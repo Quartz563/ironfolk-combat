@@ -42,3 +42,23 @@ npm-debug.log
 .env
 Dockerfile
 .dockerignore
+*.db
+*.db-shm
+*.db-wal
+
+# Environment variables and secrets
+.env.local
+config/dev.secret.exs
+config/prod.secret.exs
+
+# Editor/IDE specific
+.elixir_ls/
+.vscode/
+.idea/
+
+# OS specific
+.DS_Store
+Thumbs.db
+
+# Fly.io
+fly.toml.backup
