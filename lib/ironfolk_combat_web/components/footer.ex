@@ -174,8 +174,8 @@ defmodule IronfolkCombatWeb.Footer do
                 Blog
               </.link>
             </div>
-
-            <div class="pt-4 border-t border-gray-700">
+            
+    <!--<div class="pt-4 border-t border-gray-700">
               <h4 class="text-sm font-medium text-gray-400 mb-2">Resources</h4>
 
               <div class="space-y-1">
@@ -189,7 +189,7 @@ defmodule IronfolkCombatWeb.Footer do
                   Link C Here
                 </a>
               </div>
-            </div>
+            </div>-->
           </div>
         </div>
       </div>
