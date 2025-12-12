@@ -1,0 +1,130 @@
+<.flash_group flash={@flash} />
+<div class="min-h-screen bg-gray-50">
+  <header class="bg-white shadow-sm border-b-4 border-pink-500">
+    <div class="container mx-auto px-4 py-4">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center space-x-4">
+          <.link navigate={~p"/admin/dashboard"} class="text-pink-600 hover:text-pink-800">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M10 19l-7-7m0 0l7-7m-7 7h18"
+              >
+              </path>
+            </svg>
+          </.link>
+          <h1 class="text-2xl font-bold text-gray-900">Manage Alerts</h1>
+        </div>
+
+        <div class="flex items-center space-x-4">
+          <button phx-click="new_alert" class="rainbow-button">New Alert</button>
+          <.link href={~p"/admin/logout"} method="delete" class="secondary-button">Logout</.link>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="container mx-auto px-4 py-8">
+    <%= if @show_form do %>
+      <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+        <div class="bg-white rounded-lg shadow-xl max-w-2xl w-full">
+          <div class="p-6">
+            <h2 class="text-2xl font-bold mb-6">
+              {if @editing_alert, do: "Edit Alert", else: "New Alert"}
+            </h2>
+
+            <.form for={@form} phx-change="validate" phx-submit="save" class="space-y-4">
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Message *</label>
+                <.input field={@form[:message]} type="textarea" required />
+              </div>
+
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Type</label>
+                <.input
+                  field={@form[:type]}
+                  type="select"
+                  options={[{"Info", "info"}, {"Warning", "warning"}, {"Error", "error"}]}
+                />
+              </div>
+
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">
+                  Priority (0-10)
+                </label>
+                <.input field={@form[:priority]} type="number" />
+              </div>
+
+              <div class="flex items-center space-x-4">
+                <.input field={@form[:dismissible]} type="checkbox" label="Dismissible" />
+                <.input field={@form[:active]} type="checkbox" label="Active" />
+              </div>
+
+              <div class="flex justify-end space-x-4 pt-4">
+                <button type="button" phx-click="cancel_form" class="secondary-button">
+                  Cancel
+                </button>
+                <button type="submit" class="rainbow-button">Save Alert</button>
+              </div>
+            </.form>
+          </div>
+        </div>
+      </div>
+    <% end %>
+
+    <div class="space-y-4">
+      <%= for alert <- @alerts do %>
+        <div class={"rounded-lg p-6 shadow-md #{alert_bg(alert.type)} border-l-4 #{alert_border(alert.type)}"}>
+          <div class="flex items-start justify-between">
+            <div class="flex-1">
+              <div class="flex items-center gap-2 mb-2">
+                <span class={"px-2 py-1 rounded text-xs font-bold #{if alert.active, do: "bg-green-100 text-green-800", else: "bg-gray-100 text-gray-800"}"}>
+                  {if alert.active, do: "ACTIVE", else: "INACTIVE"}
+                </span>
+                <span class="text-xs text-gray-600">Priority: {alert.priority}</span>
+              </div>
+
+              <p class="text-gray-900 font-medium mb-2">{alert.message}</p>
+
+              <p class="text-sm text-gray-600">
+                Type: {String.upcase(alert.type)} | {if alert.dismissible,
+                  do: "Dismissible",
+                  else: "Not dismissible"}
+              </p>
+            </div>
+
+            <div class="flex space-x-2">
+              <button
+                phx-click="edit_alert"
+                phx-value-id={alert.id}
+                class="px-3 py-1 bg-blue-100 text-blue-800 rounded text-sm"
+              >
+                Edit
+              </button>
+              <%= if alert.active do %>
+                <button
+                  phx-click="deactivate"
+                  phx-value-id={alert.id}
+                  class="px-3 py-1 bg-yellow-100 text-yellow-800 rounded text-sm"
+                >
+                  Deactivate
+                </button>
+              <% end %>
+
+              <button
+                phx-click="delete"
+                phx-value-id={alert.id}
+                data-confirm="Delete this alert?"
+                class="px-3 py-1 bg-red-100 text-red-800 rounded text-sm"
+              >
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </main>
+</div>

@@ -1,0 +1,268 @@
+<%!-- Alert Banner (if present) --%>
+<.flash_group flash={@flash} />
+<%= if @alert do %>
+  <div class={"alert-banner #{alert_color(@alert.type)}"} role="alert">
+    <div class="container mx-auto px-4 py-3 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        {alert_icon(@alert.type)}
+        <p class="text-sm md:text-base font-medium">{@alert.message}</p>
+      </div>
+
+      <%= if @alert.dismissible do %>
+        <button
+          phx-click="dismiss_alert"
+          class="text-current hover:opacity-75 transition-opacity"
+          aria-label="Dismiss alert"
+        >
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M6 18L18 6M6 6l12 12"
+            >
+            </path>
+          </svg>
+        </button>
+      <% end %>
+    </div>
+  </div>
+<% end %>
+<%!-- Hero Section with Static Hero Image --%>
+<section class="relative overflow-hidden min-h-[500px] md:min-h-[600px] lg:min-h-[700px]">
+  <%!-- Hero Image Background --%>
+  <div
+    class="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat"
+    style="background-image: url('/images/hero/longsword-training-1.jpg'); background-position: center center;"
+  >
+    <div class="absolute inset-0 bg-gradient-to-br from-pink-900/40 to-purple-900/40"></div>
+  </div>
+
+  <%!-- Content Overlay --%>
+  <div class="relative z-10 flex items-center justify-center min-h-[500px] md:min-h-[600px] lg:min-h-[700px]">
+    <div class="container mx-auto px-4 py-16">
+      <div class="max-w-4xl mx-auto text-center">
+        <h1 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 md:mb-6 text-white drop-shadow-lg">
+          Ironfolk Combat
+        </h1>
+
+        <h2 class="text-lg sm:text-xl md:text-2xl text-pink-200 mb-6 md:mb-8 font-medium drop-shadow-lg">
+          Wellington Longsword Club
+        </h2>
+
+        <p class="text-base sm:text-lg md:text-xl text-white/95 mb-8 md:mb-12 max-w-2xl mx-auto drop-shadow-lg">
+          A safe, inclusive space for LGBTQ+ folks and allies to discover Historical European Martial Arts through German longsword techniques.
+        </p>
+
+        <%!-- CTA Buttons --%>
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+          <.link navigate={~p"/signup"} class="rainbow-button">Join Our Community</.link>
+          <.link
+            navigate={~p"/about"}
+            class="secondary-button bg-white/90 hover:bg-white hover:text-gray-700"
+          >
+            Learn More
+          </.link>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <%!-- Decorative rainbow gradient --%>
+  <div class="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-red-400 via-yellow-400 via-green-400 via-blue-400 via-indigo-400 to-purple-400 z-20">
+  </div>
+</section>
+
+<%!-- Quick Info Section --%>
+<section class="bg-gray-900 dark:bg-gray-900 pt-16 pb-8">
+  <div class="container mx-auto px-4">
+    <div class="grid md:grid-cols-3 gap-6 lg:gap-8">
+      <%!-- Training Times Card --%>
+      <.info_card
+        icon="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+        title="Training Times"
+        description="Training is conducted every Thursday and Saturday, with other events happening when we can organise them!"
+      >
+        <:details>
+          <p class="text-sm text-gray-500 dark:text-gray-400">6:30 PM - 8:30 PM (Thu)</p>
+
+          <p class="text-sm text-gray-500 dark:text-gray-400">10:00 AM - 12:00 PM (Sat)</p>
+        </:details>
+      </.info_card>
+      <%!-- Safe Space Card --%>
+      <.info_card
+        icon="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+        title="Safe Space"
+        description="Our training sites are located in Newtown School of Dance and at Petone Primary School, both easy to reach locations with great transport links where ever you are in Wellington!"
+        link_text="View location details"
+        link_path={~p"/contact"}
+      /> <%!-- All Welcome Card --%>
+      <.info_card
+        icon="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+        title="All Welcome"
+        description="No experience required! From those who have never picked up a sword in their lives to the ones who can recite Liechtenauer's Zettel by heart, there's a space for you here."
+        link_text="Join us today"
+        link_path={~p"/signup"}
+      />
+    </div>
+  </div>
+  <div class="pt-4 flex flex-col sm:flex-row gap-2 justify-center">
+    <.link href="https://www.facebook.com/groups/3645787538866107/" class="rainbow-button">
+      Check our Facebook
+    </.link>
+    <.link href="https://www.instagram.com/ironfolk_fencing/" class="rainbow-button">
+      Scroll our Instagram
+    </.link>
+    <.link href="https://discord.com/invite/ckvdefupC3" class="rainbow-button">
+      Join our Discord
+    </.link>
+  </div>
+</section>
+<%!-- What is HEMA Section --%>
+<section class="bg-pink-25 dark:bg-gray-800 py-16">
+  <div class="container mx-auto px-4">
+    <div class="grid md:grid-cols-2 gap-8 lg:gap-12 items-center">
+      <%!-- Image on Left --%>
+      <div class="order-2 md:order-1">
+        <div class="rounded-lg overflow-hidden shadow-xl">
+          <img
+            src="/images/content/fencer-action.jpg"
+            alt="Ironfolk Combat fencer in action"
+            class="w-full h-full object-cover"
+          />
+        </div>
+      </div>
+      <%!-- Content on Right --%>
+      <div class="order-1 md:order-2">
+        <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-6">What is HEMA?</h2>
+
+        <div class="space-y-4 text-lg text-gray-700 dark:text-gray-300">
+          <p>
+            Historical European Martial Arts (HEMA) is the study and practice of historical European fighting techniques,
+            drawn from centuries-old manuals and treatises.
+          </p>
+
+          <p>
+            At Ironfolk Combat, we specialise in German longsword techniques with plenty of support for other weapons, focusing on the teachings of medieval masters
+            like Liechtenauer and Meyer for Longsword, and Salvator Fabris for Rapier. We create an inclusive, supportive environment where the sword-curious can explore
+            these fascinating martial arts together.
+          </p>
+
+          <p>
+            Whether you're a complete beginner or an experienced practitioner, you'll find a welcoming community dedicated to
+            both historical accuracy and modern inclusivity.
+          </p>
+        </div>
+
+        <div class="mt-8">
+          <.link
+            navigate={~p"/about"}
+            class="text-pink-600 dark:text-pink-400 hover:text-pink-800 dark:hover:text-pink-300 font-semibold transition-colors text-lg"
+          >
+            Learn more about our approach →
+          </.link>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="bg-white dark:bg-gray-900 py-16">
+  <div class="container mx-auto px-4">
+    <div class="grid md:grid-cols-2 gap-8 lg:gap-12 items-start">
+      <div>
+        <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-6">About Our Club</h2>
+
+        <div class="space-y-4 text-lg text-gray-700 dark:text-gray-300">
+          <p>
+            Ironfolk Combat (Wellington Longsword Club) was founded to create a safe, inclusive space for everyone
+            to practice HEMA fencing in Wellington, New Zealand.
+          </p>
+
+          <p>
+            We believe that fencing should be accessible to everyone, regardless of background, experience level, or identity.
+            Our training emphasises respect, safety, and community alongside technical skill development.
+          </p>
+
+          <p>
+            Starter equipment is provided for beginners, and our experienced instructors are committed to helping you develop at your own pace.
+            Join us to be part of a growing community of historical fencing!
+          </p>
+        </div>
+
+        <div class="mt-8">
+          <.link navigate={~p"/signup"} class="rainbow-button inline-block">
+            Join Our Community
+          </.link>
+        </div>
+      </div>
+      <%!-- Events Calendar on Right --%>
+      <div>
+        <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-6">
+          Upcoming NZ HEMA Events
+        </h2>
+
+        <div class="bg-pink-50 dark:bg-gray-800 rounded-lg shadow-lg p-6">
+          <%= if Enum.empty?(@events) do %>
+            <p class="text-gray-600 dark:text-gray-400 text-center py-8">
+              No upcoming events at this time. Check back soon!
+            </p>
+          <% else %>
+            <div class="space-y-4">
+              <%= for event <- @events do %>
+                <div class="border-l-4 border-pink-500 bg-white dark:bg-gray-900 rounded-r-lg p-4 shadow hover:shadow-md transition-shadow">
+                  <div class="flex items-start justify-between">
+                    <div class="flex-1">
+                      <h3 class="font-bold text-gray-900 dark:text-white text-lg mb-1">
+                        {event.name}
+                      </h3>
+
+                      <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">
+                        <svg
+                          class="inline w-4 h-4 mr-1"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                          >
+                          </path>
+                        </svg>
+                        {event.date}
+                      </p>
+
+                      <p class="text-sm text-gray-700 dark:text-gray-300 mb-2">
+                        {event.location}
+                      </p>
+
+                      <%= if event.link do %>
+                        <a
+                          href={event.link}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          class="text-pink-600 dark:text-pink-400 hover:text-pink-800 dark:hover:text-pink-300 text-sm font-medium transition-colors"
+                        >
+                          Event Details →
+                        </a>
+                      <% end %>
+                    </div>
+                  </div>
+                </div>
+              <% end %>
+            </div>
+          <% end %>
+        </div>
+
+        <p class="text-sm text-gray-600 dark:text-gray-400 mt-4 text-center">
+          Check out the
+          <.link href={~p"/events"} class="text-blue-500 hover:text-pink-400">Events</.link>
+          page for more details!
+        </p>
+      </div>
+    </div>
+  </div>
+</section>

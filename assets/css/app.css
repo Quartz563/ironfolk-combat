@@ -1,0 +1,166 @@
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+
+/* This file is for your main application CSS */
+/* Import Montserrat Font */
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap");
+
+/* Apply Montserrat Font */
+* {
+    font-family: "Montserrat", sans-serif;
+}
+
+/* Navigation Links with Rainbow Bottom Border Effect - Full Height */
+.nav-link {
+    position: relative;
+    @apply text-gray-700 font-medium transition-colors duration-200;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    height: 100%;
+    padding: 0 16px;
+}
+
+.nav-link::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 0;
+    background: linear-gradient(
+        90deg,
+        #ff6b6b,
+        #ffa500,
+        #ffff00,
+        #32cd32,
+        #00bfff,
+        #8a2be2
+    );
+    transition: height 0.3s ease;
+}
+
+.nav-link:hover {
+    @apply text-pink-600 bg-gray-50;
+}
+
+.nav-link:hover::after {
+    height: 6px;
+}
+
+.mobile-nav-link {
+    position: relative;
+    @apply text-gray-700 font-medium transition-colors duration-200;
+    text-decoration: none;
+    display: block;
+    padding: 16px;
+}
+
+.mobile-nav-link::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 0;
+    background: linear-gradient(
+        90deg,
+        #ff6b6b,
+        #ffa500,
+        #ffff00,
+        #32cd32,
+        #00bfff,
+        #8a2be2
+    );
+    transition: height 0.3s ease;
+}
+
+.mobile-nav-link:hover {
+    @apply text-pink-600 bg-gray-50;
+}
+
+.mobile-nav-link:hover::after {
+    height: 4px;
+}
+
+/* Big Blocky Buttons */
+.rainbow-button {
+    position: relative;
+    background: white;
+    color: #d946ef;
+    font-weight: 600;
+    padding: 12px 32px;
+    border-radius: 8px;
+    border: 2px solid #f3e8ff;
+    transition: all 0.3s ease;
+    display: inline-block;
+    text-decoration: none;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.rainbow-button:hover {
+    background: #d946ef;
+    color: white;
+    border-color: #d946ef;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 15px -3px rgba(0, 0, 0, 0.2);
+}
+
+.secondary-button {
+    @apply bg-transparent border-2 border-pink-300 font-semibold py-3 px-8 rounded-lg transition-all duration-200;
+    color: #d946ef;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.secondary-button:hover {
+    background: #d946ef;
+    color: white;
+    border-color: #d946ef;
+}
+
+.bg-pink-25 {
+    background-color: #fef7f7;
+}
+
+.prose {
+    @apply text-gray-700;
+}
+
+.prose h2 {
+    @apply text-2xl font-bold text-gray-900 mt-8 mb-4;
+}
+
+.prose h3 {
+    @apply text-xl font-bold text-gray-900 mt-6 mb-3;
+}
+
+.prose ul,
+.prose ol {
+    @apply ml-6 mb-4 space-y-2;
+}
+
+.prose ul {
+    @apply list-disc;
+}
+
+.prose ol {
+    @apply list-decimal;
+}
+
+.prose a {
+    @apply text-pink-600 hover:text-pink-800 transition-colors;
+}
+
+.prose strong {
+    @apply font-bold text-gray-900;
+}
+
+.prose code {
+    @apply bg-gray-100 px-2 py-1 rounded text-sm font-mono;
+}
+
+.prose blockquote {
+    @apply border-l-4 border-pink-500 pl-4 italic text-gray-600 my-4;
+}

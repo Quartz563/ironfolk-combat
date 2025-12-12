@@ -1,0 +1,648 @@
+<%!-- Hero Section --%>
+<section class="relative bg-gradient-to-br from-pink-50 to-purple-50 pt-20">
+  <div class="container mx-auto px-4 py-16 lg:py-24">
+    <div class="max-w-4xl mx-auto text-center">
+      <h1 class="text-4xl md:text-6xl font-bold mb-6 text-gray-900">
+        Member Resources
+      </h1>
+
+      <p class="text-lg md:text-xl text-gray-700 mb-12 max-w-2xl mx-auto">
+        Everything you need to know about club policies, gear requirements, and member services. Your one-stop resource hub for Ironfolk Combat.
+      </p>
+    </div>
+  </div>
+  <%!-- Decorative rainbow gradient --%>
+  <div class="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-red-400 via-yellow-400 via-green-400 via-blue-400 via-indigo-400 to-purple-400">
+  </div>
+</section>
+
+<div class="min-h-screen bg-white">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <%!-- Quick Links Navigation --%>
+    <div class="bg-gradient-to-r from-pink-50 to-purple-50 border-2 border-pink-200 rounded-lg p-6 mb-12">
+      <h2 class="text-xl font-bold text-gray-900 mb-4">Quick Links</h2>
+      <div class="grid md:grid-cols-4 gap-4">
+        <a
+          href="#injury-forms"
+          class="block p-3 bg-white rounded-lg border border-pink-200 hover:border-pink-500 transition-colors text-center"
+        >
+          <svg
+            class="w-6 h-6 mx-auto mb-2 text-pink-600"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+            >
+            </path>
+          </svg>
+          <span class="text-sm font-medium text-gray-900">Misconduct Forms</span>
+        </a>
+        <a
+          href="#ifn-lookup"
+          class="block p-3 bg-white rounded-lg border border-pink-200 hover:border-pink-500 transition-colors text-center"
+        >
+          <svg
+            class="w-6 h-6 mx-auto mb-2 text-pink-600"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 114 0v1m-4 0a2 2 0 104 0m-5 8a2 2 0 100-4 2 2 0 000 4zm0 0c1.306 0 2.417.835 2.83 2M9 14a3.001 3.001 0 00-2.83 2M15 11h3m-3 4h2"
+            >
+            </path>
+          </svg>
+          <span class="text-sm font-medium text-gray-900">IFN Lookup</span>
+        </a>
+        <a
+          href="#gear-specs"
+          class="block p-3 bg-white rounded-lg border border-pink-200 hover:border-pink-500 transition-colors text-center"
+        >
+          <svg
+            class="w-6 h-6 mx-auto mb-2 text-pink-600"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"
+            >
+            </path>
+          </svg>
+          <span class="text-sm font-medium text-gray-900">Gear Specs</span>
+        </a>
+        <a
+          href="#code-of-conduct"
+          class="block p-3 bg-white rounded-lg border border-pink-200 hover:border-pink-500 transition-colors text-center"
+        >
+          <svg
+            class="w-6 h-6 mx-auto mb-2 text-pink-600"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
+            >
+            </path>
+          </svg>
+          <span class="text-sm font-medium text-gray-900">Code of Conduct</span>
+        </a>
+      </div>
+    </div>
+
+    <%!-- Injury Forms Section --%>
+    <div id="injury-forms" class="mb-12">
+      <h2 class="text-3xl font-bold text-gray-900 mb-6 flex items-center">
+        <span class="w-2 h-8 bg-pink-500 mr-3 rounded"></span> Misconduct Reporting Forms
+      </h2>
+
+      <div class="bg-white border-2 border-pink-200 rounded-lg p-8 shadow-sm">
+        <div class="flex items-start space-x-4 mb-6">
+          <div class="bg-red-100 rounded-full p-3 flex-shrink-0">
+            <svg
+              class="w-6 h-6 text-red-600"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+              >
+              </path>
+            </svg>
+          </div>
+          <div class="flex-1">
+            <h3 class="text-xl font-bold text-gray-900 mb-2">When to Report an Injury</h3>
+            <p class="text-gray-700 mb-4">
+              As outlined in our Code of Conduct, all injuries sustained during training must be reported, regardless of severity.
+              This helps us maintain safety standards and improve our training practices. This form is also used to log any activity that breeches the code of
+              conduct we have.
+            </p>
+          </div>
+        </div>
+
+        <div class="bg-gradient-to-r from-pink-25 to-purple-25 rounded-lg p-6 mb-6">
+          <h4 class="font-bold text-gray-900 mb-3">What Counts as an Injury?</h4>
+          <ul class="space-y-2 text-gray-700">
+            <li class="flex items-start">
+              <span class="text-pink-600 mr-2">•</span>
+              Any injury requiring medical attention (hospital visit, doctor's appointment)
+            </li>
+            <li class="flex items-start">
+              <span class="text-pink-600 mr-2">•</span>
+              Injuries that prevent you from participating in future sessions
+            </li>
+            <li class="flex items-start">
+              <span class="text-pink-600 mr-2">•</span>
+              Significant bruising, cuts, or impact injuries
+            </li>
+            <li class="flex items-start">
+              <span class="text-pink-600 mr-2">•</span> Any head impacts (even if you feel fine)
+            </li>
+            <li class="flex items-start">
+              <span class="text-pink-600 mr-2">•</span>
+              Joint or muscle strains that affect movement
+            </li>
+          </ul>
+        </div>
+
+        <div class="border-t-2 border-pink-200 pt-6">
+          <h4 class="font-bold text-gray-900 mb-4">Misconduct Report Form</h4>
+          <.link
+            href="https://docs.google.com/forms/d/e/1FAIpQLSf6KsI4LTSezxOJOSBTgtsuJQLVPaffR4n2DSimGQ59cUk04g/viewform"
+            class="rainbow-button"
+          >
+            Code of Conduct Reporting Form
+          </.link>
+          <p class="text-sm text-gray-600 mb-4 pt-6">
+            <strong>Note:</strong>
+            This form should be completed as soon as possible after an injury occurs.
+            If immediate medical attention is needed, seek help first and complete the form afterward.
+          </p>
+
+          <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+            <div class="flex items-start">
+              <svg
+                class="w-5 h-5 text-blue-600 mt-0.5 mr-3 flex-shrink-0"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                >
+                </path>
+              </svg>
+              <div class="text-sm text-gray-700">
+                <strong>Emergency Contact:</strong>
+                In case of serious injury, we will contact your designated emergency contact.
+                Please ensure your emergency contact details are up to date in your membership profile.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <%!-- IFN Lookup Section --%>
+    <div id="ifn-lookup" class="mb-12">
+      <h2 class="text-3xl font-bold text-gray-900 mb-6 flex items-center">
+        <span class="w-2 h-8 bg-purple-500 mr-3 rounded"></span> Ironfolk ID Number (IFN) Lookup
+      </h2>
+
+      <div class="bg-white border-2 border-pink-200 rounded-lg p-8 shadow-sm">
+        <div class="mb-6">
+          <p class="text-gray-700 mb-4">
+            Your Ironfolk ID Number (IFN) is your unique member identifier in the format <strong>IFN-XXXX</strong>.
+            You'll need this number for event registration, accessing member-only resources, and club communications.
+          </p>
+        </div>
+
+        <div class="bg-gradient-to-r from-pink-25 to-purple-25 rounded-lg p-6 mb-6">
+          <h3 class="text-lg font-bold text-gray-900 mb-4">Retrieve Your IFN</h3>
+          <.link navigate={~p"/ifn-lookup"} class="rainbow-button">
+            Complete this form to get your IFN
+          </.link>
+        </div>
+
+        <div class="border-t-2 border-pink-200 pt-6">
+          <h4 class="font-bold text-gray-900 mb-3">Where to Find Your IFN</h4>
+          <ul class="space-y-2 text-gray-700">
+            <li class="flex items-start">
+              <span class="text-pink-600 mr-2">•</span> In your membership welcome email
+            </li>
+            <li class="flex items-start">
+              <span class="text-pink-600 mr-2">•</span> On your membership card (if issued)
+            </li>
+            <li class="flex items-start">
+              <span class="text-pink-600 mr-2">•</span>
+              In your member portal (once you've logged in)
+            </li>
+            <li class="flex items-start">
+              <span class="text-pink-600 mr-2">•</span> Ask any club instructor or administrator
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <%!-- Gear Specifications Section --%>
+    <div id="gear-specs" class="mb-12">
+      <h2 class="text-3xl font-bold text-gray-900 mb-6 flex items-center">
+        <span class="w-2 h-8 bg-pink-500 mr-3 rounded"></span> Gear Specifications & Requirements
+      </h2>
+
+      <div class="space-y-6">
+        <%!-- Essential Gear --%>
+        <div class="bg-white border-2 border-pink-200 rounded-lg p-8 shadow-sm">
+          <h3 class="text-2xl font-bold text-gray-900 mb-4">Essential Protective Equipment</h3>
+          <p class="text-gray-700 mb-6">
+            All participants must wear appropriate protective equipment during sparring and contact drills.
+            Beginners can use club equipment, but regular members are encouraged to invest in their own gear over time.
+          </p>
+
+          <div class="grid md:grid-cols-2 gap-6">
+            <%!-- Mask --%>
+            <div class="border-l-4 border-pink-500 pl-4">
+              <h4 class="font-bold text-gray-900 mb-2">Fencing Mask</h4>
+              <p class="text-sm text-gray-700 mb-2">
+                <strong>Minimum Standard:</strong> 350N or 1600N rated HEMA mask
+              </p>
+              <p class="text-sm text-gray-700 mb-2">
+                <strong>Recommended:</strong>
+                Back-of-head protection, good visibility, proper sizing
+              </p>
+              <p class="text-sm text-gray-600">
+                <strong>Note:</strong> Three-weapon fencing masks are NOT suitable for HEMA
+              </p>
+            </div>
+
+            <%!-- Gloves --%>
+            <div class="border-l-4 border-purple-500 pl-4">
+              <h4 class="font-bold text-gray-900 mb-2">Fencing Gloves</h4>
+              <p class="text-sm text-gray-700 mb-2">
+                <strong>Minimum Standard:</strong>
+                HEMA-specific gloves with rigid finger protection
+              </p>
+              <p class="text-sm text-gray-700 mb-2">
+                <strong>Recommended:</strong> Good mobility, wrist protection, comfortable fit
+              </p>
+              <p class="text-sm text-gray-600">
+                <strong>Popular Brands:</strong> SPES, Sparring Glove, Koning, Red Dragon
+              </p>
+            </div>
+
+            <%!-- Gorget --%>
+            <div class="border-l-4 border-pink-500 pl-4">
+              <h4 class="font-bold text-gray-900 mb-2">Throat Protection (Gorget)</h4>
+              <p class="text-sm text-gray-700 mb-2">
+                <strong>Requirement:</strong> Rigid throat and collar bone protection
+              </p>
+              <p class="text-sm text-gray-700 mb-2">
+                <strong>Recommended:</strong> Full coverage, comfortable fit under mask
+              </p>
+              <p class="text-sm text-gray-600">
+                <strong>Note:</strong> Essential for all sparring, no exceptions
+              </p>
+            </div>
+
+            <%!-- Jacket --%>
+            <div class="border-l-4 border-purple-500 pl-4">
+              <h4 class="font-bold text-gray-900 mb-2">Fencing Jacket</h4>
+              <p class="text-sm text-gray-700 mb-2">
+                <strong>Minimum Standard:</strong> 350N rated HEMA jacket
+              </p>
+              <p class="text-sm text-gray-700 mb-2">
+                <strong>Recommended:</strong> Elbow protection, mobility, proper fit
+              </p>
+              <p class="text-sm text-gray-600">
+                <strong>Alternative:</strong> Gambeson with forearm protection can be used
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <%!-- Additional Protection --%>
+        <div class="bg-gradient-to-r from-pink-25 to-purple-25 border-2 border-pink-200 rounded-lg p-8">
+          <h3 class="text-2xl font-bold text-gray-900 mb-4">
+            Additional Protection (Strongly Recommended)
+          </h3>
+          <div class="space-y-4">
+            <div class="bg-white rounded-lg p-4">
+              <h4 class="font-bold text-gray-900 mb-2">Forearm Guards</h4>
+              <p class="text-sm text-gray-700">
+                Rigid or semi-rigid protection for forearms. Essential for longsword, highly recommended for all weapons.
+              </p>
+            </div>
+
+            <div class="bg-white rounded-lg p-4">
+              <h4 class="font-bold text-gray-900 mb-2">Knee Protection</h4>
+              <p class="text-sm text-gray-700">
+                Knee pads or guards recommended.
+              </p>
+            </div>
+
+            <div class="bg-white rounded-lg p-4">
+              <h4 class="font-bold text-gray-900 mb-2">Chest Protection</h4>
+              <p class="text-sm text-gray-700">
+                Rigid plastron or chest guard strongly recommended. Helps distribute impact and provides additional safety.
+              </p>
+            </div>
+
+            <div class="bg-white rounded-lg p-4">
+              <h4 class="font-bold text-gray-900 mb-2">Groin Protection</h4>
+              <p class="text-sm text-gray-700">
+                Highly recommended for all fencers. Standard athletic cups/guards work well for HEMA.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <%!-- Weapons --%>
+        <div class="bg-white border-2 border-pink-200 rounded-lg p-8 shadow-sm">
+          <h3 class="text-2xl font-bold text-gray-900 mb-4">Training Weapons</h3>
+          <p class="text-gray-700 mb-6">
+            The club provides training weapons for all beginners. When you're ready to purchase your own, here are our specifications:
+          </p>
+
+          <div class="space-y-6">
+            <div class="border-l-4 border-pink-500 pl-4">
+              <h4 class="font-bold text-gray-900 mb-2">Longsword (Feder)</h4>
+              <ul class="space-y-1 text-sm text-gray-700">
+                <li><strong>Length:</strong> Generally 140-150cm total length</li>
+                <li><strong>Weight:</strong> 1.4-1.8kg</li>
+                <li>
+                  <strong>Features:</strong>
+                  Flexible blade with schilt (crossguard widening), rolled tip
+                </li>
+                <li>
+                  <strong>Popular Makers:</strong> Regenyei, Sigi
+                </li>
+              </ul>
+            </div>
+
+            <div class="border-l-4 border-purple-500 pl-4">
+              <h4 class="font-bold text-gray-900 mb-2">Rapier</h4>
+              <ul class="space-y-1 text-sm text-gray-700">
+                <li><strong>Length:</strong> Generally 120-135cm total length</li>
+                <li><strong>Weight:</strong> 1.1-1.4kg</li>
+                <li>
+                  <strong>Features:</strong> Flexible blade, complex hilt, rolled or rubber tip
+                </li>
+                <li><strong>Note:</strong> Consult with instructors before purchasing</li>
+              </ul>
+            </div>
+
+            <div class="border-l-4 border-pink-500 pl-4">
+              <h4 class="font-bold text-gray-900 mb-2">Other Weapons</h4>
+              <p class="text-sm text-gray-700 mb-2">
+                We also train with saber, dagger, spear, and sidesword. If you're interested in these weapons,
+                speak with an instructor about appropriate training equipment specifications.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <%!-- Where to Buy --%>
+        <div class="bg-gradient-to-r from-pink-50 to-purple-50 border-2 border-pink-200 rounded-lg p-8">
+          <h3 class="text-2xl font-bold text-gray-900 mb-4">Where to Buy Equipment</h3>
+          <p class="text-gray-700 mb-4">
+            Here are some reputable suppliers for HEMA equipment. The club does not receive any commission from these recommendations:
+          </p>
+
+          <div class="grid md:grid-cols-2 gap-4">
+            <div class="bg-white rounded-lg p-4">
+              <h4 class="font-bold text-gray-900 mb-2">International Suppliers</h4>
+              <ul class="space-y-1 text-sm text-gray-700">
+                <li>
+                  •
+                  <a
+                    href="https://www.woodenswords.com"
+                    target="_blank"
+                    class="text-pink-600 hover:text-pink-800"
+                  >
+                    Purpleheart Armoury (USA)
+                  </a>
+                </li>
+                <li>
+                  •
+                  <a
+                    href="https://www.spes.pl"
+                    target="_blank"
+                    class="text-pink-600 hover:text-pink-800"
+                  >
+                    SPES (Poland)
+                  </a>
+                </li>
+                <li>
+                  •
+                  <a
+                    href="https://www.southcoastswords.com"
+                    target="_blank"
+                    class="text-pink-600 hover:text-pink-800"
+                  >
+                    South Coast Swords (UK)
+                  </a>
+                </li>
+                <li>
+                  •
+                  <a
+                    href="https://www.thehemashop.com"
+                    target="_blank"
+                    class="text-pink-600 hover:text-pink-800"
+                  >
+                    The HEMA Shop (Netherlands)
+                  </a>
+                </li>
+              </ul>
+            </div>
+
+            <div class="bg-white rounded-lg p-4">
+              <h4 class="font-bold text-gray-900 mb-2">New Zealand Options</h4>
+              <p class="text-sm text-gray-700 mb-2">
+                While there are limited NZ-specific HEMA suppliers, some fencing equipment retailers may carry suitable gear.
+                The club can also assist with group orders to reduce international shipping costs.
+              </p>
+            </div>
+          </div>
+
+          <div class="mt-6 bg-blue-50 border border-blue-200 rounded-lg p-4">
+            <p class="text-sm text-gray-700">
+              <strong>💡 Tip:</strong>
+              Before making any equipment purchases, especially for weapons, please consult with an instructor.
+              We can help ensure you're getting appropriate gear for your skill level and training needs, and may be able to direct you to
+              current deals or group buying opportunities.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <%!-- Code of Conduct Section --%>
+    <div id="code-of-conduct" class="mb-12">
+      <h2 class="text-3xl font-bold text-gray-900 mb-6 flex items-center">
+        <span class="w-2 h-8 bg-purple-500 mr-3 rounded"></span> Code of Conduct
+      </h2>
+
+      <div class="bg-white border-2 border-pink-200 rounded-lg p-8 shadow-sm">
+        <div class="mb-6">
+          <p class="text-gray-700 mb-4">
+            Ironfolk Combat is committed to providing a safe, inclusive, and respectful environment for all members.
+            Our Code of Conduct outlines the expectations for behavior and conduct at all club activities.
+          </p>
+        </div>
+
+        <div class="bg-gradient-to-r from-pink-25 to-purple-25 rounded-lg p-6 mb-6">
+          <h3 class="text-lg font-bold text-gray-900 mb-4">Core Principles</h3>
+          <ul class="space-y-3 text-gray-700">
+            <li class="flex items-start">
+              <svg
+                class="w-5 h-5 text-pink-600 mr-2 mt-0.5 flex-shrink-0"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M5 13l4 4L19 7"
+                >
+                </path>
+              </svg>
+              <span>
+                <strong>Safety First:</strong>
+                Always prioritize the safety of yourself and your training partners
+              </span>
+            </li>
+            <li class="flex items-start">
+              <svg
+                class="w-5 h-5 text-pink-600 mr-2 mt-0.5 flex-shrink-0"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M5 13l4 4L19 7"
+                >
+                </path>
+              </svg>
+              <span>
+                <strong>Respect:</strong>
+                Treat all members with dignity and respect, regardless of skill level, identity, or background
+              </span>
+            </li>
+            <li class="flex items-start">
+              <svg
+                class="w-5 h-5 text-pink-600 mr-2 mt-0.5 flex-shrink-0"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M5 13l4 4L19 7"
+                >
+                </path>
+              </svg>
+              <span>
+                <strong>Inclusivity:</strong>
+                Foster an environment where everyone feels welcome and valued
+              </span>
+            </li>
+            <li class="flex items-start">
+              <svg
+                class="w-5 h-5 text-pink-600 mr-2 mt-0.5 flex-shrink-0"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M5 13l4 4L19 7"
+                >
+                </path>
+              </svg>
+              <span>
+                <strong>Accountability:</strong>
+                Take responsibility for your actions and report any concerns
+              </span>
+            </li>
+          </ul>
+        </div>
+
+        <div class="space-y-6">
+          <div>
+            <h4 class="font-bold text-gray-900 mb-3">Expected Behaviors</h4>
+            <ul class="space-y-2 text-gray-700 text-sm">
+              <li>• Wear all required protective equipment during contact drills and sparring</li>
+              <li>• Control your strikes and respect tap-outs immediately</li>
+              <li>• Communicate clearly with training partners about intensity preferences</li>
+              <li>• Report all injuries, regardless of severity</li>
+              <li>• Use inclusive language and respect pronouns</li>
+              <li>• Ask for consent before physical contact or partnered drills</li>
+              <li>• Support and encourage fellow students</li>
+              <li>• Follow instructor guidance and club rules</li>
+            </ul>
+          </div>
+
+          <div>
+            <h4 class="font-bold text-gray-900 mb-3">Unacceptable Behaviors</h4>
+            <ul class="space-y-2 text-gray-700 text-sm">
+              <li>• Deliberate excessive force or unsafe training practices</li>
+              <li>• Harassment, discrimination, or hate speech of any kind</li>
+              <li>• Unwelcome physical contact or sexual harassment</li>
+              <li>• Disrespecting gender identity, sexual orientation, or pronouns</li>
+              <li>• Bullying, intimidation, or aggressive behavior</li>
+              <li>• Training while under the influence of alcohol or drugs</li>
+              <li>• Ignoring safety protocols or instructor guidance</li>
+              <li>• Creating an unwelcoming or hostile environment</li>
+            </ul>
+          </div>
+
+          <div class="bg-red-50 border-2 border-red-200 rounded-lg p-6">
+            <h4 class="font-bold text-gray-900 mb-3">Reporting Concerns</h4>
+            <p class="text-gray-700 mb-3">
+              If you experience or witness behavior that violates our Code of Conduct, please report it immediately to:
+            </p>
+            <ul class="space-y-2 text-gray-700 text-sm">
+              <li>• Any club instructor or committee member</li>
+              <li>• Via email to: Ironfolkcombat@gmail.com</li>
+              <li>• Through our anonymous reporting form (if available)</li>
+            </ul>
+            <p class="text-gray-700 mt-3 text-sm">
+              All reports will be taken seriously and handled confidentially. We are committed to addressing concerns promptly and appropriately.
+            </p>
+          </div>
+        </div>
+
+        <div class="mt-6 border-t-2 border-pink-200 pt-6">
+          <p class="text-sm text-gray-600">
+            <strong>Full Code of Conduct:</strong>
+            A complete version of our Code of Conduct is provided to all new members
+            and is available upon request. By participating in Ironfolk Combat activities, you agree to abide by this Code of Conduct.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <%!-- Contact Box --%>
+    <div class="bg-gradient-to-r from-pink-50 to-purple-50 border-2 border-pink-200 rounded-lg p-8 text-center">
+      <h3 class="text-2xl font-bold text-gray-900 mb-4">Need More Information?</h3>
+      <p class="text-gray-700 mb-6">
+        Can't find what you're looking for? Get in touch with us and we'll be happy to help.
+      </p>
+      <.link navigate={~p"/contact"} class="rainbow-button">
+        Contact Us
+      </.link>
+    </div>
+  </div>
+</div>

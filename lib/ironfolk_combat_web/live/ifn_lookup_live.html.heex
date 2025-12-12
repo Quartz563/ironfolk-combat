@@ -1,0 +1,310 @@
+<%!-- Hero Section --%>
+<section class="relative bg-gradient-to-br from-pink-50 to-purple-50 dark:from-gray-900 dark:to-gray-800 pt-20">
+  <div class="container mx-auto px-4 py-16 lg:py-24">
+    <div class="max-w-4xl mx-auto text-center">
+      <h1 class="text-4xl md:text-6xl font-bold mb-6 text-gray-900 dark:text-white">
+        IFN Lookup
+      </h1>
+
+      <p class="text-lg md:text-xl text-gray-700 dark:text-gray-300 mb-12 max-w-2xl mx-auto">
+        Retrieve your Ironfolk ID Number by email or name
+      </p>
+    </div>
+  </div>
+
+  <div class="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-red-400 via-yellow-400 via-green-400 via-blue-400 via-indigo-400 to-purple-400">
+  </div>
+</section>
+
+<div class="min-h-screen bg-white dark:bg-gray-900">
+  <div class="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div class="bg-white dark:bg-gray-800 border border-pink-200 dark:border-gray-700 rounded-lg shadow-lg p-8">
+      <%= if not @searched do %>
+        <%!-- Search Form --%>
+        <div class="mb-6">
+          <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">
+            Find Your IFN
+          </h2>
+
+          <p class="text-gray-700 dark:text-gray-300 mb-6">
+            Enter your email address or full name to receive your Ironfolk ID Number via email.
+          </p>
+        </div>
+
+        <form phx-submit="search" class="space-y-6">
+          <%!-- Search Type Selection --%>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
+              Search By:
+            </label>
+
+            <div class="flex gap-4">
+              <label class="flex items-center cursor-pointer">
+                <input
+                  type="radio"
+                  name="search_type"
+                  value="email"
+                  checked={@search_type == "email"}
+                  phx-click="update_search_type"
+                  phx-value-type="email"
+                  class="mr-2 text-pink-600 focus:ring-pink-500"
+                />
+                <span class="text-gray-700 dark:text-gray-300">Email Address</span>
+              </label>
+
+              <label class="flex items-center cursor-pointer">
+                <input
+                  type="radio"
+                  name="search_type"
+                  value="name"
+                  checked={@search_type == "name"}
+                  phx-click="update_search_type"
+                  phx-value-type="name"
+                  class="mr-2 text-pink-600 focus:ring-pink-500"
+                />
+                <span class="text-gray-700 dark:text-gray-300">Full Name</span>
+              </label>
+            </div>
+          </div>
+          <%!-- Search Input --%>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              {if @search_type == "email", do: "Email Address", else: "Full Name"} *
+            </label>
+
+            <input
+              type={if @search_type == "email", do: "email", else: "text"}
+              value={@search_value}
+              phx-change="update_search_value"
+              name="search_value"
+              required
+              placeholder={
+                if @search_type == "email",
+                  do: "your.email@example.com",
+                  else: "John Smith"
+              }
+              class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500 dark:bg-gray-700 dark:text-white"
+            />
+          </div>
+
+          <button
+            type="submit"
+            class="w-full rainbow-button text-lg py-3"
+            disabled={@loading}
+          >
+            <%= if @loading do %>
+              <span class="flex items-center justify-center">
+                <svg class="animate-spin h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24">
+                  <circle
+                    class="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    stroke-width="4"
+                  >
+                  </circle>
+
+                  <path
+                    class="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                  >
+                  </path>
+                </svg>
+                Searching...
+              </span>
+            <% else %>
+              Search
+            <% end %>
+          </button>
+        </form>
+
+        <div class="mt-8 p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
+          <div class="flex items-start">
+            <svg
+              class="w-5 h-5 text-blue-600 dark:text-blue-400 mt-0.5 mr-3 flex-shrink-0"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+              >
+              </path>
+            </svg>
+            <div class="text-sm text-gray-700 dark:text-gray-300">
+              <strong>Privacy Note:</strong>
+              Your IFN will be displayed on this page. If you're on a shared computer, make sure to close this page when done.
+            </div>
+          </div>
+        </div>
+      <% else %>
+        <%!-- Success/No Results --%>
+        <%= if @member do %>
+          <div class="text-center">
+            <div class="w-16 h-16 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
+              <svg
+                class="w-8 h-8 text-green-600 dark:text-green-400"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                >
+                </path>
+              </svg>
+            </div>
+
+            <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">
+              Member Found!
+            </h2>
+
+            <p class="text-gray-700 dark:text-gray-300 mb-6">
+              Here are the details for <strong>{@member.first_name} {@member.last_name}</strong>
+            </p>
+
+            <%!-- IFN Display Box --%>
+            <div class="bg-white dark:bg-gray-800 border-2 border-pink-500 rounded-lg p-8 mb-6">
+              <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">
+                Your Ironfolk ID Number
+              </p>
+              <div class="text-5xl font-bold text-pink-600 dark:text-pink-400 font-mono tracking-wider">
+                {@member.ifn}
+              </div>
+            </div>
+
+            <%!-- Member Details --%>
+            <div class="bg-gradient-to-r from-pink-50 to-purple-50 dark:from-gray-700 dark:to-gray-600 rounded-lg p-6 mb-6 text-left">
+              <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-4">
+                Account Details
+              </h3>
+
+              <div class="space-y-3">
+                <div class="flex justify-between items-center border-b border-gray-200 dark:border-gray-600 pb-2">
+                  <span class="text-sm font-medium text-gray-700 dark:text-gray-300">Name:</span>
+                  <span class="text-sm text-gray-900 dark:text-white">
+                    {@member.first_name} {@member.last_name}
+                  </span>
+                </div>
+
+                <div class="flex justify-between items-center border-b border-gray-200 dark:border-gray-600 pb-2">
+                  <span class="text-sm font-medium text-gray-700 dark:text-gray-300">Email:</span>
+                  <span class="text-sm text-gray-900 dark:text-white">{@member.email}</span>
+                </div>
+
+                <div class="flex justify-between items-center border-b border-gray-200 dark:border-gray-600 pb-2">
+                  <span class="text-sm font-medium text-gray-700 dark:text-gray-300">
+                    Status:
+                  </span>
+                  <span class={"text-sm font-semibold #{if @member.status == "active", do: "text-green-600 dark:text-green-400", else: "text-gray-600 dark:text-gray-400"}"}>
+                    {String.upcase(@member.status)}
+                  </span>
+                </div>
+
+                <%= if @member.membership_expires_at do %>
+                  <div class="flex justify-between items-center">
+                    <span class="text-sm font-medium text-gray-700 dark:text-gray-300">
+                      Membership:
+                    </span>
+                    <span class={"text-sm font-semibold #{if IronfolkCombat.Members.membership_active?(@member), do: "text-green-600 dark:text-green-400", else: "text-red-600 dark:text-red-400"}"}>
+                      <%= if IronfolkCombat.Members.membership_active?(@member) do %>
+                        Active until {Date.to_string(@member.membership_expires_at)}
+                      <% else %>
+                        Expired on {Date.to_string(@member.membership_expires_at)}
+                      <% end %>
+                    </span>
+                  </div>
+                <% end %>
+              </div>
+            </div>
+
+            <%!-- What to do with your IFN --%>
+            <div class="bg-gradient-to-r from-pink-50 to-purple-50 dark:from-gray-700 dark:to-gray-600 rounded-lg p-6 mb-6 text-left">
+              <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-3">
+                What's my IFN used for?
+              </h3>
+
+              <ul class="space-y-2 text-sm text-gray-700 dark:text-gray-300">
+                <li class="flex items-start">
+                  <span class="text-pink-600 dark:text-pink-400 mr-2">•</span>
+                  <span>Making membership payments</span>
+                </li>
+                <li class="flex items-start">
+                  <span class="text-pink-600 dark:text-pink-400 mr-2">•</span>
+                  <span>Registering for events and tournaments</span>
+                </li>
+                <li class="flex items-start">
+                  <span class="text-pink-600 dark:text-pink-400 mr-2">•</span>
+                  <span>Accessing member-only resources</span>
+                </li>
+              </ul>
+            </div>
+
+            <button phx-click="reset" class="rainbow-button">
+              Search Again
+            </button>
+          </div>
+        <% else %>
+          <div class="text-center">
+            <div class="w-16 h-16 bg-yellow-100 dark:bg-yellow-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
+              <svg
+                class="w-8 h-8 text-yellow-600 dark:text-yellow-400"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+                >
+                </path>
+              </svg>
+            </div>
+
+            <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">
+              No Member Found
+            </h2>
+
+            <p class="text-gray-700 dark:text-gray-300 mb-6">
+              We couldn't find a member with that {@search_type}. This could mean:
+            </p>
+
+            <ul class="text-left max-w-md mx-auto mb-6 space-y-2 text-gray-700 dark:text-gray-300">
+              <li class="flex items-start">
+                <span class="text-pink-600 dark:text-pink-400 mr-2">•</span>
+                You haven't completed the signup process yet
+              </li>
+              <li class="flex items-start">
+                <span class="text-pink-600 dark:text-pink-400 mr-2">•</span>
+                Your signup is still pending approval
+              </li>
+              <li class="flex items-start">
+                <span class="text-pink-600 dark:text-pink-400 mr-2">•</span>
+                There's a typo in the {@search_type} you entered
+              </li>
+            </ul>
+
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+              <button phx-click="reset" class="rainbow-button">
+                Try Again
+              </button>
+              <.link navigate={~p"/contact"} class="secondary-button">
+                Contact Us
+              </.link>
+            </div>
+          </div>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,39 @@
+<%!-- Hero Section --%>
+<section class="relative bg-gradient-to-br from-pink-50 to-purple-50 pt-20">
+  <div class="container mx-auto px-4 py-16 lg:py-24">
+    <div class="max-w-4xl mx-auto">
+      <.link
+        navigate={~p"/blog"}
+        class="text-pink-600 hover:text-pink-800 font-medium mb-4 inline-block"
+      >
+        ← Back to Blog
+      </.link>
+      <h1 class="text-4xl md:text-5xl font-bold mb-6 text-gray-900">{@post.title}</h1>
+
+      <div class="flex items-center gap-3 text-gray-600">
+        <span>{Calendar.strftime(@post.published_at || @post.inserted_at, "%B %d, %Y")}</span>
+        <%= if @post.author_name do %>
+          <span class="text-gray-400">•</span> <span>By {@post.author_name}</span>
+        <% end %>
+      </div>
+    </div>
+  </div>
+  <%!-- Decorative rainbow gradient --%>
+  <div class="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-red-400 via-yellow-400 via-green-400 via-blue-400 via-indigo-400 to-purple-400">
+  </div>
+</section>
+
+<div class="min-h-screen bg-white">
+  <article class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div class="prose prose-lg max-w-none text-gray-700">{render_markdown(@post.content)}</div>
+
+    <div class="mt-12 pt-8 border-t border-gray-200">
+      <.link
+        navigate={~p"/blog"}
+        class="text-pink-600 hover:text-pink-800 font-semibold transition-colors"
+      >
+        ← Back to all posts
+      </.link>
+    </div>
+  </article>
+</div>

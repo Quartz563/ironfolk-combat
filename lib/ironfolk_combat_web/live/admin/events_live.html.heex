@@ -1,0 +1,170 @@
+<.flash_group flash={@flash} />
+
+<div class="min-h-screen bg-gray-50">
+  <header class="bg-white shadow-sm border-b-4 border-pink-500">
+    <div class="container mx-auto px-4 py-4">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center space-x-4">
+          <.link navigate={~p"/admin/dashboard"} class="text-pink-600 hover:text-pink-800">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M10 19l-7-7m0 0l7-7m-7 7h18"
+              >
+              </path>
+            </svg>
+          </.link>
+          <h1 class="text-2xl font-bold text-gray-900">Manage Events</h1>
+        </div>
+        <div class="flex items-center space-x-4">
+          <button phx-click="new_event" class="rainbow-button">New Event</button>
+          <.link href={~p"/admin/logout"} method="delete" class="secondary-button">
+            Logout
+          </.link>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="container mx-auto px-4 py-8">
+    <%= if @show_form do %>
+      <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+        <div class="bg-white rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+          <div class="p-6">
+            <h2 class="text-2xl font-bold mb-6">
+              {if @editing_event, do: "Edit Event", else: "New Event"}
+            </h2>
+
+            <.form for={@form} phx-change="validate" phx-submit="save" class="space-y-4">
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Event Name *</label>
+                <.input field={@form[:name]} type="text" required />
+              </div>
+
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Event Type *</label>
+                <.input
+                  field={@form[:event_type]}
+                  type="select"
+                  options={[
+                    {"Ironfolk Event", "ironfolk"},
+                    {"Tournament", "tournament"},
+                    {"Workshop", "workshop"},
+                    {"Social Event", "social"},
+                    {"Training Session", "training"},
+                    {"NZ HEMA Event", "general"}
+                  ]}
+                  required
+                />
+                <p class="text-xs text-gray-500 mt-1">
+                  This determines the color on the calendar
+                </p>
+              </div>
+
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Date *</label>
+                <.input
+                  field={@form[:date]}
+                  type="text"
+                  placeholder="e.g., 15 November 2025"
+                  required
+                />
+                <p class="text-xs text-gray-500 mt-1">
+                  Format: DD Month YYYY (e.g., "15 November 2025"). Also accepts YYYY-MM-DD or DD/MM/YYYY
+                </p>
+              </div>
+
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Location *</label>
+                <.input field={@form[:location]} type="text" required />
+              </div>
+
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">
+                  Link (Optional)
+                </label>
+                <.input field={@form[:link]} type="text" placeholder="https://..." />
+              </div>
+
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Description</label>
+                <.input field={@form[:description]} type="textarea" rows="3" />
+              </div>
+
+              <div>
+                <.input field={@form[:active]} type="checkbox" label="Active (show on website)" />
+              </div>
+
+              <div class="flex justify-end space-x-4 pt-4">
+                <button type="button" phx-click="cancel_form" class="secondary-button">
+                  Cancel
+                </button>
+                <button type="submit" class="rainbow-button">Save Event</button>
+              </div>
+            </.form>
+          </div>
+        </div>
+      </div>
+    <% end %>
+
+    <div class="grid gap-4">
+      <%= for event <- @events do %>
+        <div class="bg-white rounded-lg shadow-md p-6">
+          <div class="flex items-start justify-between">
+            <div class="flex-1">
+              <div class="flex items-center gap-3 mb-2">
+                <h3 class="text-xl font-bold text-gray-900">{event.name}</h3>
+                <span class={"px-2 py-1 rounded text-xs font-bold #{if event.active, do: "bg-green-100 text-green-800", else: "bg-gray-100 text-gray-800"}"}>
+                  {if event.active, do: "ACTIVE", else: "INACTIVE"}
+                </span>
+                <span class={"px-2 py-1 rounded text-xs font-bold #{event_type_badge(event.event_type)}"}>
+                  {Event.event_type_label(event.event_type)}
+                </span>
+              </div>
+              <p class="text-sm text-gray-600 mb-1">📅 {event.date}</p>
+              <p class="text-sm text-gray-600 mb-2">📍 {event.location}</p>
+              <%= if event.description do %>
+                <p class="text-sm text-gray-700 mb-2">{event.description}</p>
+              <% end %>
+              <%= if event.link do %>
+                <a
+                  href={event.link}
+                  target="_blank"
+                  class="text-sm text-pink-600 hover:text-pink-800"
+                >
+                  View details →
+                </a>
+              <% end %>
+            </div>
+            <div class="flex space-x-2">
+              <button
+                phx-click="edit_event"
+                phx-value-id={event.id}
+                class="px-3 py-1 bg-blue-100 text-blue-800 rounded text-sm"
+              >
+                Edit
+              </button>
+              <button
+                phx-click="toggle_active"
+                phx-value-id={event.id}
+                class={"px-3 py-1 rounded text-sm #{if event.active, do: "bg-yellow-100 text-yellow-800", else: "bg-green-100 text-green-800"}"}
+              >
+                {if event.active, do: "Deactivate", else: "Activate"}
+              </button>
+              <button
+                phx-click="delete"
+                phx-value-id={event.id}
+                data-confirm="Delete this event?"
+                class="px-3 py-1 bg-red-100 text-red-800 rounded text-sm"
+              >
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </main>
+</div>

@@ -1,0 +1,253 @@
+<!-- lib/your_app_web/controllers/page_html/about.html.heex -->
+<%!-- Hero Section --%>
+<section class="relative bg-gradient-to-br from-pink-50 to-purple-50 pt-20">
+  <div class="container mx-auto px-4 py-16 lg:py-24">
+    <div class="max-w-4xl mx-auto text-center">
+      <h1 class="text-4xl md:text-6xl font-bold mb-6 text-gray-900">About Ironfolk Combat</h1>
+
+      <p class="text-lg md:text-xl text-gray-700 mb-12 max-w-2xl mx-auto">
+        Wellington's LGBTQ+ friendly Historical European Martial Arts (HEMA) club, dedicated to creating an inclusive space for learning medieval weapon combat.
+      </p>
+    </div>
+  </div>
+  <%!-- Decorative rainbow gradient --%>
+  <div class="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-red-400 via-yellow-400 via-green-400 via-blue-400 via-indigo-400 to-purple-400">
+  </div>
+</section>
+
+<div class="min-h-screen bg-white">
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <!-- Main Content -->
+    <div class="grid md:grid-cols-2 gap-12 mb-12">
+      <div>
+        <h2 class="text-2xl font-semibold text-gray-900 mb-4">Our Mission</h2>
+
+        <p class="text-gray-600 mb-6">
+          At Ironfolk Combat, we are passionate about preserving and practicing the martial arts of medieval Europe.
+          Our focus is on German longsword techniques, but we use a variety of other weapons such as: Saber, Rapier, Dagger, Spear, Sidesword and more!
+        </p>
+
+        <p class="text-gray-600">
+          We are proud to be an LGBTQ+ friendly space that welcomes fencers of all backgrounds and experience levels.
+          Sessions are structured to always include a mixture of lessons, both theoretical and practical, with time to
+          put that theory to the test with free fencing bouts.
+        </p>
+      </div>
+
+      <div>
+        <h2 class="text-2xl font-semibold text-gray-900 mb-4">What We Offer</h2>
+
+        <ul class="space-y-3 text-gray-600">
+          <li class="flex items-start">
+            <span class="text-pink-600 mr-2">•</span>
+            Warm-ups and Lessons to focus on code blade work and footwork
+          </li>
+
+          <li class="flex items-start">
+            <span class="text-pink-600 mr-2">•</span>
+            Members with a broad range of experience to challenge you
+          </li>
+
+          <li class="flex items-start">
+            <span class="text-pink-600 mr-2">•</span>
+            Equipment guidance and loaner gear for beginners
+          </li>
+
+          <li class="flex items-start">
+            <span class="text-pink-600 mr-2">•</span>
+            Tournament preparation and competition opportunities
+          </li>
+
+          <li class="flex items-start">
+            <span class="text-pink-600 mr-2">•</span>
+            Historical context and academic study of source materials
+          </li>
+        </ul>
+      </div>
+    </div>
+    <p class="flex justify-center text-gray-700">
+      You can learn more about the club by visiting our
+      <.link class="pl-1 text-pink-400 hover:text-gray-700" navigate={~p"/faq"}>
+        FAQ section
+      </.link>
+      .
+    </p>
+    <!-- Charity Section -->
+    <div class="mt-12 bg-gradient-to-r from-pink-50 to-purple-50 border-2 border-pink-200 rounded-lg p-8">
+      <h2 class="text-2xl font-semibold text-gray-900 mb-6 text-center">Registered Charity</h2>
+
+      <div class="max-w-3xl mx-auto">
+        <p class="text-gray-700 mb-6 text-center">
+          Ironfolk Combat is a registered charity and incorporated society serving the Wellington region.
+          We're committed to making Historical European Martial Arts accessible to everyone in our community.
+        </p>
+
+        <div class="grid md:grid-cols-2 gap-6 mb-6">
+          <div class="bg-white rounded-lg p-4 border border-pink-200">
+            <h3 class="text-sm font-semibold text-gray-600 mb-2">Charity Registration</h3>
+            <p class="text-gray-900 font-mono text-sm">CC62599</p>
+          </div>
+
+          <div class="bg-white rounded-lg p-4 border border-pink-200">
+            <h3 class="text-sm font-semibold text-gray-600 mb-2">NZBN</h3>
+            <p class="text-gray-900 font-mono text-sm">9429051968922</p>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-lg p-6 border border-pink-200 mb-6">
+          <h3 class="font-semibold text-gray-900 mb-3">What We Do</h3>
+          <ul class="space-y-2 text-gray-700 text-sm">
+            <li class="flex items-start">
+              <span class="text-pink-600 mr-2">•</span>
+              Provide training facilities and equipment for HEMA education
+            </li>
+            <li class="flex items-start">
+              <span class="text-pink-600 mr-2">•</span>
+              Serve as a resource for the Wellington HEMA community
+            </li>
+            <li class="flex items-start">
+              <span class="text-pink-600 mr-2">•</span>
+              Offer advice, information, and advocacy for sport and recreation
+            </li>
+            <li class="flex items-start">
+              <span class="text-pink-600 mr-2">•</span>
+              Make HEMA accessible to the general public regardless of financial circumstances
+            </li>
+            <li class="flex items-start">
+              More information about our charity can be found on the charaties register
+              <.link
+                class="pl-1 text-pink-400 hover:text-gray-700"
+                href="https://www.register.charities.govt.nz/Charity/CC62599"
+              >
+                Here
+              </.link>
+            </li>
+          </ul>
+        </div>
+
+        <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+          <p class="text-sm text-gray-700">
+            <strong>Supporting Our Club:</strong>
+            We ask for monthly membership contributions to cover
+            training space rental and equipment costs. All funds go directly toward maintaining an
+            accessible, safe, and welcoming environment for our members.
+          </p>
+        </div>
+      </div>
+    </div>
+    <!-- Instructor Section -->
+    <div class="bg-gradient-to-r from-pink-25 to-purple-25 rounded-lg p-8 mb-12">
+      <h2 class="text-2xl font-semibold text-gray-900 mb-6 text-center">
+        Our Trainers and Coaches
+      </h2>
+
+      <div class="p-4 grid md:grid-cols-2 gap-8">
+        <.trainer_card
+          photo=""
+          name="Tye"
+        >
+          <:description>
+            <p>Tye did not give me anything to work with, so this card is sad.</p>
+            <p>:(</p>
+          </:description>
+        </.trainer_card>
+        <.trainer_card
+          photo="/images/content/coach_headshots/olive_headshot.jpg"
+          name="Olive"
+        >
+          <:description>
+            <p>
+              Olive gives one on one lessons and coaching at Ironfolk Combat. She specialises in Fabris' rapier, Lew's longsword, and Radaellian sabre. Competition is front of mind for Olive, but she strongly believes in empowering her students to reach their personal fencing goals in whatever arena is front of mind for them. Olive belongs to Ironfolk Combat, Melbourne Messer Club, and Silly Goose Swords historical fencing clubs.
+            </p>
+          </:description>
+          <:weapons>
+            <p>
+              Rapier, Rapier and Dagger,  Longsword, Sabre, and Smallsword
+            </p>
+          </:weapons>
+        </.trainer_card>
+      </div>
+      <!-- Values Section -->
+      <div class="text-center">
+        <h2 class="text-2xl font-semibold text-gray-900 mb-8">Our Values</h2>
+
+        <div class="grid md:grid-cols-3 gap-8">
+          <div class="bg-white border border-pink-200 rounded-lg p-6 shadow-sm">
+            <div class="w-16 h-16 bg-pink-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <svg
+                class="w-8 h-8 text-pink-600"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"
+                >
+                </path>
+              </svg>
+            </div>
+
+            <h3 class="text-lg font-semibold text-gray-900 mb-3">Safety First</h3>
+
+            <p class="text-gray-600">
+              All training is conducted with proper protective equipment and progressive skill building.
+            </p>
+          </div>
+
+          <div class="bg-white border border-purple-200 rounded-lg p-6 shadow-sm">
+            <div class="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <svg
+                class="w-8 h-8 text-purple-600"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
+                >
+                </path>
+              </svg>
+            </div>
+
+            <h3 class="text-lg font-semibold text-gray-900 mb-3">Historical Accuracy</h3>
+
+            <p class="text-gray-600">
+              Our techniques are based on careful study of medieval treatises and manuscripts.
+            </p>
+          </div>
+
+          <div class="bg-white border border-pink-200 rounded-lg p-6 shadow-sm">
+            <div class="w-16 h-16 bg-gradient-to-r from-pink-100 to-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <svg
+                class="w-8 h-8 text-pink-600"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+                >
+                </path>
+              </svg>
+            </div>
+
+            <h3 class="text-lg font-semibold text-gray-900 mb-3">Inclusive Community</h3>
+
+            <p class="text-gray-600">
+              We welcome all people regardless of background, age, gender identity, or experience level.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

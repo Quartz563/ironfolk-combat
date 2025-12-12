@@ -1,0 +1,789 @@
+<.flash_group flash={@flash} />
+<%!-- Hero Section --%>
+<section class="relative bg-gradient-to-br from-pink-50 to-purple-50 dark:from-gray-900 dark:to-gray-800 pt-20">
+  <div class="container mx-auto px-4 py-16 lg:py-24">
+    <div class="max-w-4xl mx-auto text-center">
+      <h1 class="text-4xl md:text-6xl font-bold mb-6 text-gray-900 dark:text-white">
+        Join Ironfolk Combat
+      </h1>
+
+      <p class="text-lg md:text-xl text-gray-700 dark:text-gray-300 mb-12 max-w-2xl mx-auto">
+        Ready to begin your Fencing/HEMA journey? Signup for your three free sessions!
+      </p>
+    </div>
+  </div>
+
+  <div class="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-red-400 via-yellow-400 via-green-400 via-blue-400 via-indigo-400 to-purple-400">
+  </div>
+</section>
+
+<div class="min-h-screen bg-white ">
+  <div class="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div class="bg-white  border border-pink-200  rounded-lg shadow-lg p-8">
+      <.form for={@form} phx-change="validate" phx-submit="save" class="space-y-6">
+        <%!-- Personal Information --%>
+        <div class="border-b border-gray-200  pb-6">
+          <h2 class="text-lg font-semibold text-gray-900  mb-4">Personal Information</h2>
+
+          <div class="grid md:grid-cols-2 gap-4">
+            <div>
+              <label for="first_name" class="block text-sm font-medium text-gray-700 mb-2">
+                First Name *
+              </label>
+              <.input field={@form[:first_name]} type="text" required />
+            </div>
+
+            <div>
+              <label for="last_name" class="block text-sm font-medium text-gray-700  mb-2">
+                Last Name *
+              </label>
+              <.input field={@form[:last_name]} type="text" required />
+            </div>
+          </div>
+        </div>
+        <%!-- Contact Information --%>
+        <div class="border-b border-gray-200 pb-6">
+          <h2 class="text-lg font-semibold text-gray-900  mb-4">Contact Information</h2>
+
+          <div class="space-y-4">
+            <div>
+              <label for="email" class="block text-sm font-medium text-gray-700 mb-2">
+                Email Address *
+              </label>
+              <.input field={@form[:email]} type="email" required />
+            </div>
+
+            <div>
+              <label for="phone" class="block text-sm font-medium text-gray-700 mb-2">
+                Phone Number *
+              </label>
+              <.input field={@form[:phone]} type="tel" required />
+            </div>
+
+            <div>
+              <label for="age_range" class="block text-sm font-medium text-gray-700 mb-2">
+                Age Range *
+              </label>
+              <.input
+                field={@form[:age_range]}
+                type="select"
+                prompt="Select age range"
+                options={[
+                  {"Under 18", "under_18"},
+                  {"18-25", "18_25"},
+                  {"26-35", "26_35"},
+                  {"36-45", "36_45"},
+                  {"46-55", "46_55"},
+                  {"Over 55", "over_55"}
+                ]}
+                required
+              />
+            </div>
+          </div>
+        </div>
+        <%!-- Experience & Emergency Contact --%>
+        <div class="border-b border-gray-200 pb-6">
+          <h2 class="text-lg font-semibold text-gray-900 mb-4">Experience & Safety</h2>
+
+          <div class="space-y-4">
+            <div>
+              <label for="experience_level" class="block text-sm font-medium text-gray-700 mb-2">
+                Previous HEMA/Martial Arts Experience
+              </label>
+              <.input
+                field={@form[:experience_level]}
+                type="select"
+                options={[
+                  {"Complete beginner", "none"},
+                  {"Some martial arts experience", "some_martial_arts"},
+                  {"Some HEMA experience", "some_hema"},
+                  {"Experienced HEMA practitioner", "experienced_hema"}
+                ]}
+              />
+            </div>
+
+            <div>
+              <label
+                for="emergency_contact_name"
+                class="block text-sm font-medium text-gray-700 mb-2"
+              >
+                Emergency Contact Name *
+              </label>
+              <.input field={@form[:emergency_contact_name]} type="text" required />
+            </div>
+
+            <div>
+              <label
+                for="emergency_contact_phone"
+                class="block text-sm font-medium text-gray-700 mb-2"
+              >
+                Emergency Contact Phone *
+              </label>
+              <.input field={@form[:emergency_contact_phone]} type="tel" required />
+            </div>
+
+            <div>
+              <label for="medical_conditions" class="block text-sm font-medium text-gray-700 mb-2">
+                Medical Conditions or Injuries (Optional)
+              </label>
+              <.input
+                field={@form[:medical_conditions]}
+                type="textarea"
+                rows="3"
+                placeholder="Please list any medical conditions, injuries, or physical limitations we should be aware of..."
+              />
+            </div>
+          </div>
+        </div>
+        <%!-- Policy Agreement Section --%>
+        <div class="space-y-4">
+          <div class="bg-pink-50 border border-pink-200 rounded-lg p-4">
+            <h3 class="text-md font-semibold text-gray-900 mb-3">Required Reading</h3>
+
+            <p class="text-sm text-gray-700 mb-4">
+              Before joining, you must read and acknowledge our Code of Conduct and Relationship Policy.
+            </p>
+
+            <div class="space-y-3">
+              <div class="flex items-center justify-between p-3 bg-white rounded border border-gray-200">
+                <div class="flex items-center space-x-3">
+                  <%= if @code_of_conduct_read do %>
+                    <svg
+                      class="w-6 h-6 text-green-600"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                      >
+                      </path>
+                    </svg>
+                  <% else %>
+                    <svg
+                      class="w-6 h-6 text-gray-400"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                      >
+                      </path>
+                    </svg>
+                  <% end %>
+                  <span class="text-sm font-medium text-gray-900">Code of Conduct</span>
+                </div>
+
+                <button
+                  type="button"
+                  phx-click="show_code_of_conduct"
+                  class="text-sm text-pink-600 hover:text-pink-800 font-medium"
+                >
+                  {if @code_of_conduct_read, do: "Read Again", else: "Read Now"}
+                </button>
+              </div>
+
+              <div class="flex items-center justify-between p-3 bg-white rounded border border-gray-200">
+                <div class="flex items-center space-x-3">
+                  <%= if @relationship_policy_read do %>
+                    <svg
+                      class="w-6 h-6 text-green-600"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                      >
+                      </path>
+                    </svg>
+                  <% else %>
+                    <svg
+                      class="w-6 h-6 text-gray-400"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                      >
+                      </path>
+                    </svg>
+                  <% end %>
+                  <span class="text-sm font-medium text-gray-900">Relationship Policy</span>
+                </div>
+
+                <button
+                  type="button"
+                  phx-click="show_relationship_policy"
+                  class="text-sm text-pink-600 hover:text-pink-800 font-medium"
+                >
+                  {if @relationship_policy_read, do: "Read Again", else: "Read Now"}
+                </button>
+              </div>
+            </div>
+          </div>
+          <%!-- Waiver Agreement --%>
+          <div class="flex items-start">
+            <.input
+              field={@form[:waiver_agreement]}
+              type="checkbox"
+              required
+              label="I understand that HEMA training involves physical activity and potential risk of injury. I agree to follow all safety protocols and acknowledge that I participate at my own risk. I will complete a formal waiver before my first training session. *"
+            />
+          </div>
+          <%!-- Contact Agreement --%>
+          <div class="flex items-start">
+            <.input
+              field={@form[:contact_agreement]}
+              type="checkbox"
+              required
+              label="I agree to be contacted by Ironfolk Combat regarding training schedules, events, and club information. *"
+            />
+          </div>
+
+          <button
+            type="submit"
+            class={"w-full text-lg py-3 transition-all duration-200 #{if @code_of_conduct_read and @relationship_policy_read, do: "rainbow-button", else: "bg-gray-300 text-gray-500 cursor-not-allowed rounded-lg font-semibold"}"}
+            disabled={not (@code_of_conduct_read and @relationship_policy_read)}
+          >
+            Submit Application
+          </button>
+          <%= if not (@code_of_conduct_read and @relationship_policy_read) do %>
+            <p class="text-sm text-center text-gray-600">
+              Please read both policies above to enable submission
+            </p>
+          <% end %>
+        </div>
+      </.form>
+    </div>
+    <%!-- Information Box --%>
+    <div class="mt-8 bg-gradient-to-r from-pink-50 to-purple-50 border-pink-200 rounded-lg p-6">
+      <h3 class="text-lg font-semibold text-gray-900 mb-3">What happens next?</h3>
+
+      <ul class="space-y-2 text-gray-700">
+        <li class="flex items-start">
+          <span class="text-pink-600 mr-2">1.</span>
+          We'll send you an email with all the information about the club's training times and community
+        </li>
+
+        <li class="flex items-start">
+          <span class="text-pink-600 mr-2">2.</span>
+          Show up to the lesson and get familiar with our training gear and practices
+        </li>
+
+        <li class="flex items-start">
+          <span class="text-pink-600 mr-2">3.</span> Begin your HEMA journey!
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+<%!-- Code of Conduct Modal --%>
+<%= if @show_code_of_conduct do %>
+  <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+    <div class="bg-white rounded-lg shadow-xl max-w-3xl w-full max-h-[80vh] flex flex-col">
+      <div class="p-6 border-b border-gray-200">
+        <div class="flex items-center justify-between">
+          <h2 class="text-2xl font-bold text-gray-900">Code of Conduct</h2>
+
+          <button
+            phx-click="close_code_of_conduct"
+            class="text-gray-400 hover:text-gray-600"
+          >
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M6 18L18 6M6 6l12 12"
+              >
+              </path>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <div
+        class="flex-1 overflow-y-auto p-6"
+        phx-hook="ScrollDetector"
+        id="code-of-conduct-content"
+        data-event="code_of_conduct_scrolled"
+      >
+        <div class="prose max-w-none">
+          <h2>Ironfolk Combat Code of Conduct</h2>
+
+          <h3>Values</h3>
+
+          <p>
+            Ironfolk Combat strives to create an environment of safety, fun, and supportiveness that is accessible to anyone who wishes to participate. As a club, we organise around our core values:
+          </p>
+
+          <ul>
+            <li><strong>Safety</strong></li>
+
+            <li><strong>Camaraderie</strong></li>
+
+            <li><strong>Fun</strong></li>
+
+            <li><strong>Learning</strong></li>
+          </ul>
+
+          <p>
+            These values serve as a guide for members to ensure that we all participate in the way we mean to proceed. This document seeks to further break down these values, provide a guide to member conduct, and sets out the actions and procedures for recognising problems or issues with a member's conduct.
+          </p>
+
+          <h3>Safety</h3>
+
+          <p>
+            Within a HEMA club, safety is paramount. We must recognise the inherent danger in swinging steel at each other and take all necessary steps to ensure our own safety and the safety of other members of the club. We must also recognise that a safe environment is not just masks and padding, and ensure that our club is a safe space for all of our members to learn, practice, and participate.
+          </p>
+
+          <ul>
+            <li>We recognise safety is paramount</li>
+
+            <li>We all take responsibility for ensuring safety during club activities</li>
+
+            <li>We wear correct protective equipment for our activity</li>
+
+            <li>We communicate</li>
+
+            <li>We seek and obtain consent</li>
+
+            <li>We ask for, understand, and recognise the needs of others</li>
+
+            <li>We receive feedback</li>
+
+            <li>We do not tolerate unsafe behaviour</li>
+
+            <li>We speak up</li>
+
+            <li>We guide gently</li>
+          </ul>
+
+          <h3>Camaraderie</h3>
+
+          <p>
+            We recognise that to ensure our club remains stable, we must build and maintain relationships between members, and ensure that ours is a club that maintains a safe and inclusive environment that recognises the varied needs of our fellow members. We aim to build a strong sense of kinship and belonging by ensuring that all members are recognised, involved, seen, heard, and feel valued during club time.
+          </p>
+
+          <ul>
+            <li>We respect each other</li>
+
+            <li>We listen</li>
+
+            <li>We communicate</li>
+
+            <li>We include</li>
+
+            <li>We value input</li>
+
+            <li>We seek to understand</li>
+
+            <li>We seek to resolve</li>
+          </ul>
+
+          <h3>Fun</h3>
+
+          <p>
+            As a core value, we aim to recognise that no member needs to be here, and that enjoying ourselves and the company we keep is a large part of why we do what we do. By including this here we understand that fun is key to ensuring a successful and thriving club, with a culture we can be proud of.
+          </p>
+
+          <ul>
+            <li>We have fun together</li>
+
+            <li>We don't take ourselves too seriously</li>
+
+            <li>We communicate</li>
+
+            <li>We are inclusive and positive</li>
+
+            <li>We reinforce the enjoyment of others</li>
+          </ul>
+
+          <h3>Learning</h3>
+
+          <p>
+            Ironfolk Combat is a learning environment and we aim to ensure that all members are able to learn (and teach) the things that they are interested in. We are all here to be sword people, and learning is key to this goal.
+          </p>
+
+          <ul>
+            <li>We listen</li>
+
+            <li>We guide</li>
+
+            <li>We communicate</li>
+
+            <li>We are respectful when we disagree</li>
+
+            <li>We debate, we don't argue</li>
+
+            <li>We are clear and concise</li>
+          </ul>
+
+          <h3>Conduct</h3>
+
+          <p>
+            This section serves as a guide for members to understand that there are actions we will not tolerate as a club. This is not an exhaustive list, and it should be noted that any action deemed inconsistent with our club values, or otherwise deemed inappropriate by the club/club leaders may result in disciplinary action.
+          </p>
+
+          <h4>Discrimination and Harassment</h4>
+
+          <p>
+            <strong>1.</strong>
+            Ironfolk Combat celebrates diversity, and recognises that there is value in growing more diverse. We will not tolerate discrimination for any reason. We aim to be a welcoming, safe space for diverse identities, whether it be of culture, gender, sexuality, race, religion, politics, or otherwise. We expect that members will be respectful and welcoming of any member regardless of their background.
+          </p>
+
+          <p>
+            <strong>1a.</strong>
+            For clarity, any views that conflict with the validity of the identity of a member are not welcome. This is not the place for discourse, and these discussions are not useful. It should be a given that members are entitled to their identity.
+          </p>
+
+          <p>
+            <strong>2.</strong>
+            It is critical to note that we will not tolerate, nor welcome or include, any member with views that inherently disregard the validity of other cultures or identities including (but not limited to) Nazism (or any form of White Supremacy), not recognising gender diversity, or religion that is unable to tolerate diversity. This is not a matter of 'keep it to yourself', if you're a Nazi, you aren't welcome in our club, cry about it.
+          </p>
+
+          <p>
+            <strong>3.</strong>
+            There is no excuse for unwanted physical contact, it is easy to ask for consent. We expect all members to ask for consent before touching another person, and we ask that members communicate and are clear about their physical boundaries during these discussions.
+          </p>
+
+          <p>
+            <strong>3a.</strong>
+            We ask that members never assume consent, unless an explicit discussion about implicit consent has been had between the two members, and a distinct understanding has been reached. In these situations, we expect members to be clear with their boundaries, and regularly communicate to ensure the safety of everyone involved.
+          </p>
+
+          <p>
+            <strong>4.</strong>
+            Our club deals in controlled action with various weapons and simulators. While these lend themselves to aggressive action, violence of any kind will not be tolerated. Any action taken upon another member or property in anger or otherwise emotionally, with or without a weapon in hand will not be accepted.
+          </p>
+
+          <p>
+            <strong>5.</strong>
+            Bullying will not be tolerated. We ask that members that are feeling bullied talk to club leaders, or other members, as appropriate. We take bullying allegations seriously, and we expect members to receive feedback around their behaviour and change. In the case of bullying allegations, initially a discussion will be had with the relevant member. If there is not an immediate and ongoing change in behaviour, further action will be taken as appropriate.
+          </p>
+
+          <h4>Equipment/Property</h4>
+
+          <p>
+            Members will treat club equipment (including the equipment of other members) as if it were their own, if not better.
+          </p>
+
+          <p>
+            Members will not intentionally take action to damage/break equipment or property, including their own, on club time. This is dangerous, and disrespectful to other members.
+          </p>
+
+          <p>
+            Members will ensure any equipment that they use is safe and appropriately maintained. Damaged or dangerous equipment will not be used, and burrs, sharp edges, and other dangerous elements will be removed before use of any equipment.
+          </p>
+
+          <p>
+            Members will ensure that they are wearing adequate safety equipment for an activity, as per the Ironfolk equipment guidelines.
+          </p>
+
+          <h4>Event Conduct</h4>
+
+          <p>
+            As representatives of the club, members are expected to comply with the Code of Conduct at any event including events hosted by other clubs.
+          </p>
+
+          <p>
+            Ironfolk Combat has established a reputation in the HEMA community for building kinship and sportsmanship. Members are expected to maintain positive, sportly conduct, in line with our values, while representing our club at events.
+          </p>
+
+          <p>
+            For clarity, HEMA in Aotearoa New Zealand is a small community, we must take the club's reputation very seriously. Damage to our reputation caused by an individual will be dealt with appropriately by club leaders.
+          </p>
+
+          <h3>Discipline</h3>
+
+          <p>
+            We expect members to comply with NZ law at all times while representing the club. Members are also expected to comply with the law in any other country they may visit as a representative of Ironfolk Combat. Any illegal actions will be dealt with by the appropriate authorities.
+          </p>
+
+          <p>
+            Breaches of the Code of Conduct, or any other misconduct as determined by the Club/Club Leaders, will be dealt with on a case by case basis. In many cases, we will take a restorative communication based approach, however we recognise that this is not always ideal.
+          </p>
+
+          <h4>Major Misconduct</h4>
+
+          <p>
+            Major misconduct will largely consist of intentional, recurring, repeated, or negative behaviour breaching one or many of the conduct expectations or values as outlined in the code of conduct. This may also include illegal activity, or breaches which tangibly impact the club's standing or reputation in the wider community.
+          </p>
+
+          <p>
+            By decision of the club/club leaders, upon discovery of major misconduct, relevant action will be taken, including but not limited to:
+          </p>
+
+          <ul>
+            <li>Initiating an investigation</li>
+
+            <li>Immediate expulsion from the club</li>
+
+            <li>Alerting the appropriate authorities</li>
+
+            <li>Suspension from the club</li>
+
+            <li>Suspension/ban from competition</li>
+
+            <li>Demotion from a leadership position</li>
+
+            <li>Other disciplinary action, including behaviour plans/restorative resolutions</li>
+          </ul>
+
+          <h4>Minor Misconduct</h4>
+
+          <p>
+            Minor misconduct is defined as breaches of the club Values/conduct expectations on a minor scale. Repeated breaches, or patterns of behaviour will be defined as Major Misconduct as above. In the case of minor misconduct, we will focus on a restorative approach, including but not limited to:
+          </p>
+
+          <ul>
+            <li>Discussion about the behaviour</li>
+
+            <li>Guidance on appropriate conduct</li>
+
+            <li>Mediation</li>
+
+            <li>Restorative resolutions processes</li>
+
+            <li>Issuing a warning</li>
+
+            <li>Suspension from club activities</li>
+
+            <li>Suspension from competition</li>
+          </ul>
+
+          <h3>Admin Note</h3>
+
+          <p>
+            A Code of Conduct can be viewed as a doom and gloom document, in place to allow us to deal with anti-social behaviour as a collective. In practice, we aim to have a culture in place where issues are legitimate mistakes or miscommunications, and are dealt with courageously with immediate feedback and brave conversation. This document serves as a tool for situations where this is not possible or appropriate, and a guide for members on how we can achieve this culture together.
+          </p>
+
+          <p>
+            Each member will be provided a digital copy of this document. So long as this document has been provided to a member, the member, by participating in club activities, agrees that they have read and understood this document, and to act in accordance with club values and conduct expectations at all times.
+          </p>
+        </div>
+      </div>
+
+      <div class="p-6 border-t border-gray-200 flex justify-between items-center">
+        <%= if @code_of_conduct_scrolled do %>
+          <p class="text-sm text-green-600 flex items-center">
+            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M5 13l4 4L19 7"
+              >
+              </path>
+            </svg>
+            Document fully read
+          </p>
+        <% else %>
+          <p class="text-sm text-gray-600">Please scroll to the bottom to continue</p>
+        <% end %>
+
+        <div class="flex space-x-3">
+          <button
+            type="button"
+            phx-click="close_code_of_conduct"
+            class="secondary-button"
+          >
+            Close
+          </button>
+          <button
+            type="button"
+            phx-click="mark_code_of_conduct_read"
+            class={"px-4 py-2 rounded-lg font-semibold transition-all duration-200 #{if @code_of_conduct_scrolled, do: "rainbow-button", else: "bg-gray-300 text-gray-500 cursor-not-allowed"}"}
+            disabled={not @code_of_conduct_scrolled}
+          >
+            I Have Read and Understand
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>
+<%!-- Relationship Policy Modal --%>
+<%= if @show_relationship_policy do %>
+  <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+    <div class="bg-white rounded-lg shadow-xl max-w-3xl w-full max-h-[80vh] flex flex-col">
+      <div class="p-6 border-b border-gray-200">
+        <div class="flex items-center justify-between">
+          <h2 class="text-2xl font-bold text-gray-900">Relationship Policy</h2>
+
+          <button
+            phx-click="close_relationship_policy"
+            class="text-gray-400 hover:text-gray-600"
+          >
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M6 18L18 6M6 6l12 12"
+              >
+              </path>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <div
+        class="flex-1 overflow-y-auto p-6"
+        phx-hook="ScrollDetector"
+        id="relationship-policy-content"
+        data-event="relationship_policy_scrolled"
+      >
+        <div class="prose max-w-none">
+          <p class="font-semibold">
+            Above all, Ironfolk Combat takes the physical and emotional safety of its members very seriously. Trainings and events organized by Ironfolk are designed as a safe space for camaraderie, friendship, fun, and community. However, this club is not a dating service, and many join wanting only to learn swords or make platonic friends. Using or viewing Ironfolk as a dating service goes against the opt-in and consent-based values of this group, creates an unsafe environment, and will not be tolerated.
+          </p>
+
+          <h3>Guidelines</h3>
+
+          <p>
+            To ensure everyone's safety, members must agree to the following guidelines at trainings and events:
+          </p>
+
+          <ul>
+            <li>
+              Friendliness, politeness, or club membership should never be assumed as interest in dating.
+            </li>
+
+            <li>
+              Sexual harassment, including any implicit or explicit suggestive actions or comments made without explicit consent, will absolutely not be tolerated.
+            </li>
+
+            <li>
+              Hitting on members implicitly or explicitly is not acceptable, regardless of how this is received.
+            </li>
+
+            <li>
+              Sexual jokes or comments about members are not acceptable, regardless of how this is received.
+            </li>
+
+            <li>
+              Explicit consent must be obtained before touching anyone even in a platonic-intended way.
+            </li>
+
+            <li>
+              Senior members, including both Leadership and long-standing members of the club, must be especially aware of power dynamics and not hit on newbies regardless of how it is received.
+            </li>
+
+            <li>
+              PDA within existing relationships should be reasonable and respectful of others' space.
+            </li>
+
+            <li>
+              Even outside Ironfolk trainings and events, a member's participation in informal hangouts should never be assumed as an interest in dating, and there must always be explicit consent.
+            </li>
+          </ul>
+
+          <h3>Examples of Unacceptable Behavior</h3>
+
+          <p>Examples of unacceptable behavior include, but are not limited to:</p>
+
+          <ul>
+            <li>
+              Viewing someone's kindness as interest – it is common for someone feeling uncomfortable to respond in a polite or pleasant way out of fear of upsetting the other person
+            </li>
+
+            <li>
+              Asking about or alluding to sexual preferences, including asking for someone's Fetlife or if they're "in the kink scene"
+            </li>
+
+            <li>Participating in the club with the intention of finding people to date</li>
+          </ul>
+
+          <h3>Recourse</h3>
+
+          <ul>
+            <li>
+              An anonymous reporting form for sexual harassment, as well as any breaches of the Code of Conduct, is available <a
+                href="https://forms.gle/6vKumeJv3EdC2yih6"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="text-pink-600 dark:text-pink-400 hover:underline"
+              >here</a>. Ironfolk will ensure the safety, anonymity, and support of those reporting. Any retaliation may lead to immediate dismissal from the club.
+            </li>
+
+            <li>
+              Offenses will be dealt with on a case-by-case basis based on Code of Conduct procedures.
+            </li>
+
+            <li>
+              First offense and unintentional offhand comments may constitute a Minor Misconduct.
+            </li>
+
+            <li>
+              Repeated or intentional comments may constitute a Major Misconduct and lead to dismissal.
+            </li>
+
+            <li>
+              Any comment or action that endangers someone's safety will lead to immediate dismissal and any illegal comments or actions will be dealt with by the appropriate authorities.
+            </li>
+          </ul>
+
+          <div class="bg-yellow-50 border border-yellow-200 dark:border-yellow-800 rounded-lg p-4 mt-6">
+            <p class="text-sm text-gray-800 ">
+              <strong>Note:</strong>
+              Upon approval of your membership, you will be required to sign a physical or digital acknowledgment of this policy before your first training session.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="p-6 border-t border-gray-200 flex justify-between items-center">
+        <%= if @relationship_policy_scrolled do %>
+          <p class="text-sm text-green-600 flex items-center">
+            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M5 13l4 4L19 7"
+              >
+              </path>
+            </svg>
+            Document fully read
+          </p>
+        <% else %>
+          <p class="text-sm text-gray-600">Please scroll to the bottom to continue</p>
+        <% end %>
+
+        <div class="flex space-x-3">
+          <button
+            type="button"
+            phx-click="close_relationship_policy"
+            class="secondary-button"
+          >
+            Close
+          </button>
+          <button
+            type="button"
+            phx-click="mark_relationship_policy_read"
+            class={"px-4 py-2 rounded-lg font-semibold transition-all duration-200 #{if @relationship_policy_scrolled, do: "rainbow-button", else: "bg-gray-300 text-gray-500 cursor-not-allowed"}"}
+            disabled={not @relationship_policy_scrolled}
+          >
+            I Have Read and Understand
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>
