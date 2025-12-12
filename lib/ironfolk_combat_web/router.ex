@@ -35,9 +35,9 @@ defmodule IronfolkCombatWeb.Router do
     # live "/payment/success", PaymentSuccessLive
     live "/blog", BlogIndexLive
     live "/ifn-lookup", IFNLookupLive
+    live "/contact", ContactLive
 
     get "/about", PageController, :about
-    get "/contact", PageController, :contact
     get "/faq", PageController, :faq
     get "/resources", PageController, :resources
     get "/blog/:slug", BlogController, :show
@@ -64,6 +64,7 @@ defmodule IronfolkCombatWeb.Router do
     live "/alerts/new", AlertsLive, :new
     live "/events", EventsLive, :index
     live "/events/new", EventsLive, :new
+    live "/messages", MessagesLive
     live "/members", MembersLive
     live "/payments", PaymentsLive
   end

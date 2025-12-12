@@ -11,6 +11,7 @@ defmodule IronfolkCombat.Admin do
   alias IronfolkCombat.Content.Alert
   alias IronfolkCombat.Events.Event
   alias IronfolkCombat.Members
+  alias IronfolkCombat.Content.ContactMessage
 
   @pubsub IronfolkCombat.PubSub
 
@@ -475,5 +476,47 @@ defmodule IronfolkCombat.Admin do
 
   defp broadcast_event_change do
     Phoenix.PubSub.broadcast(@pubsub, "events", {:events_updated})
+  end
+
+  # ============================================
+  # CONTACT MESSAGE MANAGEMENT
+  # ============================================
+
+  def list_contact_messages(opts \\ []) do
+    status = Keyword.get(opts, :status, :all)
+
+    ContactMessage
+    |> filter_by_message_status(status)
+    |> order_by([m], desc: m.inserted_at)
+    |> Repo.all()
+  end
+
+  defp filter_by_message_status(query, :all), do: query
+  defp filter_by_message_status(query, status), do: where(query, [m], m.status == ^status)
+
+  def get_contact_message!(id), do: Repo.get!(ContactMessage, id)
+
+  def create_contact_message(attrs \\ %{}) do
+    %ContactMessage{}
+    |> ContactMessage.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  def update_contact_message(%ContactMessage{} = message, attrs) do
+    message
+    |> ContactMessage.changeset(attrs)
+    |> Repo.update()
+  end
+
+  def mark_message_read(%ContactMessage{} = message) do
+    update_contact_message(message, %{status: "read"})
+  end
+
+  def archive_message(%ContactMessage{} = message) do
+    update_contact_message(message, %{status: "archived"})
+  end
+
+  def delete_contact_message(%ContactMessage{} = message) do
+    Repo.delete(message)
   end
 end

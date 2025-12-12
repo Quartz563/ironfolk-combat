@@ -25,6 +25,7 @@ defmodule IronfolkCombatWeb.Admin.DashboardLive do
     |> assign(:draft_posts_count, count_draft_posts())
     |> assign(:active_events_count, count_active_events())
     |> assign(:active_alerts_count, count_active_alerts())
+    |> assign(:unread_messages_count, count_unread_messages())
   end
 
   defp count_pending_signups do
@@ -56,6 +57,10 @@ defmodule IronfolkCombatWeb.Admin.DashboardLive do
       nil -> 0
       _ -> 1
     end
+  end
+
+  defp count_unread_messages do
+    Admin.list_contact_messages(status: "unread") |> length()
   end
 
   defp get_admin_from_session(%{"admin_id" => admin_id}) do

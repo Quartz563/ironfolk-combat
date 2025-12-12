@@ -1,0 +1,211 @@
+<div class="min-h-screen bg-gray-50">
+  <header class="bg-white shadow-sm border-b-4 border-pink-500">
+    <div class="container mx-auto px-4 py-4">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center space-x-4">
+          <.link navigate={~p"/admin/dashboard"} class="text-pink-600 hover:text-pink-800">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M10 19l-7-7m0 0l7-7m-7 7h18"
+              >
+              </path>
+            </svg>
+          </.link>
+          <div>
+            <h1 class="text-2xl font-bold text-gray-900">Contact Messages</h1>
+            <p class="text-sm text-gray-600">{length(@messages)} messages</p>
+          </div>
+        </div>
+        <.link href={~p"/admin/logout"} method="delete" class="secondary-button">Logout</.link>
+      </div>
+    </div>
+  </header>
+
+  <main class="container mx-auto px-4 py-8">
+    <!-- Filters -->
+    <div class="bg-white rounded-lg shadow-md p-4 mb-6">
+      <div class="flex items-center space-x-4">
+        <span class="text-sm font-medium text-gray-700">Filter by status:</span>
+        <button
+          phx-click="filter"
+          phx-value-status="all"
+          class={"px-4 py-2 rounded-md text-sm font-medium transition-colors #{if @filter == "all", do: "bg-pink-600 text-white", else: "bg-gray-200 text-gray-700 hover:bg-gray-300"}"}
+        >
+          All
+        </button>
+        <button
+          phx-click="filter"
+          phx-value-status="unread"
+          class={"px-4 py-2 rounded-md text-sm font-medium transition-colors #{if @filter == "unread", do: "bg-yellow-600 text-white", else: "bg-gray-200 text-gray-700 hover:bg-gray-300"}"}
+        >
+          Unread
+        </button>
+        <button
+          phx-click="filter"
+          phx-value-status="read"
+          class={"px-4 py-2 rounded-md text-sm font-medium transition-colors #{if @filter == "read", do: "bg-blue-600 text-white", else: "bg-gray-200 text-gray-700 hover:bg-gray-300"}"}
+        >
+          Read
+        </button>
+        <button
+          phx-click="filter"
+          phx-value-status="archived"
+          class={"px-4 py-2 rounded-md text-sm font-medium transition-colors #{if @filter == "archived", do: "bg-gray-600 text-white", else: "bg-gray-200 text-gray-700 hover:bg-gray-300"}"}
+        >
+          Archived
+        </button>
+      </div>
+    </div>
+    
+<!-- Messages List -->
+    <%= if Enum.empty?(@messages) do %>
+      <div class="bg-white rounded-lg shadow-md p-12 text-center">
+        <svg
+          class="w-16 h-16 text-gray-400 mx-auto mb-4"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+          >
+          </path>
+        </svg>
+        <p class="text-gray-600 text-lg">No messages found</p>
+      </div>
+    <% else %>
+      <div class="space-y-4">
+        <%= for message <- @messages do %>
+          <div class={"bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow #{if message.status == "unread", do: "border-l-4 border-yellow-400"}"}>
+            <div class="p-6">
+              <div class="flex items-start justify-between mb-4">
+                <div class="flex-1">
+                  <div class="flex items-center gap-3 mb-2">
+                    <h3 class="text-xl font-bold text-gray-900">{message.name}</h3>
+                    <span class={"px-3 py-1 rounded-full text-xs font-semibold #{status_badge(message.status)}"}>
+                      {String.upcase(message.status)}
+                    </span>
+                  </div>
+                  <p class="text-sm text-gray-600 mb-1">📧 {message.email}</p>
+                  <%= if message.subject do %>
+                    <p class="text-sm font-medium text-gray-700">Subject: {message.subject}</p>
+                  <% end %>
+                  <p class="text-sm text-gray-600">
+                    {Calendar.strftime(message.inserted_at, "%B %d, %Y at %I:%M %p")}
+                  </p>
+                </div>
+              </div>
+
+              <div class="mb-4">
+                <p class="text-gray-700 line-clamp-3">{message.message}</p>
+              </div>
+
+              <div class="flex items-center space-x-2 pt-4 border-t border-gray-200">
+                <button
+                  phx-click="view_message"
+                  phx-value-id={message.id}
+                  class="px-3 py-1 text-sm bg-blue-100 text-blue-800 rounded hover:bg-blue-200 transition-colors"
+                >
+                  View Full
+                </button>
+                <%= if message.status == "unread" do %>
+                  <button
+                    phx-click="mark_read"
+                    phx-value-id={message.id}
+                    class="px-3 py-1 text-sm bg-green-100 text-green-800 rounded hover:bg-green-200 transition-colors"
+                  >
+                    Mark Read
+                  </button>
+                <% end %>
+                <%= if message.status != "archived" do %>
+                  <button
+                    phx-click="archive"
+                    phx-value-id={message.id}
+                    class="px-3 py-1 text-sm bg-gray-100 text-gray-800 rounded hover:bg-gray-200 transition-colors"
+                  >
+                    Archive
+                  </button>
+                <% end %>
+                <button
+                  phx-click="delete"
+                  phx-value-id={message.id}
+                  data-confirm="Delete this message?"
+                  class="px-3 py-1 text-sm bg-red-100 text-red-800 rounded hover:bg-red-200 transition-colors ml-auto"
+                >
+                  Delete
+                </button>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    <% end %>
+  </main>
+  
+<!-- Message Detail Modal -->
+  <%= if @selected_message do %>
+    <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+      <div class="bg-white rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+        <div class="p-6">
+          <div class="flex items-start justify-between mb-4">
+            <div class="flex-1">
+              <h2 class="text-2xl font-bold text-gray-900 mb-2">{@selected_message.name}</h2>
+              <p class="text-sm text-gray-600">📧 {@selected_message.email}</p>
+              <%= if @selected_message.subject do %>
+                <p class="text-sm font-medium text-gray-700 mt-1">
+                  Subject: {@selected_message.subject}
+                </p>
+              <% end %>
+              <p class="text-sm text-gray-600">
+                {Calendar.strftime(@selected_message.inserted_at, "%B %d, %Y at %I:%M %p")}
+              </p>
+            </div>
+            <button phx-click="close_message" class="text-gray-400 hover:text-gray-600">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M6 18L18 6M6 6l12 12"
+                >
+                </path>
+              </svg>
+            </button>
+          </div>
+
+          <div class="bg-gray-50 rounded-lg p-4 mb-4">
+            <h3 class="text-sm font-semibold text-gray-700 mb-2">Message:</h3>
+            <p class="text-gray-900 whitespace-pre-wrap">{@selected_message.message}</p>
+          </div>
+
+          <div class="flex justify-end space-x-3 pt-4 border-t">
+            <%= if @selected_message.status != "archived" do %>
+              <button
+                phx-click="archive"
+                phx-value-id={@selected_message.id}
+                class="secondary-button"
+              >
+                Archive
+              </button>
+            <% end %>
+            <button
+              phx-click="delete"
+              phx-value-id={@selected_message.id}
+              data-confirm="Delete this message?"
+              class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700"
+            >
+              Delete
+            </button>
+            <button phx-click="close_message" class="rainbow-button">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  <% end %>
+</div>
