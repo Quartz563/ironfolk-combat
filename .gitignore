@@ -40,8 +40,6 @@ npm-debug.log
 .vscode
 .zed
 .env
-Dockerfile
-.dockerignore
 *.db
 *.db-shm
 *.db-wal
