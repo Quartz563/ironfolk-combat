@@ -52,6 +52,7 @@ defmodule IronfolkCombatWeb.Router do
     get "/login", AdminSessionController, :new
     post "/login", AdminSessionController, :create
     delete "/logout", AdminSessionController, :delete
+    live "/register", AdminRegisterLive
   end
 
   scope "/admin", IronfolkCombatWeb.Admin, as: :admin do
