@@ -48,12 +48,12 @@ defmodule IronfolkCombatWeb.HomeLive do
     IronfolkCombat.Admin.list_active_events()
   end
 
-  defp alert_color(:info), do: "bg-blue-600 text-white"
-  defp alert_color(:warning), do: "bg-yellow-500 text-gray-900"
-  defp alert_color(:error), do: "bg-red-600 text-white"
+  defp alert_color("info"), do: "bg-blue-600 text-white"
+  defp alert_color("warning"), do: "bg-yellow-500 text-gray-900"
+  defp alert_color("error"), do: "bg-red-600 text-white"
   defp alert_color(_), do: "bg-gray-600 text-white"
 
-  defp alert_icon(%{type: :info} = assigns) do
+  defp alert_icon(%{type: "info"} = assigns) do
     ~H"""
     <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
       <path
@@ -67,7 +67,7 @@ defmodule IronfolkCombatWeb.HomeLive do
     """
   end
 
-  defp alert_icon(%{type: :warning} = assigns) do
+  defp alert_icon(%{type: "warning"} = assigns) do
     ~H"""
     <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
       <path
@@ -81,7 +81,7 @@ defmodule IronfolkCombatWeb.HomeLive do
     """
   end
 
-  defp alert_icon(%{type: :error} = assigns) do
+  defp alert_icon(%{type: "error"} = assigns) do
     ~H"""
     <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
       <path
