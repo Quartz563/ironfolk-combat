@@ -11,10 +11,6 @@ defmodule IronfolkCombatWeb.PageController do
     render(conn, :about)
   end
 
-  def contact(conn, _params) do
-    render(conn, :contact)
-  end
-
   def faq(conn, _params) do
     render(conn, :faq)
   end
