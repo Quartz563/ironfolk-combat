@@ -3,8 +3,9 @@
 # See https://fly.io/docs/reference/configuration/ for information about how to use this file.
 #
 
-app = "ironfolk-combat"
+app = "ironfolk-combat-misty-butterfly-5508"
 primary_region = "syd"
+kill_signal = 'SIGTERM'
 
 [build]
 
@@ -37,6 +38,7 @@ primary_region = "syd"
     path = "/"
 
 [[vm]]
+  memory = '512mb'
   cpu_kind = "shared"
   cpus = 1
   memory_mb = 512
