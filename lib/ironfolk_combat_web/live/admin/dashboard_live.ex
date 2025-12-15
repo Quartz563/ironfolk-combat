@@ -11,9 +11,31 @@ defmodule IronfolkCombatWeb.Admin.DashboardLive do
       socket
       |> assign(:current_admin, admin)
       |> assign(:page_title, "Admin Dashboard")
+      |> assign(:show_invite_modal, false)
+      |> assign(:new_invite, nil)
       |> load_dashboard_stats()
 
     {:ok, socket}
+  end
+
+  @impl true
+  def handle_event("generate_invite", _params, socket) do
+    case Admin.create_admin_invite(socket.assigns.current_admin.id) do
+      {:ok, invite} ->
+        {:noreply,
+         socket
+         |> assign(:new_invite, invite)
+         |> assign(:show_invite_modal, true)
+         |> put_flash(:info, "Admin invite code generated successfully!")}
+
+      {:error, _changeset} ->
+        {:noreply, put_flash(socket, :error, "Failed to generate invite code")}
+    end
+  end
+
+  @impl true
+  def handle_event("close_invite_modal", _params, socket) do
+    {:noreply, assign(socket, :show_invite_modal, false)}
   end
 
   defp load_dashboard_stats(socket) do
