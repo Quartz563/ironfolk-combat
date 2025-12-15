@@ -1,0 +1,193 @@
+<.flash_group flash={@flash} />
+<%!-- Hero Section --%>
+<section class="relative bg-gradient-to-br from-pink-50 to-purple-50 pt-20">
+  <div class="container mx-auto px-4 py-16 lg:py-24">
+    <div class="max-w-4xl mx-auto text-center">
+      <h1 class="text-4xl md:text-6xl font-bold mb-6 text-gray-900">
+        Create Admin Account
+      </h1>
+
+      <p class="text-lg md:text-xl text-gray-700 mb-12 max-w-2xl mx-auto">
+        Enter your admin invite code to create your account
+      </p>
+    </div>
+  </div>
+
+  <div class="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-red-400 via-yellow-400 via-green-400 via-blue-400 via-indigo-400 to-purple-400">
+  </div>
+</section>
+
+<div class="min-h-screen bg-white py-12">
+  <div class="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
+    <%= if @step == :enter_code do %>
+      <%!-- Step 1: Enter Invite Code --%>
+      <div class="bg-gradient-to-br from-pink-50 to-purple-50 rounded-lg shadow-lg p-8">
+        <h2 class="text-2xl font-bold text-gray-900 mb-6">
+          Enter Your Invite Code
+        </h2>
+
+        <p class="text-gray-700 mb-6">
+          Please enter the admin invite code you received.
+        </p>
+
+        <form phx-submit="verify_code" class="space-y-6">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">
+              Admin Invite Code
+            </label>
+            <input
+              type="text"
+              name="code"
+              value={@code}
+              phx-change="update_code"
+              placeholder="Enter Code"
+              required
+              class="w-full px-4 py-3 text-lg font-mono border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500 uppercase"
+            />
+          </div>
+
+          <button type="submit" class="w-full rainbow-button text-lg py-3">
+            Continue
+          </button>
+        </form>
+
+        <div class="mt-8 pt-6 border-t border-gray-200">
+          <h3 class="text-sm font-semibold text-gray-900 mb-3">
+            Don't have an invite code?
+          </h3>
+
+          <p class="text-sm text-gray-700 mb-4">
+            Admin accounts can only be created with a valid invite code. If you need access:
+          </p>
+
+          <ul class="text-sm text-gray-700 space-y-2 mb-4">
+            <li class="flex items-start">
+              <span class="text-pink-600 mr-2">•</span>
+              <span>Contact an existing admin to generate an invite code for you</span>
+            </li>
+            <li class="flex items-start">
+              <span class="text-pink-600 mr-2">•</span>
+              <span>Invite codes expire after 7 days</span>
+            </li>
+            <li class="flex items-start">
+              <span class="text-pink-600 mr-2">•</span>
+              <span>Each code can only be used once</span>
+            </li>
+          </ul>
+
+          <.link
+            navigate={~p"/admin/login"}
+            class="text-sm text-pink-600 hover:text-pink-800 font-medium"
+          >
+            Already have an account? Sign in →
+          </.link>
+        </div>
+      </div>
+    <% else %>
+      <%!-- Step 2: Create Account --%>
+      <div class="bg-gradient-to-br from-pink-50 to-purple-50 rounded-lg shadow-lg p-8">
+        <h2 class="text-2xl font-bold text-gray-900 mb-6">
+          Create Your Account
+        </h2>
+
+        <%!-- Invite Code Display --%>
+        <div class="bg-white rounded-lg p-4 mb-6 border border-pink-200">
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="text-sm text-gray-600">Using invite code:</p>
+              <p class="text-lg font-mono font-bold text-pink-600">{@code}</p>
+            </div>
+            <div>
+              <span class="px-3 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-800">
+                VALID
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <.form for={@form} phx-change="validate" phx-submit="save" class="space-y-6">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">
+              Full Name *
+            </label>
+            <.input field={@form[:name]} type="text" required />
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">
+              Email Address *
+            </label>
+            <.input field={@form[:email]} type="email" required autocomplete="email" />
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">
+              Password *
+            </label>
+            <.input field={@form[:password]} type="password" required autocomplete="new-password" />
+            <p class="mt-1 text-xs text-gray-500">Must be at least 8 characters</p>
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">
+              Confirm Password *
+            </label>
+            <.input
+              field={@form[:password_confirmation]}
+              type="password"
+              required
+              autocomplete="new-password"
+            />
+          </div>
+
+          <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+            <div class="flex items-start">
+              <svg
+                class="w-5 h-5 text-blue-600 mt-0.5 mr-3 flex-shrink-0"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                >
+                </path>
+              </svg>
+              <div class="text-sm text-gray-700">
+                <strong>Note:</strong>
+                This invite code can only be used once. After creating your account,
+                you'll be able to log in with your email and password.
+              </div>
+            </div>
+          </div>
+
+          <%!-- Actions --%>
+          <div class="flex space-x-4">
+            <button
+              type="button"
+              phx-click="back"
+              class="flex-1 secondary-button py-3"
+            >
+              Back
+            </button>
+            <button
+              type="submit"
+              class="flex-1 rainbow-button py-3"
+            >
+              Create Account
+            </button>
+          </div>
+        </.form>
+
+        <div class="mt-6 text-center">
+          <.link navigate={~p"/admin/login"} class="text-sm text-pink-600 hover:text-pink-800">
+            Already have an account? Sign in
+          </.link>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>
