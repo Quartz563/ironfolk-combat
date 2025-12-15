@@ -29,7 +29,7 @@ defmodule IronfolkCombat.Accounts.AdminInvite do
   def generate_code do
     part1 = :crypto.strong_rand_bytes(2) |> Base.encode(16)
     part2 = :crypto.strong_rand_bytes(2) |> Base.encode(16)
-    "ADMIN-#{part1}-#{part2}"
+    String.upcase("ADMIN-#{part1}-#{part2}")
   end
 
   @doc """
