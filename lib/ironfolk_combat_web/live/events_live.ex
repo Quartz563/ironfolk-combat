@@ -55,40 +55,16 @@ defmodule IronfolkCombatWeb.EventsLive do
     # Get all active events
     all_events = Admin.list_active_events()
 
-    # Parse event dates and attach to each event
-    events_with_dates =
-      Enum.map(all_events, fn event ->
-        parsed_date = get_event_date(event)
-        Map.put(event, :parsed_date, parsed_date)
-      end)
-
     # Build calendar grid (including days from previous/next month to fill weeks)
     calendar_grid = build_calendar_grid(first_of_month, last_of_month)
 
     socket
-    |> assign(:events, events_with_dates)
+    |> assign(:events, all_events)
     |> assign(:first_of_month, first_of_month)
     |> assign(:last_of_month, last_of_month)
     |> assign(:calendar_grid, calendar_grid)
     |> assign(:month_name, Calendar.strftime(date, "%B %Y"))
   end
-
-  # Get the date from an event - works with both :date and :event_date fields
-  defp get_event_date(%{event_date: %Date{} = date}), do: date
-
-  defp get_event_date(%{date: date_string}) when is_binary(date_string) do
-    case Event.parse_date(date_string) do
-      {:ok, date} -> date
-      _ -> nil
-    end
-  end
-
-  defp get_event_date(_), do: nil
-
-  # Format date for display - works with both string and Date types
-  defp format_event_date(%{event_date: %Date{} = date}), do: Event.format_date(date)
-  defp format_event_date(%{date: date_string}) when is_binary(date_string), do: date_string
-  defp format_event_date(_), do: ""
 
   defp build_calendar_grid(first_of_month, last_of_month) do
     # Get day of week for first day (1 = Monday, 7 = Sunday)
@@ -116,7 +92,7 @@ defmodule IronfolkCombatWeb.EventsLive do
 
   defp get_events_for_date(events, date) do
     Enum.filter(events, fn event ->
-      event.parsed_date == date
+      event.event_date == date
     end)
   end
 

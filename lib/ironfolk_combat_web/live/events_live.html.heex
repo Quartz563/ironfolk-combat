@@ -186,7 +186,9 @@
                 >
                 </path>
               </svg>
-              <span class="font-medium">{format_event_date(@selected_event)}</span>
+              <span class="font-medium">
+                {Event.format_date_long(@selected_event.event_date)}
+              </span>
             </div>
 
             <div class="flex items-center text-gray-700">

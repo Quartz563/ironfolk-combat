@@ -450,7 +450,7 @@ defmodule IronfolkCombat.Admin do
   """
   def list_events do
     Event
-    |> order_by([e], asc: e.date)
+    |> order_by([e], asc: e.event_date)
     |> Repo.all()
   end
 
@@ -460,7 +460,7 @@ defmodule IronfolkCombat.Admin do
   def list_active_events do
     Event
     |> where([e], e.active == true)
-    |> order_by([e], asc: e.date)
+    |> order_by([e], asc: e.event_date)
     |> Repo.all()
   end
 
@@ -527,38 +527,19 @@ defmodule IronfolkCombat.Admin do
   end
 
   @doc """
-  Lists only upcoming active events (for homepage preview).
-  Limited to 3 events, sorted by date.
+  Lists upcoming active events (today and future dates only).
+  Returns up to `limit` events (default 3).
   """
   def list_upcoming_events(limit \\ 3) do
     today = Date.utc_today()
 
     Event
     |> where([e], e.active == true)
-    |> order_by([e], asc: e.date)
+    |> where([e], e.event_date >= ^today)
+    |> order_by([e], asc: e.event_date)
+    |> limit(^limit)
     |> Repo.all()
-    |> Enum.map(fn event ->
-      parsed_date = parse_event_date(event)
-      Map.put(event, :parsed_date, parsed_date)
-    end)
-    |> Enum.filter(fn event ->
-      case event.parsed_date do
-        %Date{} = date -> Date.compare(date, today) in [:gt, :eq]
-        _ -> false
-      end
-    end)
-    |> Enum.take(limit)
   end
-
-  # Helper to parse event dates
-  defp parse_event_date(%{date: date_string}) when is_binary(date_string) do
-    case IronfolkCombat.Events.Event.parse_date(date_string) do
-      {:ok, date} -> date
-      _ -> nil
-    end
-  end
-
-  defp parse_event_date(_), do: nil
 
   defp broadcast_event_change do
     Phoenix.PubSub.broadcast(@pubsub, "events", {:events_updated})
