@@ -12,9 +12,109 @@ defmodule IronfolkCombatWeb.Admin.MembersLive do
       |> assign(:current_admin, admin)
       |> assign(:page_title, "Member List")
       |> assign(:filter, "all")
+      |> assign(:selected_member, nil)
+      |> assign(:show_detail_modal, false)
+      |> assign(:show_edit_ifn_modal, false)
+      |> assign(:editing_member, nil)
+      |> assign(:new_ifn, "")
       |> load_members()
 
     {:ok, socket}
+  end
+
+  @impl true
+  def handle_event("filter", %{"status" => status}, socket) do
+    {:noreply, socket |> assign(:filter, status) |> load_members()}
+  end
+
+  @impl true
+  def handle_event("view_member", %{"id" => id}, socket) do
+    member = Members.get_member!(String.to_integer(id))
+
+    {:noreply,
+     socket
+     |> assign(:selected_member, member)
+     |> assign(:show_detail_modal, true)}
+  end
+
+  @impl true
+  def handle_event("close_detail_modal", _params, socket) do
+    {:noreply,
+     socket
+     |> assign(:show_detail_modal, false)
+     |> assign(:selected_member, nil)}
+  end
+
+  @impl true
+  def handle_event("edit_ifn", %{"id" => id}, socket) do
+    member = Members.get_member!(String.to_integer(id))
+
+    {:noreply,
+     socket
+     |> assign(:editing_member, member)
+     |> assign(:new_ifn, member.ifn)
+     |> assign(:show_edit_ifn_modal, true)}
+  end
+
+  @impl true
+  def handle_event("close_ifn_modal", _params, socket) do
+    {:noreply,
+     socket
+     |> assign(:show_edit_ifn_modal, false)
+     |> assign(:editing_member, nil)
+     |> assign(:new_ifn, "")}
+  end
+
+  @impl true
+  def handle_event("update_ifn_input", %{"ifn" => ifn}, socket) do
+    {:noreply, assign(socket, :new_ifn, String.upcase(ifn))}
+  end
+
+  @impl true
+  def handle_event("save_ifn", %{"ifn" => new_ifn}, socket) do
+    member = socket.assigns.editing_member
+    new_ifn = String.upcase(new_ifn)
+
+    # Validate IFN format
+    if Regex.match?(~r/^IFN-\d{4}$/, new_ifn) do
+      case Members.update_member(member, %{ifn: new_ifn}) do
+        {:ok, _updated_member} ->
+          {:noreply,
+           socket
+           |> put_flash(:info, "IFN updated successfully")
+           |> assign(:show_edit_ifn_modal, false)
+           |> assign(:editing_member, nil)
+           |> load_members()}
+
+        {:error, changeset} ->
+          error_message =
+            case changeset.errors[:ifn] do
+              {"has already been taken", _} -> "This IFN is already in use by another member"
+              _ -> "Failed to update IFN"
+            end
+
+          {:noreply, put_flash(socket, :error, error_message)}
+      end
+    else
+      {:noreply,
+       put_flash(socket, :error, "Invalid IFN format. Must be IFN-XXXX (e.g., IFN-0042)")}
+    end
+  end
+
+  @impl true
+  def handle_event("deactivate_member", %{"id" => id}, socket) do
+    member = Members.get_member!(String.to_integer(id))
+
+    case Members.deactivate_member(member) do
+      {:ok, _member} ->
+        {:noreply,
+         socket
+         |> put_flash(:info, "Member deactivated successfully")
+         |> load_members()}
+
+      {:error, _} ->
+        {:noreply, put_flash(socket, :error, "Failed to deactivate member")}
+    end
   end
 
   defp load_members(socket) do
