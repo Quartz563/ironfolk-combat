@@ -3,33 +3,44 @@
 # See https://fly.io/docs/reference/configuration/ for information about how to use this file.
 #
 
-app = 'ironfolk-combat-misty-butterfly-5508'
-primary_region = 'syd'
-kill_signal = 'SIGTERM'
+app = "ironfolk-combat"
+primary_region = "syd"
 
 [build]
 
 [deploy]
-  release_command = '/app/bin/migrate'
+  release_command = "/app/bin/migrate"
 
 [env]
-  PHX_HOST = 'ironfolk-combat-misty-butterfly-5508.fly.dev'
-  PORT = '8080'
+  PHX_HOST = "www.ironfolkcombat.co.nz"
+  PORT = "8080"
+  ECTO_IPV6 = "true"
 
 [http_service]
   internal_port = 8080
   force_https = true
-  auto_stop_machines = 'stop'
+  auto_stop_machines = true
   auto_start_machines = true
-  min_machines_running = 0
-  processes = ['app']
+  min_machines_running = 1
+  processes = ["app"]
 
   [http_service.concurrency]
-    type = 'connections'
+    type = "connections"
     hard_limit = 1000
     soft_limit = 1000
 
+  [[http_service.checks]]
+    interval = "30s"
+    timeout = "10s"
+    grace_period = "10s"
+    method = "GET"
+    path = "/"
+
 [[vm]]
-  memory = '512mb'
+  cpu_kind = "shared"
   cpus = 1
   memory_mb = 512
+
+[[statics]]
+  guest_path = "/app/lib/ironfolk_combat-0.1.0/priv/static"
+  url_prefix = "/assets"

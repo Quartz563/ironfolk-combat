@@ -5,10 +5,7 @@ import Config
 # system starts, so it is typically used to load production configuration
 # and secrets from environment variables or elsewhere.
 
-# Don't use config_env() in releases - check if we're in a release instead
-if System.get_env("RELEASE_NAME") do
-  # We're in a release (production)
-
+if config_env() == :prod do
   database_url =
     System.get_env("DATABASE_URL") ||
       raise """
@@ -23,6 +20,7 @@ if System.get_env("RELEASE_NAME") do
     pool_size: String.to_integer(System.get_env("POOL_SIZE") || "10"),
     socket_options: maybe_ipv6
 
+  # The secret key base is used to sign/encrypt cookies and other secrets.
   secret_key_base =
     System.get_env("SECRET_KEY_BASE") ||
       raise """
@@ -31,27 +29,43 @@ if System.get_env("RELEASE_NAME") do
       """
 
   host = System.get_env("PHX_HOST") || "ironfolkcombat.co.nz"
-  port = String.to_integer(System.get_env("PORT") || "8080")
+  port = String.to_integer(System.get_env("PORT") || "4000")
 
   config :ironfolk_combat, IronfolkCombatWeb.Endpoint,
     url: [host: host, port: 443, scheme: "https"],
     http: [
+      # Enable IPv6 and bind on all interfaces.
       ip: {0, 0, 0, 0, 0, 0, 0, 0},
       port: port
     ],
     secret_key_base: secret_key_base,
-    server: true
+    check_origin: [
+      "https://ironfolkcombat.co.nz",
+      "https://www.ironfolkcombat.co.nz"
+    ],
+    # CRITICAL: WebSocket configuration
+    websocket: [
+      # Increase timeout for slower connections
+      timeout: 60_000,
+      # Allow WebSocket connections from your domains
+      check_origin: [
+        "https://ironfolkcombat.co.nz",
+        "https://www.ironfolkcombat.co.nz"
+      ],
+      # Compress WebSocket messages
+      compress: true
+    ],
+    # Force SSL for LiveView
+    force_ssl: [
+      rewrite_on: [:x_forwarded_proto],
+      host: nil,
+      hsts: true
+    ]
 
-  # Configure Stripe
-  config :stripity_stripe,
-    api_key: System.get_env("STRIPE_SECRET_KEY")
-
+  # Stripe configuration
   config :ironfolk_combat,
     stripe_webhook_secret: System.get_env("STRIPE_WEBHOOK_SECRET")
 
-  # Mailer configuration
-  config :ironfolk_combat, IronfolkCombat.Mailer, adapter: Swoosh.Adapters.Local
-
-  # Configure logger level
-  config :logger, level: :info
+  config :stripity_stripe,
+    api_key: System.get_env("STRIPE_SECRET_KEY")
 end
