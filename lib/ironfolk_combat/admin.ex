@@ -4,8 +4,10 @@ defmodule IronfolkCombat.Admin do
   This is the main API for interacting with admin features.
   """
   import Ecto.Query, warn: false
+  alias IronfolkCombat.Accounts.AdminInvite
   alias IronfolkCombat.Repo
   alias IronfolkCombat.Accounts.Admin, as: AdminUser
+  alias IronfolkCombat.Accounts.AdminInvite
   alias IronfolkCombat.Signups.Signup
   alias IronfolkCombat.Blog.Post
   alias IronfolkCombat.Content.Alert
@@ -67,6 +69,90 @@ defmodule IronfolkCombat.Admin do
   """
   def list_admins do
     Repo.all(AdminUser)
+  end
+
+  # ============================================
+  # ADMIN INVITE MANAGEMENT
+  # ============================================
+
+  @doc """
+  Creates a new admin invite code.
+  Expires in 7 days by default
+  """
+  def create_admin_invite(created_by_admin_id, opts \\ []) do
+    expires_in_days = Keyword.get(opts, :expires_in_days, 7)
+
+    attrs = %{
+      code: AdminInvite.generate_code(),
+      created_by_admin_id: created_by_admin_id,
+      expires_at:
+        NaiveDateTime.utc_now()
+        |> NaiveDateTime.add(expires_in_days * 24 * 60 * 60, :second)
+        |> NaiveDateTime.truncate(:second)
+    }
+
+    %AdminInvite{}
+    |> AdminInvite.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
+  Get invite by code
+  """
+  def get_invite_by_code(code) do
+    Repo.get_by(AdminInvite, code: code)
+  end
+
+  @doc """
+  Validates if an invite code is usable
+  Returns {:ok, invite} or {:error, reason}
+  """
+  def validate_invite_code(code) do
+    case get_invite_by_code(code) do
+      nil ->
+        {:error, :not_found}
+
+      invite ->
+        cond do
+          invite.used -> {:error, :already_used}
+          !AdminInvite.valid?(invite) -> {:error, :expired}
+          true -> {:ok, invite}
+        end
+    end
+  end
+
+  @doc """
+  Marks an invte as used
+  """
+  def use_admin_invite(invite, new_admin_id) do
+    invite
+    |> Ecto.Changeset.change(%{
+      used: true,
+      used_by_admin_id: new_admin_id,
+      used_at: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
+    })
+    |> Repo.update()
+  end
+
+  @doc """
+  Lists all admin invites
+  """
+  def list_all_admin_invites do
+    AdminInvite
+    |> preload([:created_by, :used_by])
+    |> order_by([i], desc: i.inserted_at)
+    |> Repo.all()
+  end
+
+  @doc """
+  Deletes an unused invite.
+  """
+  def delete_admin_invite(%AdminInvite{used: false} = invite) do
+    Repo.delete(invite)
+  end
+
+  def delete_admin_invite(%AdminInvite{used: true}) do
+    {:error, :invite_already_used}
   end
 
   # ============================================
