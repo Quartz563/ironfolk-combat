@@ -8,7 +8,8 @@ defmodule IronfolkCombatWeb.Endpoint do
     store: :cookie,
     key: "_ironfolk_combat_key",
     signing_salt: "bZDni5nF",
-    same_site: "Lax"
+    same_site: "Lax",
+    pubsub_timeout_ms: 2000
   ]
 
   socket "/live", Phoenix.LiveView.Socket,
