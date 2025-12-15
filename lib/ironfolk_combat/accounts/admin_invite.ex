@@ -27,9 +27,9 @@ defmodule IronfolkCombat.Accounts.AdminInvite do
   """
 
   def generate_code do
-    part1 = :crypto.strong_rand_bytes(2) |> Base.encode(16)
-    part2 = :crypto.strong_rand_bytes(2) |> Base.encode(16)
-    String.upcase("ADMIN-#{part1}-#{part2}")
+    part1 = :crypto.strong_rand_bytes(2) |> Base.encode16(case: :upper)
+    part2 = :crypto.strong_rand_bytes(2) |> Base.encode16(case: :upper)
+    "ADMIN-#{part1}-#{part2}"
   end
 
   @doc """
@@ -38,6 +38,6 @@ defmodule IronfolkCombat.Accounts.AdminInvite do
   def valid?(%__MODULE__{used: true}), do: false
 
   def valid?(%__MODULE__{expires_at: expires_at}) do
-    NativeDateTime.compare(NativeDateTime.utc_now(), expires_at) == :lt
+    NaiveDateTime.compare(NaiveDateTime.utc_now(), expires_at) == :lt
   end
 end
