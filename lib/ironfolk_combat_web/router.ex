@@ -40,6 +40,8 @@ defmodule IronfolkCombatWeb.Router do
     get "/about", PageController, :about
     get "/faq", PageController, :faq
     get "/resources", PageController, :resources
+    get "/code-of-conduct", PageController, :code_of_conduct
+    get "/harassment-policy", PageController, :sexual_harassment
     get "/blog/:slug", BlogController, :show
     get "/payment/cancel", PageController, :payment_cancel
 

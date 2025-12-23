@@ -19,6 +19,14 @@ defmodule IronfolkCombatWeb.PageController do
     render(conn, :resources)
   end
 
+  def code_of_conduct(conn, _params) do
+    render(conn, :code_of_conduct)
+  end
+
+  def sexual_harassment(conn, _params) do
+    render(conn, :sexual_harassment)
+  end
+
   def payment_cancel(conn, _params) do
     conn
     |> put_flash(:info, "Payment cancelled. No charges were made.")
