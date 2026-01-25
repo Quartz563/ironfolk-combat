@@ -620,7 +620,7 @@ defmodule IronfolkCombat.Admin do
   """
   def add_misconduct_report_note(report, admin_id, note) do
     case IronfolkCombat.Misconduct.add_admin_note(report, admin_id, note) do
-      {:ok, report} = result ->
+      {:ok, _report} = result ->
         broadcast_misconduct_change()
         result
 

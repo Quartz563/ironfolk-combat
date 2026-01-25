@@ -36,6 +36,7 @@ defmodule IronfolkCombatWeb.Router do
     live "/blog", BlogIndexLive
     live "/ifn-lookup", IFNLookupLive
     live "/contact", ContactLive
+    live "/misconduct-report", MisconductReportLive
 
     get "/about", PageController, :about
     get "/faq", PageController, :faq

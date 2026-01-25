@@ -16,16 +16,56 @@
               </path>
             </svg>
           </.link>
-          <h1 class="text-2xl font-bold text-gray-900">Manage Misconduct Reports</h1>
+          <div>
+            <h1 class="text-2xl font-bold text-gray-900">Misconduct Reports</h1>
+            <p class="text-sm text-gray-600">{length(@reports)} total reports</p>
+          </div>
         </div>
 
-        <div class="flex items-center space-x-4">
-          <.link href={~p"/admin/logout"} method="delete" class="secondary-button">Logout</.link>
-        </div>
+        <.link href={~p"/admin/logout"} method="delete" class="secondary-button">Logout</.link>
       </div>
     </div>
   </header>
+
   <main class="container mx-auto px-4 py-8">
+    <!-- Filters -->
+    <div class="bg-white rounded-lg shadow-md p-4 mb-6">
+      <div class="flex flex-wrap items-center gap-4">
+        <div>
+          <label class="text-sm font-medium text-gray-700 mr-2">Status:</label>
+          <select
+            phx-change="filter_status"
+            name="status"
+            class="px-3 py-2 border border-gray-300 rounded-md"
+          >
+            <option value="all" selected={@filter_status == :all}>All Statuses</option>
+            <option value="PENDING" selected={@filter_status == "PENDING"}>Pending</option>
+            <option value="IN_PROGRESS" selected={@filter_status == "IN_PROGRESS"}>
+              In Progress
+            </option>
+            <option value="RESOLVED" selected={@filter_status == "RESOLVED"}>Resolved</option>
+            <option value="DISMISSED" selected={@filter_status == "DISMISSED"}>Dismissed</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="text-sm font-medium text-gray-700 mr-2">Severity:</label>
+          <select
+            phx-change="filter_severity"
+            name="severity"
+            class="px-3 py-2 border border-gray-300 rounded-md"
+          >
+            <option value="all" selected={@filter_severity == :all}>All Severities</option>
+            <option value="LOW" selected={@filter_severity == "LOW"}>Low</option>
+            <option value="MEDIUM" selected={@filter_severity == "MEDIUM"}>Medium</option>
+            <option value="HIGH" selected={@filter_severity == "HIGH"}>High</option>
+            <option value="CRITICAL" selected={@filter_severity == "CRITICAL"}>Critical</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    
+<!-- Reports List -->
     <%= if Enum.empty?(@reports) do %>
       <div class="bg-white rounded-lg shadow-md p-12 text-center">
         <svg
@@ -38,26 +78,65 @@
             stroke-linecap="round"
             stroke-linejoin="round"
             stroke-width="2"
-            d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"
+            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
           >
           </path>
         </svg>
-        <p class="text-gray-600 text-lg">No reports yet</p>
-        <p class="text-gray-500 text-sm mt-2">
-          Direct members to the incident form to create reports
-        </p>
+        <p class="text-gray-600 text-lg">No reports found</p>
       </div>
     <% else %>
       <div class="space-y-4">
-        <%= for report <- @misconduct_reports do %>
+        <%= for report <- @reports do %>
           <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
             <div class="p-6">
               <div class="flex items-start justify-between mb-4">
                 <div class="flex-1">
-                  <h3 class="text-xl font-bold text-gray-900">
-                    Misconduct Incident Report #{report.id}
-                  </h3>
+                  <div class="flex items-center gap-3 mb-2">
+                    <h3 class="text-lg font-bold text-gray-900">
+                      Report #{report.report_id}
+                    </h3>
+                    <span class={"px-2 py-1 rounded text-xs font-semibold #{status_badge_color(report.status)}"}>
+                      {report.status}
+                    </span>
+                    <span class={"px-2 py-1 rounded text-xs font-semibold #{severity_badge_color(report.severity)}"}>
+                      {report.severity}
+                    </span>
+                    <%= if has_immediate_threat?(report) do %>
+                      <span class="px-2 py-1 rounded text-xs font-semibold bg-red-100 text-red-800">
+                        ⚠️ IMMEDIATE THREAT
+                      </span>
+                    <% end %>
+                  </div>
+
+                  <p class="text-sm text-gray-600 mb-2">
+                    <strong>Violation:</strong>
+                    {format_violation_type(report.violation_type)}
+                  </p>
+
+                  <p class="text-sm text-gray-600 mb-2">
+                    <strong>Date:</strong>
+                    {format_datetime(report.date_time)} at {format_time(report.time)}
+                  </p>
+
+                  <%= if report.affected do %>
+                    <p class="text-sm text-gray-600 mb-2">
+                      <strong>People Affected:</strong> {report.affected}
+                    </p>
+                  <% end %>
+
+                  <p class="text-sm text-gray-600">
+                    <strong>Submitted:</strong>
+                    {Calendar.strftime(report.inserted_at, "%B %d, %Y at %I:%M %p")}
+                  </p>
                 </div>
+
+                <button
+                  phx-click="select_report"
+                  phx-value-id={report.id}
+                  class="px-4 py-2 bg-pink-500 text-white rounded-lg hover:bg-pink-600 transition-colors"
+                >
+                  View Details
+                </button>
               </div>
             </div>
           </div>
@@ -65,4 +144,265 @@
       </div>
     <% end %>
   </main>
+  
+<!-- Report Detail Modal -->
+  <%= if @selected_report do %>
+    <div
+      class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4"
+      phx-click="close_detail"
+    >
+      <div
+        class="bg-white rounded-lg shadow-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto"
+        phx-click={JS.exec("phx-stop-propagation")}
+      >
+        <div class="p-6">
+          <!-- Header -->
+          <div class="flex items-start justify-between mb-6">
+            <div>
+              <h2 class="text-2xl font-bold text-gray-900 mb-2">
+                Report #{@selected_report.report_id}
+              </h2>
+              <div class="flex items-center gap-2">
+                <span class={"px-3 py-1 rounded text-sm font-semibold #{status_badge_color(@selected_report.status)}"}>
+                  {@selected_report.status}
+                </span>
+                <span class={"px-3 py-1 rounded text-sm font-semibold #{severity_badge_color(@selected_report.severity)}"}>
+                  {@selected_report.severity}
+                </span>
+              </div>
+            </div>
+
+            <button
+              phx-click="close_detail"
+              class="text-gray-400 hover:text-gray-600 transition-colors"
+            >
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M6 18L18 6M6 6l12 12"
+                >
+                </path>
+              </svg>
+            </button>
+          </div>
+          
+<!-- Immediate Threat Warning -->
+          <%= if has_immediate_threat?(@selected_report) do %>
+            <div class="bg-red-50 border-2 border-red-500 rounded-lg p-4 mb-6">
+              <div class="flex items-start">
+                <svg
+                  class="w-6 h-6 text-red-600 mr-3 flex-shrink-0 mt-0.5"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+                  >
+                  </path>
+                </svg>
+                <div class="flex-1">
+                  <h3 class="text-lg font-bold text-red-900 mb-2">⚠️ IMMEDIATE THREAT REPORTED</h3>
+                  <p class="text-red-800 font-medium">
+                    Person named: {@selected_report.immediate_threat_name}
+                  </p>
+                  <p class="text-red-700 text-sm mt-2">
+                    This report indicates an immediate safety concern.
+                  </p>
+                </div>
+              </div>
+            </div>
+          <% end %>
+          
+<!-- Report Details -->
+          <div class="space-y-6">
+            <!-- Incident Information -->
+            <div class="bg-gray-50 rounded-lg p-4">
+              <h3 class="text-lg font-bold text-gray-900 mb-4">Incident Information</h3>
+
+              <div class="grid md:grid-cols-2 gap-4 text-sm">
+                <div>
+                  <p class="font-medium text-gray-700">Violation Type:</p>
+                  <p class="text-gray-900">
+                    {format_violation_type(@selected_report.violation_type)}
+                  </p>
+                </div>
+
+                <div>
+                  <p class="font-medium text-gray-700">Date & Time:</p>
+                  <p class="text-gray-900">
+                    {format_datetime(@selected_report.date_time)} at {format_time(
+                      @selected_report.time
+                    )}
+                  </p>
+                </div>
+
+                <%= if @selected_report.affected do %>
+                  <div>
+                    <p class="font-medium text-gray-700">People Affected:</p>
+                    <p class="text-gray-900">{@selected_report.affected}</p>
+                  </div>
+                <% end %>
+
+                <div>
+                  <p class="font-medium text-gray-700">Submitted:</p>
+                  <p class="text-gray-900">
+                    {Calendar.strftime(@selected_report.inserted_at, "%B %d, %Y at %I:%M %p")}
+                  </p>
+                </div>
+              </div>
+            </div>
+            
+<!-- Description -->
+            <div class="bg-gray-50 rounded-lg p-4">
+              <h3 class="text-lg font-bold text-gray-900 mb-2">Incident Description</h3>
+              <p class="text-gray-800 whitespace-pre-wrap">
+                {@selected_report.incident_description}
+              </p>
+            </div>
+
+            <%= if @selected_report.other_information do %>
+              <div class="bg-gray-50 rounded-lg p-4">
+                <h3 class="text-lg font-bold text-gray-900 mb-2">Additional Information</h3>
+                <p class="text-gray-800 whitespace-pre-wrap">
+                  {@selected_report.other_information}
+                </p>
+              </div>
+            <% end %>
+            
+<!-- Reporter Contact -->
+            <%= if @selected_report.follow_up do %>
+              <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                <h3 class="text-lg font-bold text-gray-900 mb-2">Reporter Requests Follow-Up</h3>
+                <div class="text-sm space-y-1">
+                  <p><strong>Name:</strong> {@selected_report.name}</p>
+                  <p><strong>Email:</strong> {@selected_report.email}</p>
+                </div>
+              </div>
+            <% else %>
+              <div class="bg-gray-50 rounded-lg p-4">
+                <p class="text-gray-600 text-sm">
+                  Reporter chose to remain anonymous (no follow-up requested)
+                </p>
+              </div>
+            <% end %>
+            
+<!-- Admin Actions -->
+            <div class="border-t-2 border-pink-200 pt-6">
+              <h3 class="text-lg font-bold text-gray-900 mb-4">Admin Actions</h3>
+
+              <div class="grid md:grid-cols-2 gap-4 mb-6">
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-2">
+                    Update Status
+                  </label>
+                  <select
+                    phx-change="update_status"
+                    phx-value-id={@selected_report.id}
+                    name="status"
+                    class="w-full px-3 py-2 border border-gray-300 rounded-md"
+                  >
+                    <option value="PENDING" selected={@selected_report.status == "PENDING"}>
+                      Pending
+                    </option>
+                    <option
+                      value="IN_PROGRESS"
+                      selected={@selected_report.status == "IN_PROGRESS"}
+                    >
+                      In Progress
+                    </option>
+                    <option value="RESOLVED" selected={@selected_report.status == "RESOLVED"}>
+                      Resolved
+                    </option>
+                    <option value="DISMISSED" selected={@selected_report.status == "DISMISSED"}>
+                      Dismissed
+                    </option>
+                  </select>
+                </div>
+
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-2">
+                    Update Severity
+                  </label>
+                  <select
+                    phx-change="update_severity"
+                    phx-value-id={@selected_report.id}
+                    name="severity"
+                    class="w-full px-3 py-2 border border-gray-300 rounded-md"
+                  >
+                    <option value="LOW" selected={@selected_report.severity == "LOW"}>Low</option>
+                    <option value="MEDIUM" selected={@selected_report.severity == "MEDIUM"}>
+                      Medium
+                    </option>
+                    <option value="HIGH" selected={@selected_report.severity == "HIGH"}>
+                      High
+                    </option>
+                    <option value="CRITICAL" selected={@selected_report.severity == "CRITICAL"}>
+                      Critical
+                    </option>
+                  </select>
+                </div>
+              </div>
+              
+<!-- Admin Notes -->
+              <div class="bg-gray-50 rounded-lg p-4">
+                <h4 class="font-bold text-gray-900 mb-3">Admin Notes</h4>
+
+                <%= if @selected_report.admin_notes && length(@selected_report.admin_notes) > 0 do %>
+                  <div class="space-y-3 mb-4">
+                    <%= for note <- @selected_report.admin_notes do %>
+                      <div class="bg-white border border-gray-200 rounded p-3">
+                        <div class="flex justify-between items-start mb-1">
+                          <p class="text-sm font-medium text-gray-900">{note["admin"]}</p>
+                          <p class="text-xs text-gray-500">{note["timestamp"]}</p>
+                        </div>
+                        <p class="text-sm text-gray-700">{note["note"]}</p>
+                      </div>
+                    <% end %>
+                  </div>
+                <% else %>
+                  <p class="text-sm text-gray-500 mb-4">No admin notes yet</p>
+                <% end %>
+
+                <form phx-submit="add_note" class="space-y-3">
+                  <textarea
+                    name="note"
+                    phx-change="update_note"
+                    value={@new_note}
+                    rows="3"
+                    placeholder="Add a new admin note..."
+                    class="w-full px-3 py-2 border border-gray-300 rounded-md"
+                  ></textarea>
+                  <button
+                    type="submit"
+                    class="px-4 py-2 bg-pink-500 text-white rounded-lg hover:bg-pink-600 transition-colors"
+                  >
+                    Add Note
+                  </button>
+                </form>
+              </div>
+            </div>
+            
+<!-- Danger Zone -->
+            <div class="border-t-2 border-red-200 pt-6">
+              <h3 class="text-lg font-bold text-red-900 mb-4">Danger Zone</h3>
+              <button
+                phx-click="delete_report"
+                phx-value-id={@selected_report.id}
+                data-confirm="Are you sure you want to delete this report? This action cannot be undone."
+                class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
+              >
+                Delete Report
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  <% end %>
 </div>
