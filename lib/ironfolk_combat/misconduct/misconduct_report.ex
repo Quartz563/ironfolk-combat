@@ -14,6 +14,8 @@ defmodule IronfolkCombat.Misconduct.MisconductReport do
     field(:email, :string, default: "None Given")
     field(:follow_up, :boolean, default: false)
     field(:status, :string, default: "pending")
+    field(:severity, :string, default: "medium")
+    field(:admin_notes, {:array, :map}, default: [])
     timestamps()
   end
 
@@ -29,7 +31,9 @@ defmodule IronfolkCombat.Misconduct.MisconductReport do
       :name,
       :email,
       :follow_up,
-      :status
+      :status,
+      :severity,
+      :admin_notes
     ])
     |> validate_required([
       :violation_type,
@@ -39,6 +43,7 @@ defmodule IronfolkCombat.Misconduct.MisconductReport do
     ])
     |> validate_format(:email, ~r/^[^\s]+@[^\s]+$/)
     |> validate_inclusion(:affected, ["me", "someone else", "multiple people", "other"])
-    |> validate_inclusion(:status, ["pending", "followup", "resolved"])
+    |> validate_inclusion(:status, ["pending", "under_review", "resolved", "dismissed"])
+    |> validate_inclusion(:severity, ["low", "medium", "high"])
   end
 end

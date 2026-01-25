@@ -67,7 +67,8 @@ defmodule IronfolkCombatWeb.Router do
     live "/alerts/new", AlertsLive, :new
     live "/events", EventsLive, :index
     live "/events/new", EventsLive, :new
-    live "/messages", MessagesLive
+    live "/messages", MessagesLive, :index
+    live "/reports", ReportsLive, :index
     live "/members", MembersLive
     live "/payments", PaymentsLive
   end

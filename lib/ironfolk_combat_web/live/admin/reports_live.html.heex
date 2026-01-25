@@ -26,7 +26,7 @@
     </div>
   </header>
   <main class="container mx-auto px-4 py-8">
-    <%= if Enum.empty?(@misconduct_reports) do %>
+    <%= if Enum.empty?(@reports) do %>
       <div class="bg-white rounded-lg shadow-md p-12 text-center">
         <svg
           class="w-16 h-16 text-gray-400 mx-auto mb-4"
@@ -54,9 +54,9 @@
             <div class="p-6">
               <div class="flex items-start justify-between mb-4">
                 <div class="flex-1">
-                    <h3 class="text-xl font-bold text-gray-900">
-                        Misconduct Incident Report #{report.id}
-                    </h3>
+                  <h3 class="text-xl font-bold text-gray-900">
+                    Misconduct Incident Report #{report.id}
+                  </h3>
                 </div>
               </div>
             </div>

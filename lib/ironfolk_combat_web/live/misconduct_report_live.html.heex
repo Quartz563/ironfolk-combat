@@ -1,0 +1,519 @@
+<.flash_group flash={@flash} />
+<%!-- Hero Section --%>
+<section class="relative bg-gradient-to-br from-pink-50 to-purple-50 pt-20">
+  <div class="container mx-auto px-4 py-16 lg:py-24">
+    <div class="max-w-4xl mx-auto text-center">
+      <h1 class="text-4xl md:text-5xl font-bold mb-6 text-gray-900">
+        Ironfolk Code of Conduct Reporting Form
+      </h1>
+    </div>
+  </div>
+
+  <div class="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-red-400 via-yellow-400 via-green-400 via-blue-400 via-indigo-400 to-purple-400">
+  </div>
+</section>
+
+<div class="min-h-screen bg-white">
+  <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <%= if @submitted do %>
+      <%!-- Success Message --%>
+      <div class="bg-white border-2 border-green-200 rounded-lg shadow-lg p-8 text-center">
+        <div class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
+          <svg
+            class="w-10 h-10 text-green-600"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M5 13l4 4L19 7"
+            >
+            </path>
+          </svg>
+        </div>
+
+        <h2 class="text-3xl font-bold text-gray-900 mb-4">Your response has been recorded</h2>
+
+        <p class="text-lg text-gray-700 mb-8">
+          Thank you for submitting this report. Your information has been received and will be
+          reviewed by club leadership.
+        </p>
+
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+          <button phx-click="submit_another" class="secondary-button">
+            Submit another response
+          </button>
+          <.link navigate={~p"/"} class="rainbow-button">
+            Return to Homepage
+          </.link>
+        </div>
+      </div>
+    <% else %>
+      <%!-- Form Introduction --%>
+      <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
+        <p class="text-gray-700 leading-relaxed">
+          This form can be used to report a Code of Conduct violation that you have experienced or
+          witnessed, including sexual harassment. The form is anonymous unless you choose to provide
+          your name or email below. We're here to support you and value your safety, input, and
+          experience. Any information that you share with Leadership here will remain fully
+          confidential and we won't allow any retaliation against someone for reporting.
+        </p>
+
+        <p class="text-sm text-red-600 mt-4">* Indicates required question</p>
+      </div>
+      <%!-- Main Form --%>
+      <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-8">
+        <.form for={@form} phx-change="validate" phx-submit="submit" class="space-y-8">
+          <%!-- NEW: Identification Method Selector --%>
+          <div class="bg-blue-50 border-2 border-blue-200 rounded-lg p-6">
+            <h3 class="text-lg font-semibold text-gray-900 mb-4">
+              How would you like to identify yourself?
+            </h3>
+
+            <div class="space-y-3">
+              <label class="flex items-start cursor-pointer">
+                <input
+                  type="radio"
+                  name="identification_method"
+                  value="anonymous"
+                  checked={@identification_method == "anonymous"}
+                  phx-click="change_identification"
+                  phx-value-method="anonymous"
+                  class="mt-1 text-pink-600 focus:ring-pink-500"
+                />
+                <div class="ml-3">
+                  <span class="text-gray-900 font-medium">Report Anonymously</span>
+                  <p class="text-sm text-gray-600">
+                    No identifying information will be collected
+                  </p>
+                </div>
+              </label>
+
+              <label class="flex items-start cursor-pointer">
+                <input
+                  type="radio"
+                  name="identification_method"
+                  value="manual"
+                  checked={@identification_method == "manual"}
+                  phx-click="change_identification"
+                  phx-value-method="manual"
+                  class="mt-1 text-pink-600 focus:ring-pink-500"
+                />
+                <div class="ml-3">
+                  <span class="text-gray-900 font-medium">Provide Name & Email</span>
+                  <p class="text-sm text-gray-600">Enter your contact information manually</p>
+                </div>
+              </label>
+
+              <label class="flex items-start cursor-pointer">
+                <input
+                  type="radio"
+                  name="identification_method"
+                  value="ifn"
+                  checked={@identification_method == "ifn"}
+                  phx-click="change_identification"
+                  phx-value-method="ifn"
+                  class="mt-1 text-pink-600 focus:ring-pink-500"
+                />
+                <div class="ml-3">
+                  <span class="text-gray-900 font-medium">Use My IFN</span>
+                  <p class="text-sm text-gray-600">
+                    Your information will be pulled from our member database
+                  </p>
+                </div>
+              </label>
+            </div>
+
+            <%!-- IFN Lookup Field --%>
+            <%= if @identification_method == "ifn" do %>
+              <div class="mt-4 pt-4 border-t border-blue-300">
+                <label for="ifn_input" class="block text-sm font-medium text-gray-900 mb-2">
+                  Enter Your IFN (e.g., IFN-0001)
+                </label>
+                <div class="flex gap-2">
+                  <input
+                    type="text"
+                    id="ifn_input"
+                    name="ifn_lookup"
+                    placeholder="IFN-XXXX"
+                    class="flex-1 px-3 py-2 border border-gray-300 rounded-md uppercase font-mono"
+                    phx-debounce="500"
+                    phx-change="update_ifn_input"
+                  />
+                  <button
+                    type="button"
+                    phx-click="lookup_ifn"
+                    phx-value-ifn={Phoenix.HTML.Form.input_value(@form, :ifn_input) || ""}
+                    class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+                  >
+                    Lookup
+                  </button>
+                </div>
+
+                <%= case @ifn_lookup_result do %>
+                  <% {:found, member} -> %>
+                    <div class="mt-3 p-3 bg-green-50 border border-green-200 rounded-md">
+                      <p class="text-sm text-green-800">
+                        ✓ Found: <strong>{member.first_name} {member.last_name}</strong>
+                        ({member.email})
+                      </p>
+                    </div>
+                  <% :not_found -> %>
+                    <div class="mt-3 p-3 bg-red-50 border border-red-200 rounded-md">
+                      <p class="text-sm text-red-800">
+                        IFN not found. Please check your Ironfolk ID Number.
+                      </p>
+                    </div>
+                  <% _ -> %>
+                    <p class="mt-2 text-xs text-gray-600">Enter your IFN and click Lookup</p>
+                <% end %>
+              </div>
+            <% end %>
+          </div>
+
+          <%!-- Question 1: Type of violation with quick-select buttons --%>
+          <div>
+            <label for="violation_type" class="block text-base font-normal text-gray-900 mb-3">
+              What type of violation does this involve (i.e. discrimination, harassment)?
+              <span class="text-red-600">*</span>
+            </label>
+
+            <.input
+              field={@form[:violation_type]}
+              type="select"
+              prompt="Please select an option"
+              phx-change="toggle_custom_violation"
+              options={[
+                {"Injury", "INJURY"},
+                {"Safety", "SAFETY"},
+                {"Harassment", "HARASSMENT"},
+                {"Harassment (Sexual)", "SEXUAL_HARASSMENT"},
+                {"Discrimination", "DISCRIMINATION"},
+                {"Abuse (Verbal)", "VERBAL_ABUSE"},
+                {"Abuse (Physical)", "PHYSICAL_VIOLENCE"},
+                {"Other", "CUSTOM"}
+              ]}
+            />
+          </div>
+          <%= if @is_custom_violation do %>
+            <div class="mt-4 bg-yellow-50 border-2 border-yellow-200 rounded-lg p-4">
+              <label for="violation_text" class="block text-base font-semibold text-gray-900 mb-3">
+                Please describe the type of violation <span class="text-red-600">*</span>
+              </label>
+              <.input
+                field={@form[:violation_text]}
+                type="text"
+                placeholder="e.g., Property damage, Equipment misuse, etc."
+                required={@is_custom_violation}
+              />
+              <p class="text-sm text-gray-600 mt-2">
+                Briefly describe what category this violation falls under.
+              </p>
+            </div>
+          <% end %>
+          <%!-- Question 2: Immediate threats --%>
+          <div>
+            <label class="block text-base font-normal text-gray-900 mb-3">
+              Does this involve any immediate threats to someone's safety?
+              <span class="text-red-600">*</span>
+            </label>
+            <div class="space-y-2 mb-4">
+              <label class="flex items-center">
+                <input
+                  type="radio"
+                  name="misconduct_report[immediate_threat]"
+                  value="false"
+                  checked={to_string(@form[:immediate_threat].value) == "false"}
+                  class="text-pink-600 focus:ring-pink-500"
+                />
+                <span class="ml-3 text-gray-900">No</span>
+              </label>
+
+              <label class="flex items-center">
+                <input
+                  type="radio"
+                  name="misconduct_report[immediate_threat]"
+                  value="true"
+                  checked={to_string(@form[:immediate_threat].value) == "true"}
+                  class="text-pink-600 focus:ring-pink-500"
+                />
+                <span class="ml-3 text-gray-900">Yes</span>
+              </label>
+              <.error :for={
+                msg <- Enum.map(@form[:immediate_threat].errors, &translate_error(&1))
+              }>
+                {msg}
+              </.error>
+            </div>
+          </div>
+          <%!-- Conditional Name Field using the form value directly --%>
+          <%= if to_string(@form[:immediate_threat].value) == "true" do %>
+            <div class="mt-4 p-4 bg-red-50 border-2 border-red-200 rounded-lg">
+              <label
+                for="immediate_threat_name"
+                class="block text-sm font-medium text-gray-700 mb-2"
+              >
+                Please provide their name so we can follow up ASAP
+                <span class="text-red-600">*</span>
+              </label>
+              <.input
+                field={@form[:immediate_threat_name]}
+                type="text"
+                placeholder="Name of person at immediate risk"
+                required
+              />
+              <.error :for={
+                msg <- Enum.map(@form[:immediate_threat_name].errors, &translate_error(&1))
+              }>
+                {msg}
+              </.error>
+            </div>
+          <% end %>
+          <%!-- Question 3: Date/time with picker --%>
+          <div>
+            <label for="date_time" class="block text-base font-normal text-gray-900 mb-3">
+              Date of the incident (if applicable)
+            </label>
+            <.input
+              field={@form[:date_time]}
+              type="date"
+              class="w-full"
+            />
+          </div>
+          <div>
+            <label for="time" class="block text-base front-normal text-gray-900 mb-3">
+              Time of the incident (if applicable)
+            </label>
+            <.input
+              field={@form[:time]}
+              type="time"
+              class="w-full"
+            />
+            <p class="text-xs text-gray-500 mt-1">
+              Select the date and time when the incident occurred
+            </p>
+          </div>
+          <%!-- Question 4: Who was affected --%>
+          <div>
+            <label class="block text-base font-normal text-gray-900 mb-3">
+              Who was affected? <span class="text-red-600">*</span>
+            </label>
+
+            <div class="space-y-2">
+              <label class="flex items-center">
+                <input
+                  type="radio"
+                  name="misconduct_report[affected]"
+                  value="ME"
+                  checked={@form[:affected].value == "ME"}
+                  class="text-pink-600 focus:ring-pink-500"
+                />
+                <span class="ml-3 text-gray-900">Me</span>
+              </label>
+
+              <label class="flex items-center">
+                <input
+                  type="radio"
+                  name="misconduct_report[affected]"
+                  value="SOMEONE_ELSE"
+                  checked={@form[:affected].value == "SOMEONE_ELSE"}
+                  class="text-pink-600 focus:ring-pink-500"
+                />
+                <span class="ml-3 text-gray-900">Someone else</span>
+              </label>
+
+              <label class="flex items-center">
+                <input
+                  type="radio"
+                  name="misconduct_report[affected]"
+                  value="MULTIPLE_PEOPLE"
+                  checked={@form[:affected].value == "MULTIPLE_PEOPLE"}
+                  class="text-pink-600 focus:ring-pink-500"
+                />
+                <span class="ml-3 text-gray-900">Multiple people</span>
+              </label>
+
+              <label class="flex items-center">
+                <input
+                  type="radio"
+                  name="misconduct_report[affected]"
+                  value="OTHER"
+                  checked={@form[:affected].value == "OTHER"}
+                  class="text-pink-600 focus:ring-pink-500"
+                />
+                <span class="ml-3 text-gray-900">Other</span>
+              </label>
+
+              <%!-- Conditional Other Text Input --%>
+              <%= if @is_affected_other do %>
+                <div class="mt-4 p-4 bg-gray-50 border border-gray-200 rounded-lg">
+                  <label class="block text-sm font-medium text-gray-700 mb-2">
+                    Please specify who was affected <span class="text-red-600">*</span>
+                  </label>
+                  <.input
+                    field={@form[:affected_other]}
+                    type="text"
+                    placeholder="Describe the affected party..."
+                  />
+                </div>
+              <% end %>
+            </div>
+
+            <.error :for={msg <- Enum.map(@form[:affected].errors, &translate_error(&1))}>
+              {msg}
+            </.error>
+          </div>
+          <%!-- Question 5: Description --%>
+          <div>
+            <label
+              for="incident_description"
+              class="block text-base font-normal text-gray-900 mb-3"
+            >
+              Description of the incident (Please include any details you're comfortable sharing about who is involved, the incident/comments made, whether the behavior is ongoing/a pattern, and the impact on you and/or others)
+              <span class="text-red-600">*</span>
+            </label>
+            <.input
+              field={@form[:incident_description]}
+              type="textarea"
+              rows="6"
+              placeholder="Your answer"
+              required
+              class="w-full"
+            />
+            <.error :for={
+              msg <- Enum.map(@form[:incident_description].errors, &translate_error(&1))
+            }>
+              {msg}
+            </.error>
+          </div>
+          <%!-- Question 6: Other information --%>
+          <div>
+            <label for="other_information" class="block text-base font-normal text-gray-900 mb-3">
+              Is there any other information you would like to share? This can also include any requests or recommendations you may have on how to resolve this.
+            </label>
+            <.input
+              field={@form[:other_information]}
+              type="textarea"
+              rows="4"
+              placeholder="Your answer"
+              class="w-full"
+            />
+          </div>
+          <%!-- Question 7 & 8: Name and Email (only for manual entry) --%>
+          <%= if @identification_method == "manual" do %>
+            <div>
+              <label for="name" class="block text-base font-normal text-gray-900 mb-3">
+                Name <span class="text-red-600">*</span>
+              </label>
+              <.input
+                field={@form[:name]}
+                type="text"
+                placeholder="Your answer"
+                required
+                class="w-full"
+              />
+            </div>
+
+            <div>
+              <label for="email" class="block text-base font-normal text-gray-900 mb-3">
+                Email <span class="text-red-600">*</span>
+              </label>
+              <.input
+                field={@form[:email]}
+                type="email"
+                placeholder="Your answer"
+                required
+                class="w-full"
+              />
+            </div>
+          <% else %>
+            <%!-- Hidden fields to satisfy form requirements --%>
+            <input
+              type="hidden"
+              name="misconduct_report[name]"
+              value={
+                if @identification_method == "ifn" and match?({:found, _}, @ifn_lookup_result),
+                  do:
+                    elem(@ifn_lookup_result, 1).first_name <>
+                      " " <> elem(@ifn_lookup_result, 1).last_name,
+                  else: "ANON"
+              }
+            />
+            <input
+              type="hidden"
+              name="misconduct_report[email]"
+              value={
+                if @identification_method == "ifn" and match?({:found, _}, @ifn_lookup_result),
+                  do: elem(@ifn_lookup_result, 1).email,
+                  else: ""
+              }
+            />
+
+            <%!-- Show what will be submitted --%>
+            <div class="p-4 bg-gray-50 border border-gray-200 rounded-lg">
+              <p class="text-sm font-medium text-gray-700 mb-2">Reporting as:</p>
+              <%= if @identification_method == "anonymous" do %>
+                <p class="text-sm text-gray-900">🔒 Anonymous (no contact information)</p>
+              <% else %>
+                <%= case @ifn_lookup_result do %>
+                  <% {:found, member} -> %>
+                    <p class="text-sm text-gray-900">
+                      👤 <strong>{member.first_name} {member.last_name}</strong> ({member.email})
+                    </p>
+                  <% _ -> %>
+                    <p class="text-sm text-gray-600 italic">Enter your IFN above to continue</p>
+                <% end %>
+              <% end %>
+            </div>
+          <% end %>
+          <%!-- Question 9: Follow up --%>
+          <div>
+            <label class="block text-base font-normal text-gray-900 mb-3">
+              If you provided your information above, would you like one of us to follow up with you?
+            </label>
+
+            <div class="space-y-2">
+              <label class="flex items-center">
+                <input
+                  type="radio"
+                  name="misconduct_report[follow_up]"
+                  value="true"
+                  checked={to_string(@form[:follow_up].value) == "true"}
+                  class="text-pink-600 focus:ring-pink-500"
+                />
+                <span class="ml-3 text-gray-900">Yes</span>
+              </label>
+
+              <label class="flex items-center">
+                <input
+                  type="radio"
+                  name="misconduct_report[follow_up]"
+                  value="false"
+                  checked={to_string(@form[:follow_up].value) == "false"}
+                  class="text-pink-600 focus:ring-pink-500"
+                />
+                <span class="ml-3 text-gray-900">No</span>
+              </label>
+            </div>
+          </div>
+          <%!-- Submit Buttons --%>
+          <div class="flex gap-4 pt-4">
+            <button type="submit" class="rainbow-button px-8 py-2">
+              Submit
+            </button>
+            <button
+              type="button"
+              onclick="if(confirm('Clear form?')) { window.location.reload(); }"
+              class="secondary-button px-8 py-2"
+            >
+              Clear
+            </button>
+          </div>
+        </.form>
+      </div>
+    <% end %>
+  </div>
+</div>

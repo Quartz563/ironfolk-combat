@@ -14,6 +14,7 @@ defmodule IronfolkCombat.Admin do
   alias IronfolkCombat.Events.Event
   alias IronfolkCombat.Members
   alias IronfolkCombat.Content.ContactMessage
+  alias IronfolkCombat.Misconduct
 
   @pubsub IronfolkCombat.PubSub
 
@@ -585,5 +586,57 @@ defmodule IronfolkCombat.Admin do
 
   def delete_contact_message(%ContactMessage{} = message) do
     Repo.delete(message)
+  end
+
+  # ============================================
+  # MISCONDUCT REPORT MANAGEMENT
+  # ============================================
+
+  @doc """
+  Lists misconduct reports with optional filtering.
+  Options:
+    - status: :all (default), "pending", "under_review", "resolved", "dismissed"
+  """
+  def list_misconduct_reports(opts \\ []) do
+    IronfolkCombat.Misconduct.list_reports(opts)
+  end
+
+  @doc """
+  Gets a single misconduct report by ID. Raises if not found.
+  """
+  def get_misconduct_report!(id) do
+    IronfolkCombat.Misconduct.get_report!(id)
+  end
+
+  @doc """
+  Updates a misconduct report's status.
+  """
+  def update_misconduct_report_status(report, status) do
+    IronfolkCombat.Misconduct.update_report_status(report, status)
+  end
+
+  @doc """
+  Adds an admin note to a misconduct report.
+  """
+  def add_misconduct_report_note(report, admin_id, note) do
+    case IronfolkCombat.Misconduct.add_admin_note(report, admin_id, note) do
+      {:ok, report} = result ->
+        broadcast_misconduct_change()
+        result
+
+      error ->
+        error
+    end
+  end
+
+  @doc """
+  Gets count of pending misconduct reports (for dashboard).
+  """
+  def count_pending_misconduct_reports do
+    IronfolkCombat.Misconduct.count_pending_reports()
+  end
+
+  defp broadcast_misconduct_change do
+    Phoenix.PubSub.broadcast(@pubsub, "misconduct_reports", {:reports_updated})
   end
 end

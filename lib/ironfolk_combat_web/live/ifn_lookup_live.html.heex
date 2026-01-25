@@ -75,7 +75,6 @@
             <input
               type={if @search_type == "email", do: "email", else: "text"}
               value={@search_value}
-              phx-change="update_search_value"
               name="search_value"
               required
               placeholder={
