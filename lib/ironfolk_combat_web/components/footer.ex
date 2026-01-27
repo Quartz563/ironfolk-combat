@@ -200,8 +200,8 @@ defmodule IronfolkCombatWeb.Footer do
             <p>&copy; 2025 Ironfolk Combat. All rights reserved.</p>
 
             <div class="flex space-x-6 mt-2 md:mt-0">
-              <.link href="#" class="hover:text-pink-400 transition-colors">Privacy Policy</.link>
-              <a href="#" class="hover:text-pink-400 transition-colors">Terms of Service</a>
+              <!--<.link href="#" class="hover:text-pink-400 transition-colors">Privacy Policy</.link>
+              <a href="#" class="hover:text-pink-400 transition-colors">Terms of Service</a>-->
               <.link href={~p"/code-of-conduct"} class="hover:text-pink-400 transition-colors">
                 Code of Conduct
               </.link>

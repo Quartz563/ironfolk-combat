@@ -105,10 +105,10 @@
       </div>
     </div>
 
-    <%!-- Injury Forms Section --%>
+    <%!-- Injury & Misconduct Reporting Section --%>
     <div id="injury-forms" class="mb-12">
       <h2 class="text-3xl font-bold text-gray-900 mb-6 flex items-center">
-        <span class="w-2 h-8 bg-pink-500 mr-3 rounded"></span> Misconduct Reporting Forms
+        <span class="w-2 h-8 bg-pink-500 mr-3 rounded"></span> Injury & Misconduct Reporting
       </h2>
 
       <div class="bg-white border-2 border-pink-200 rounded-lg p-8 shadow-sm">
@@ -130,11 +130,12 @@
             </svg>
           </div>
           <div class="flex-1">
-            <h3 class="text-xl font-bold text-gray-900 mb-2">When to Report an Injury</h3>
+            <h3 class="text-xl font-bold text-gray-900 mb-2">When to Use This Form</h3>
             <p class="text-gray-700 mb-4">
-              As outlined in our Code of Conduct, all injuries sustained during training must be reported, regardless of severity.
-              This helps us maintain safety standards and improve our training practices.
-              This form is also used to log any activity that breaches the code of conduct we have.
+              Our reporting form serves two important purposes:
+              <strong>reporting training injuries</strong>
+              of any severity, and <strong>reporting Code of Conduct violations</strong>
+              including harassment, discrimination, safety concerns, or any behavior that violates our club policies. All reports are taken seriously and handled confidentially by club leadership.
             </p>
           </div>
         </div>
@@ -164,19 +165,53 @@
           </ul>
         </div>
 
-        <div class="border-t-2 border-pink-200 pt-6">
-          <h4 class="font-bold text-gray-900 mb-4">Misconduct Report Form</h4>
-          <.link
-            href="https://docs.google.com/forms/d/e/1FAIpQLSf6KsI4LTSezxOJOSBTgtsuJQLVPaffR4n2DSimGQ59cUk04g/viewform"
-            class="rainbow-button"
-          >
-            Code of Conduct Reporting Form
-          </.link>
-          <p class="text-sm text-gray-600 mb-4 pt-6">
-            <strong>Note:</strong>
-            This form should be completed as soon as possible after an injury occurs.
-            If immediate medical attention is needed, seek help first and complete the form afterward.
+        <div class="bg-gradient-to-r from-purple-50 to-pink-50 rounded-lg p-6 mb-6 border-2 border-purple-200">
+          <h4 class="font-bold text-gray-900 mb-3">What Are Code of Conduct Violations?</h4>
+          <p class="text-gray-700 text-sm mb-3">
+            Any behavior that violates our club policies, creates an unsafe environment, or makes others feel unwelcome should be reported. The form is anonymous unless you choose to provide your information.
           </p>
+          <ul class="space-y-2 text-gray-700">
+            <li class="flex items-start">
+              <span class="text-purple-600 mr-2">•</span> Harassment or discrimination of any kind
+            </li>
+            <li class="flex items-start">
+              <span class="text-purple-600 mr-2">•</span> Sexual harassment or unwelcome advances
+            </li>
+            <li class="flex items-start">
+              <span class="text-purple-600 mr-2">•</span>
+              Unsafe training practices or deliberate excessive force
+            </li>
+            <li class="flex items-start">
+              <span class="text-purple-600 mr-2">•</span>
+              Bullying, intimidation, or aggressive behavior
+            </li>
+            <li class="flex items-start">
+              <span class="text-purple-600 mr-2">•</span>
+              Any behavior creating a hostile or unwelcoming environment
+            </li>
+          </ul>
+        </div>
+
+        <div class="border-t-2 border-pink-200 pt-6">
+          <div class="bg-gradient-to-r from-pink-50 to-purple-50 rounded-lg p-6 mb-6">
+            <h4 class="font-bold text-gray-900 mb-3">How Reporting Works</h4>
+            <p class="text-gray-700 text-sm">
+              <strong>Confidential:</strong>
+              All reports are handled privately by club leadership.<br />
+              <strong>Anonymous Option:</strong>
+              You can submit reports without providing your name or contact information.<br />
+              <strong>On Behalf of Others:</strong>
+              You can report concerns about incidents affecting other members.<br />
+              <strong>No Retaliation:</strong>
+              We strictly prohibit any retaliation against those who report concerns in good faith.
+            </p>
+          </div>
+
+          <div class="text-center mb-6">
+            <.link navigate={~p"/misconduct-report"} class="rainbow-button text-lg px-8 py-3">
+              Submit Injury or Misconduct Report
+            </.link>
+          </div>
 
           <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
             <div class="flex items-start">
@@ -195,16 +230,24 @@
                 </path>
               </svg>
               <div class="text-sm text-gray-700">
-                <strong>Emergency Contact:</strong>
-                In case of serious injury, we will contact your designated emergency contact.
-                Please ensure your emergency contact details are up to date in your membership profile.
+                <p class="mb-2">
+                  <strong>For injuries requiring immediate medical attention:</strong>
+                  Seek help first, then complete the report form afterward.
+                </p>
+                <p class="mb-2">
+                  <strong>For immediate safety threats:</strong>
+                  Call emergency services (111) if anyone is in immediate danger.
+                </p>
+                <p>
+                  <strong>Alternative reporting methods:</strong>
+                  You can also report concerns to any instructor, committee member, or via email to Ironfolkcombat@gmail.com
+                </p>
               </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-
     <%!-- IFN Lookup Section --%>
     <div id="ifn-lookup" class="mb-12">
       <h2 class="text-3xl font-bold text-gray-900 mb-6 flex items-center">
