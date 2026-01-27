@@ -276,6 +276,11 @@ defmodule IronfolkCombat.Admin do
     |> Repo.all()
   end
 
+  def list_published_slugs do
+    list_published_posts()
+    |> Enum.map(fn p -> p.slug end)
+  end
+
   defp filter_by_published(query, :all), do: query
   defp filter_by_published(query, published), do: where(query, [p], p.published == ^published)
 

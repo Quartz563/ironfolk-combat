@@ -96,6 +96,36 @@ function initMobileMenu() {
   }
 }
 
+const MarkdownEditor = {
+  mounted() {
+    this.handleEvent("insert-markdown", ({ before, after, placeholder }) => {
+      const editor = this.el;
+      const start = editor.selectionStart;
+      const end = editor.selectionEnd;
+      const selectedText = editor.value.substring(start, end);
+      const textToInsert = selectedText || placeholder;
+
+      const newText = before + textToInsert + after;
+
+      editor.value =
+        editor.value.substring(0, start) +
+        newText +
+        editor.value.substring(end);
+
+      // Trigger change event for LiveView
+      editor.dispatchEvent(new Event("input", { bubbles: true }));
+
+      // Set cursor position
+      const newCursorPos = start + before.length + textToInsert.length;
+      editor.focus();
+      editor.setSelectionRange(newCursorPos, newCursorPos);
+    });
+  },
+};
+
+// Find where your LiveSocket is created and add the hook
+Hooks.MarkdownEditor = MarkdownEditor;
+
 // Initialize when DOM is loaded
 document.addEventListener("DOMContentLoaded", function () {
   initMobileMenu();

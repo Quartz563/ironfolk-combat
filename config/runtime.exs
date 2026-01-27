@@ -68,4 +68,8 @@ if config_env() == :prod do
 
   config :stripity_stripe,
     api_key: System.get_env("STRIPE_SECRET_KEY")
+
+  config :ironfolk_combat, Ironfolk.Mailer,
+    adapter: Swoosh.Adapters.Resend,
+    api_key: System.env("RESEND_API_KEY")
 end
