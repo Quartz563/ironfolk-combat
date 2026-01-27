@@ -1,6 +1,5 @@
 <.flash_group flash={@flash} />
 <div class="min-h-screen bg-gray-50">
-  <!-- Admin Header -->
   <header class="bg-white shadow-sm border-b-4 border-pink-500">
     <div class="container mx-auto px-4 py-4">
       <div class="flex items-center justify-between">
@@ -16,11 +15,7 @@
               </path>
             </svg>
           </.link>
-          <div>
-            <h1 class="text-2xl font-bold text-gray-900">Manage Blog Posts</h1>
-
-            <p class="text-sm text-gray-600">{length(@posts)} posts</p>
-          </div>
+          <h1 class="text-2xl font-bold text-gray-900">Manage Blog Posts</h1>
         </div>
 
         <div class="flex items-center space-x-4">
@@ -46,71 +41,345 @@
       </div>
     </div>
   </header>
-  <!-- Main Content -->
+
   <main class="container mx-auto px-4 py-8">
-    <!-- Post Form Modal -->
     <%= if @show_form do %>
-      <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-        <div class="bg-white rounded-lg shadow-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
-          <div class="p-6">
-            <div class="flex items-center justify-between mb-6">
+      <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4 overflow-y-auto">
+        <div class="bg-white rounded-lg shadow-xl w-full max-w-6xl my-8 max-h-[90vh] overflow-y-auto">
+          <div class="p-6 border-b border-gray-200">
+            <div class="flex items-center justify-between mb-4">
               <h2 class="text-2xl font-bold text-gray-900">
                 {if @editing_post, do: "Edit Post", else: "New Post"}
               </h2>
 
-              <button phx-click="cancel_form" class="text-gray-400 hover:text-gray-600">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M6 18L18 6M6 6l12 12"
+              <div class="flex items-center space-x-2">
+                <button
+                  type="button"
+                  phx-click="toggle_help"
+                  class="px-3 py-2 text-sm bg-blue-100 text-blue-800 rounded hover:bg-blue-200"
+                >
+                  <svg
+                    class="w-4 h-4 inline-block mr-1"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
                   >
-                  </path>
-                </svg>
-              </button>
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                    >
+                    </path>
+                  </svg>
+                  {if @show_help, do: "Hide Help", else: "Show Help"}
+                </button>
+
+                <button phx-click="cancel_form" class="text-gray-400 hover:text-gray-600">
+                  <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M6 18L18 6M6 6l12 12"
+                    >
+                    </path>
+                  </svg>
+                </button>
+              </div>
             </div>
 
-            <.form for={@form} phx-change="validate" phx-submit="save" class="space-y-6">
-              <div>
-                <label for="title" class="block text-sm font-medium text-gray-700 mb-2">
-                  Title *
-                </label>
-                <.input field={@form[:title]} type="text" required />
+            <%= if @show_help do %>
+              <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
+                <h3 class="font-bold text-blue-900 mb-2">Markdown Quick Reference</h3>
+                <div class="grid md:grid-cols-2 gap-4 text-sm text-blue-900">
+                  <div>
+                    <p class="font-semibold mb-1">Headers:</p>
+                    <code class="bg-white px-2 py-1 rounded"># Heading 1</code>
+                    <br />
+                    <code class="bg-white px-2 py-1 rounded">## Heading 2</code>
+                  </div>
+                  <div>
+                    <p class="font-semibold mb-1">Formatting:</p>
+                    <code class="bg-white px-2 py-1 rounded">**bold**</code>
+                    <br />
+                    <code class="bg-white px-2 py-1 rounded">*italic*</code>
+                  </div>
+                  <div>
+                    <p class="font-semibold mb-1">Links:</p>
+                    <code class="bg-white px-2 py-1 rounded">[text](url)</code>
+                  </div>
+                  <div>
+                    <p class="font-semibold mb-1">Images:</p>
+                    <code class="bg-white px-2 py-1 rounded">![alt text](image-url)</code>
+                  </div>
+                  <div>
+                    <p class="font-semibold mb-1">Lists:</p>
+                    <code class="bg-white px-2 py-1 rounded">- Item</code>
+                    <br />
+                    <code class="bg-white px-2 py-1 rounded">1. Item</code>
+                  </div>
+                  <div>
+                    <p class="font-semibold mb-1">Video Embed:</p>
+                    <code class="bg-white px-2 py-1 rounded text-xs">
+                      &lt;iframe src="youtube-url"&gt;&lt;/iframe&gt;
+                    </code>
+                  </div>
+                </div>
               </div>
-
-              <div>
-                <label for="excerpt" class="block text-sm font-medium text-gray-700 mb-2">
-                  Excerpt (Short summary)
-                </label>
-                <.input field={@form[:excerpt]} type="textarea" rows="2" />
-              </div>
-
-              <div>
-                <label for="content" class="block text-sm font-medium text-gray-700 mb-2">
-                  Content *
-                </label>
-                <.input field={@form[:content]} type="textarea" rows="12" required />
-              </div>
-
-              <div class="flex items-center">
-                <.input field={@form[:published]} type="checkbox" label="Publish immediately" />
-              </div>
-
-              <div class="flex items-center justify-end space-x-4 pt-4 border-t border-gray-200">
-                <button type="button" phx-click="cancel_form" class="secondary-button">
-                  Cancel
-                </button>
-                <button type="submit" class="rainbow-button">
-                  {if @editing_post, do: "Update Post", else: "Create Post"}
-                </button>
-              </div>
-            </.form>
+            <% end %>
           </div>
+
+          <.form for={@form} phx-change="validate" phx-submit="save" class="p-6">
+            <%!-- Post Metadata --%>
+            <div class="grid md:grid-cols-2 gap-4 mb-4">
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">
+                  Post Title *
+                </label>
+                <.input
+                  field={@form[:title]}
+                  type="text"
+                  placeholder="Enter an engaging title..."
+                  required
+                  class="text-lg"
+                />
+              </div>
+
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">
+                  Author Name *
+                </label>
+                <.input
+                  field={@form[:author_name]}
+                  type="text"
+                  placeholder="Your name"
+                  required
+                />
+                <p class="text-xs text-gray-500 mt-1">
+                  This will be displayed as the post author
+                </p>
+              </div>
+            </div>
+
+            <div class="mb-4">
+              <label class="block text-sm font-medium text-gray-700 mb-2">
+                Excerpt (Optional)
+              </label>
+              <.input
+                field={@form[:excerpt]}
+                type="textarea"
+                rows="2"
+                placeholder="A brief summary that appears in the blog list..."
+              />
+              <p class="text-xs text-gray-500 mt-1">
+                If left empty, the first 200 characters of your post will be used
+              </p>
+            </div>
+
+            <%!-- Editor and Preview Side-by-Side --%>
+            <div class="mb-4">
+              <div class="flex items-center justify-between mb-2">
+                <label class="block text-sm font-medium text-gray-700">
+                  Post Content * (Supports Markdown)
+                </label>
+                <button
+                  type="button"
+                  phx-click="toggle_preview"
+                  class="text-sm text-pink-600 hover:text-pink-800 font-medium"
+                >
+                  {if @show_preview, do: "Hide Preview", else: "Show Preview"}
+                </button>
+              </div>
+
+              <%!-- Formatting Toolbar --%>
+              <div class="bg-gray-100 border border-gray-300 rounded-t-lg p-2 flex flex-wrap gap-1">
+                <button
+                  type="button"
+                  phx-click="insert_markdown"
+                  phx-value-before="**"
+                  phx-value-after="**"
+                  phx-value-placeholder="bold text"
+                  class="px-3 py-1 bg-white border border-gray-300 rounded hover:bg-gray-50 text-sm font-semibold"
+                  title="Make text bold"
+                >
+                  Bold
+                </button>
+                <button
+                  type="button"
+                  phx-click="insert_markdown"
+                  phx-value-before="*"
+                  phx-value-after="*"
+                  phx-value-placeholder="italic text"
+                  class="px-3 py-1 bg-white border border-gray-300 rounded hover:bg-gray-50 text-sm italic"
+                  title="Make text italic"
+                >
+                  Italic
+                </button>
+                <button
+                  type="button"
+                  phx-click="insert_markdown"
+                  phx-value-before="\n## "
+                  phx-value-after=""
+                  phx-value-placeholder="Heading"
+                  class="px-3 py-1 bg-white border border-gray-300 rounded hover:bg-gray-50 text-sm"
+                  title="Add a heading"
+                >
+                  Heading
+                </button>
+                <button
+                  type="button"
+                  phx-click="insert_markdown"
+                  phx-value-before="["
+                  phx-value-after="](url)"
+                  phx-value-placeholder="link text"
+                  class="px-3 py-1 bg-white border border-gray-300 rounded hover:bg-gray-50 text-sm"
+                  title="Add a link"
+                >
+                  Link
+                </button>
+                <button
+                  type="button"
+                  phx-click="insert_markdown"
+                  phx-value-before="![alt text]("
+                  phx-value-after=")"
+                  phx-value-placeholder="image-url"
+                  class="px-3 py-1 bg-white border border-gray-300 rounded hover:bg-gray-50 text-sm"
+                  title="Add an image"
+                >
+                  Image
+                </button>
+                <button
+                  type="button"
+                  phx-click="insert_markdown"
+                  phx-value-before="\n- "
+                  phx-value-after=""
+                  phx-value-placeholder="List item"
+                  class="px-3 py-1 bg-white border border-gray-300 rounded hover:bg-gray-50 text-sm"
+                  title="Add a bullet list"
+                >
+                  • List
+                </button>
+                <button
+                  type="button"
+                  phx-click="insert_markdown"
+                  phx-value-before="<iframe width='560' height='315' src='"
+                  phx-value-after="' frameborder='0' allowfullscreen></iframe>"
+                  phx-value-placeholder="https://www.youtube.com/embed/VIDEO_ID"
+                  class="px-3 py-1 bg-white border border-gray-300 rounded hover:bg-gray-50 text-sm"
+                  title="Embed a YouTube video"
+                >
+                  Video
+                </button>
+                <button
+                  type="button"
+                  phx-click="insert_markdown"
+                  phx-value-before="<br>"
+                  phx-value-after=""
+                  phx-value-placeholder=""
+                  class="px-3 py-1 bg-white border border-gray-300 rounded hover:bg-gray-50 text-sm"
+                  title="Add a line break to the post"
+                >
+                  New Line
+                </button>
+              </div>
+
+              <div class={"grid gap-4 #{if @show_preview, do: "md:grid-cols-2", else: "grid-cols-1"}"}>
+                <%!-- Editor --%>
+                <div>
+                  <.input
+                    field={@form[:content]}
+                    type="textarea"
+                    rows="15"
+                    id="post-content-editor"
+                    phx-hook="MarkdownEditor"
+                    placeholder="Write your post here using Markdown formatting...
+
+## Example Heading
+
+This is a paragraph with **bold** and *italic* text.
+
+- Bullet point 1
+- Bullet point 2
+
+[Link text](https://example.com)
+
+![Image description](image-url)
+
+For YouTube videos, use an iframe:
+<iframe width='560' height='315' src='https://www.youtube.com/embed/VIDEO_ID' frameborder='0' allowfullscreen></iframe>"
+                    required
+                    class="font-mono text-sm rounded-t-none"
+                  />
+                  <p class="text-xs text-gray-500 mt-1">
+                    💡 Tip: Use the toolbar buttons above to insert formatting
+                  </p>
+                </div>
+
+                <%!-- Live Preview --%>
+                <%= if @show_preview do %>
+                  <div>
+                    <div class="border border-gray-300 rounded-lg p-4 bg-white min-h-[400px] max-h-[500px] overflow-y-auto">
+                      <div class="prose max-w-none">
+                        <%= if @preview_html != "" do %>
+                          {Phoenix.HTML.raw(@preview_html)}
+                        <% else %>
+                          <p class="text-gray-400 italic">
+                            Preview will appear here as you type...
+                          </p>
+                        <% end %>
+                      </div>
+                    </div>
+                    <p class="text-xs text-gray-500 mt-1">
+                      👁️ Live preview of your formatted post
+                    </p>
+                  </div>
+                <% end %>
+              </div>
+            </div>
+
+            <%!-- Publishing Options --%>
+            <div class="bg-gradient-to-r from-pink-50 to-purple-50 border border-pink-200 rounded-lg p-4 mb-4">
+              <div class="flex items-center justify-between">
+                <div class="flex items-center">
+                  <.input
+                    field={@form[:published]}
+                    type="checkbox"
+                    label="Publish immediately (make visible to public)"
+                  />
+                </div>
+                <p class="text-sm text-gray-600">
+                  Uncheck to save as draft
+                </p>
+              </div>
+            </div>
+
+            <%!-- Action Buttons --%>
+            <div class="flex items-center justify-between pt-4 border-t border-gray-200">
+              <button type="button" phx-click="cancel_form" class="secondary-button">
+                Cancel
+              </button>
+
+              <div class="flex items-center space-x-3">
+                <button
+                  type="submit"
+                  name="action"
+                  value="draft"
+                  class="px-6 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 font-semibold"
+                >
+                  {if @editing_post, do: "Update Draft", else: "Save as Draft"}
+                </button>
+                <button type="submit" name="action" value="publish" class="rainbow-button">
+                  {if @editing_post, do: "Update Post", else: "Publish Post"}
+                </button>
+              </div>
+            </div>
+          </.form>
         </div>
       </div>
     <% end %>
-    <!-- Filters -->
+
+    <%!-- Filters --%>
     <div class="bg-white rounded-lg shadow-md p-4 mb-6">
       <div class="flex items-center space-x-4">
         <span class="text-sm font-medium text-gray-700">Filter by status:</span>
@@ -137,7 +406,8 @@
         </button>
       </div>
     </div>
-    <!-- Posts List -->
+
+    <%!-- Posts List --%>
     <%= if Enum.empty?(@posts) do %>
       <div class="bg-white rounded-lg shadow-md p-12 text-center">
         <svg
