@@ -14,33 +14,32 @@ defmodule IronfolkCombatWeb.Admin.ReportsLive do
       socket
       |> assign(:current_admin, admin)
       |> assign(:page_title, "Misconduct Reports")
-      |> assign(:filter_status, :all)
-      |> assign(:filter_severity, :all)
+      |> assign(:filter_status, "all")
+      |> assign(:filter_severity, "all")
       |> assign(:selected_report, nil)
       |> assign(:new_note, "")
       |> load_reports()
+      |> load_statistics()
 
     {:ok, socket}
   end
 
   @impl true
   def handle_event("filter_status", %{"status" => status}, socket) do
-    filter_status = if status == "all", do: :all, else: status
-
     {:noreply,
      socket
-     |> assign(:filter_status, filter_status)
-     |> load_reports()}
+     |> assign(:filter_status, status)
+     |> load_reports()
+     |> load_statistics()}
   end
 
   @impl true
   def handle_event("filter_severity", %{"severity" => severity}, socket) do
-    filter_severity = if severity == "all", do: :all, else: severity
-
     {:noreply,
      socket
-     |> assign(:filter_severity, filter_severity)
-     |> load_reports()}
+     |> assign(:filter_severity, severity)
+     |> load_reports()
+     |> load_statistics()}
   end
 
   @impl true
@@ -55,6 +54,23 @@ defmodule IronfolkCombatWeb.Admin.ReportsLive do
   end
 
   @impl true
+  def handle_event("quick_status_update", %{"id" => id, "status" => status}, socket) do
+    report = Misconduct.get_report!(id)
+
+    case Misconduct.update_report_status(report, status) do
+      {:ok, _updated_report} ->
+        {:noreply,
+         socket
+         |> put_flash(:info, "Status updated to #{format_status_text(status)}")
+         |> load_reports()
+         |> load_statistics()}
+
+      {:error, _changeset} ->
+        {:noreply, put_flash(socket, :error, "Failed to update status")}
+    end
+  end
+
+  @impl true
   def handle_event("update_status", %{"id" => id, "status" => status}, socket) do
     report = Misconduct.get_report!(id)
 
@@ -64,7 +80,8 @@ defmodule IronfolkCombatWeb.Admin.ReportsLive do
          socket
          |> put_flash(:info, "Status updated successfully")
          |> assign(:selected_report, updated_report)
-         |> load_reports()}
+         |> load_reports()
+         |> load_statistics()}
 
       {:error, _changeset} ->
         {:noreply, put_flash(socket, :error, "Failed to update status")}
@@ -81,7 +98,8 @@ defmodule IronfolkCombatWeb.Admin.ReportsLive do
          socket
          |> put_flash(:info, "Severity updated successfully")
          |> assign(:selected_report, updated_report)
-         |> load_reports()}
+         |> load_reports()
+         |> load_statistics()}
 
       {:error, _changeset} ->
         {:noreply, put_flash(socket, :error, "Failed to update severity")}
@@ -126,7 +144,8 @@ defmodule IronfolkCombatWeb.Admin.ReportsLive do
          socket
          |> put_flash(:info, "Report deleted successfully")
          |> assign(:selected_report, nil)
-         |> load_reports()}
+         |> load_reports()
+         |> load_statistics()}
 
       {:error, _} ->
         {:noreply, put_flash(socket, :error, "Failed to delete report")}
@@ -135,7 +154,7 @@ defmodule IronfolkCombatWeb.Admin.ReportsLive do
 
   @impl true
   def handle_info({:report_created, _report}, socket) do
-    {:noreply, load_reports(socket)}
+    {:noreply, socket |> load_reports() |> load_statistics()}
   end
 
   @impl true
@@ -143,6 +162,7 @@ defmodule IronfolkCombatWeb.Admin.ReportsLive do
     socket =
       socket
       |> load_reports()
+      |> load_statistics()
       |> then(fn sock ->
         if sock.assigns.selected_report && sock.assigns.selected_report.id == report.id do
           assign(sock, :selected_report, report)
@@ -164,7 +184,34 @@ defmodule IronfolkCombatWeb.Admin.ReportsLive do
     assign(socket, :reports, reports)
   end
 
-  defp maybe_add_filter(filters, _key, :all), do: filters
+  defp load_statistics(socket) do
+    all_reports = Misconduct.list_reports()
+
+    stats = %{
+      total: length(all_reports),
+      pending: count_by_status(all_reports, "PENDING"),
+      in_progress: count_by_status(all_reports, "IN_PROGRESS"),
+      resolved: count_by_status(all_reports, "RESOLVED"),
+      dismissed: count_by_status(all_reports, "DISMISSED"),
+      critical: count_by_severity(all_reports, "CRITICAL"),
+      high: count_by_severity(all_reports, "HIGH"),
+      medium: count_by_severity(all_reports, "MEDIUM"),
+      low: count_by_severity(all_reports, "LOW"),
+      threats: Enum.count(all_reports, &has_immediate_threat?/1)
+    }
+
+    assign(socket, :stats, stats)
+  end
+
+  defp count_by_status(reports, status) do
+    Enum.count(reports, fn report -> report.status == status end)
+  end
+
+  defp count_by_severity(reports, severity) do
+    Enum.count(reports, fn report -> report.severity == severity end)
+  end
+
+  defp maybe_add_filter(filters, _key, "all"), do: filters
   defp maybe_add_filter(filters, key, value), do: [{key, value} | filters]
 
   defp get_admin_from_session(%{"admin_id" => admin_id}) do
@@ -192,6 +239,12 @@ defmodule IronfolkCombatWeb.Admin.ReportsLive do
     |> Enum.map(&String.capitalize/1)
     |> Enum.join(" ")
   end
+
+  defp format_status_text("PENDING"), do: "Pending"
+  defp format_status_text("IN_PROGRESS"), do: "In Progress"
+  defp format_status_text("RESOLVED"), do: "Resolved"
+  defp format_status_text("DISMISSED"), do: "Dismissed"
+  defp format_status_text(status), do: status
 
   defp format_datetime(%Date{} = date) do
     Calendar.strftime(date, "%B %d, %Y")

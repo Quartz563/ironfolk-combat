@@ -88,6 +88,14 @@ defmodule IronfolkCombatWeb.MisconductReportLive do
     report_params = Map.get(params, "misconduct_report", %{})
 
     # Update UI state variables to prevent them from resetting
+    # IMPORTANT: Track immediate_threat from form to ensure severity calculation works
+    has_immediate_threat =
+      case report_params["immediate_threat"] do
+        "true" -> true
+        true -> true
+        _ -> false
+      end
+
     socket =
       socket
       |> assign(
@@ -96,6 +104,7 @@ defmodule IronfolkCombatWeb.MisconductReportLive do
       )
       |> assign(:is_custom_violation, report_params["violation_type"] == "CUSTOM")
       |> assign(:is_affected_other, report_params["affected"] == "OTHER")
+      |> assign(:has_immediate_threat, has_immediate_threat)
 
     # Process the changeset for the rest of the form
     changeset =
@@ -105,6 +114,7 @@ defmodule IronfolkCombatWeb.MisconductReportLive do
 
     IO.inspect(changeset.errors, label: "CHANGESET ERRORS")
     IO.inspect(changeset.valid?, label: "IS VALID?")
+    IO.inspect(has_immediate_threat, label: "HAS IMMEDIATE THREAT")
     {:noreply, assign(socket, :form, to_form(changeset))}
   end
 
@@ -137,12 +147,11 @@ defmodule IronfolkCombatWeb.MisconductReportLive do
           params
       end
 
-    # We use the socket assign as the source of truth
+    # 3. Get immediate threat status from socket (now properly tracked)
     has_threat = socket.assigns.has_immediate_threat
     params = Map.put(params, "immediate_threat", has_threat)
 
-    # 4. Assess Severity
-    # Pass the boolean has_threat directly so assess_severity knows exactly what to do
+    # 4. Assess Severity based on violation type and immediate threat
     severity =
       Misconduct.assess_severity(
         Map.get(params, "violation_type", ""),
@@ -150,6 +159,9 @@ defmodule IronfolkCombatWeb.MisconductReportLive do
       )
 
     params = Map.put(params, "severity", severity)
+
+    IO.inspect(has_threat, label: "SUBMITTING WITH IMMEDIATE THREAT")
+    IO.inspect(severity, label: "CALCULATED SEVERITY")
 
     # 5. Database Attempt
     case Misconduct.create_report(params) do
@@ -180,6 +192,7 @@ defmodule IronfolkCombatWeb.MisconductReportLive do
      |> assign(:identification_method, "ANON")
      |> assign(:ifn_lookup_result, nil)
      |> assign(:violation_text, "")
+     |> assign(:has_immediate_threat, false)
      |> clear_flash()}
   end
 end

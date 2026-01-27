@@ -18,7 +18,9 @@
           </.link>
           <div>
             <h1 class="text-2xl font-bold text-gray-900">Misconduct Reports</h1>
-            <p class="text-sm text-gray-600">{length(@reports)} total reports</p>
+            <p class="text-sm text-gray-600">
+              {length(@reports)} {if length(@reports) == 1, do: "report", else: "reports"} displayed
+            </p>
           </div>
         </div>
 
@@ -28,44 +30,222 @@
   </header>
 
   <main class="container mx-auto px-4 py-8">
-    <!-- Filters -->
-    <div class="bg-white rounded-lg shadow-md p-4 mb-6">
-      <div class="flex flex-wrap items-center gap-4">
-        <div>
-          <label class="text-sm font-medium text-gray-700 mr-2">Status:</label>
-          <select
-            phx-change="filter_status"
-            name="status"
-            class="px-3 py-2 border border-gray-300 rounded-md"
-          >
-            <option value="all" selected={@filter_status == :all}>All Statuses</option>
-            <option value="PENDING" selected={@filter_status == "PENDING"}>Pending</option>
-            <option value="IN_PROGRESS" selected={@filter_status == "IN_PROGRESS"}>
-              In Progress
-            </option>
-            <option value="RESOLVED" selected={@filter_status == "RESOLVED"}>Resolved</option>
-            <option value="DISMISSED" selected={@filter_status == "DISMISSED"}>Dismissed</option>
-          </select>
+    <!-- Statistics Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 mb-6">
+      <!-- Total Reports -->
+      <div class="bg-white rounded-lg shadow-md p-4 border-l-4 border-gray-500">
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="text-xs font-medium text-gray-600 uppercase">Total</p>
+            <p class="text-2xl font-bold text-gray-900">{@stats.total}</p>
+          </div>
+          <div class="bg-gray-100 rounded-full p-2">
+            <svg
+              class="w-6 h-6 text-gray-600"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+              >
+              </path>
+            </svg>
+          </div>
         </div>
-
-        <div>
-          <label class="text-sm font-medium text-gray-700 mr-2">Severity:</label>
-          <select
-            phx-change="filter_severity"
-            name="severity"
-            class="px-3 py-2 border border-gray-300 rounded-md"
-          >
-            <option value="all" selected={@filter_severity == :all}>All Severities</option>
-            <option value="LOW" selected={@filter_severity == "LOW"}>Low</option>
-            <option value="MEDIUM" selected={@filter_severity == "MEDIUM"}>Medium</option>
-            <option value="HIGH" selected={@filter_severity == "HIGH"}>High</option>
-            <option value="CRITICAL" selected={@filter_severity == "CRITICAL"}>Critical</option>
-          </select>
+      </div>
+      <!-- Pending -->
+      <div class="bg-white rounded-lg shadow-md p-4 border-l-4 border-yellow-500">
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="text-xs font-medium text-gray-600 uppercase">Pending</p>
+            <p class="text-2xl font-bold text-yellow-700">{@stats.pending}</p>
+          </div>
+          <div class="bg-yellow-100 rounded-full p-2">
+            <svg
+              class="w-6 h-6 text-yellow-600"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+              >
+              </path>
+            </svg>
+          </div>
+        </div>
+      </div>
+      <!-- In Progress -->
+      <div class="bg-white rounded-lg shadow-md p-4 border-l-4 border-blue-500">
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="text-xs font-medium text-gray-600 uppercase">In Progress</p>
+            <p class="text-2xl font-bold text-blue-700">{@stats.in_progress}</p>
+          </div>
+          <div class="bg-blue-100 rounded-full p-2">
+            <svg
+              class="w-6 h-6 text-blue-600"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M13 10V3L4 14h7v7l9-11h-7z"
+              >
+              </path>
+            </svg>
+          </div>
+        </div>
+      </div>
+      <!-- Resolved -->
+      <div class="bg-white rounded-lg shadow-md p-4 border-l-4 border-green-500">
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="text-xs font-medium text-gray-600 uppercase">Resolved</p>
+            <p class="text-2xl font-bold text-green-700">{@stats.resolved}</p>
+          </div>
+          <div class="bg-green-100 rounded-full p-2">
+            <svg
+              class="w-6 h-6 text-green-600"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+              >
+              </path>
+            </svg>
+          </div>
+        </div>
+      </div>
+      <!-- Critical Severity -->
+      <div class="bg-white rounded-lg shadow-md p-4 border-l-4 border-red-500">
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="text-xs font-medium text-gray-600 uppercase">Critical/High</p>
+            <p class="text-2xl font-bold text-red-700">{@stats.critical + @stats.high}</p>
+          </div>
+          <div class="bg-red-100 rounded-full p-2">
+            <svg
+              class="w-6 h-6 text-red-600"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+              >
+              </path>
+            </svg>
+          </div>
         </div>
       </div>
     </div>
-    
-<!-- Reports List -->
+    <!-- Filters -->
+    <div class="bg-white rounded-lg shadow-md p-4 mb-6">
+      <div class="space-y-4">
+        <!-- Status Filter -->
+        <div>
+          <span class="text-sm font-medium text-gray-700 block mb-2">Filter by status:</span>
+          <div class="flex flex-wrap items-center gap-2">
+            <button
+              phx-click="filter_status"
+              phx-value-status="all"
+              class={"px-4 py-2 rounded-md text-sm font-medium transition-colors #{if @filter_status == "all", do: "bg-pink-600 text-white", else: "bg-gray-200 text-gray-700 hover:bg-gray-300"}"}
+            >
+              All ({@stats.total})
+            </button>
+            <button
+              phx-click="filter_status"
+              phx-value-status="PENDING"
+              class={"px-4 py-2 rounded-md text-sm font-medium transition-colors #{if @filter_status == "PENDING", do: "bg-yellow-600 text-white", else: "bg-gray-200 text-gray-700 hover:bg-gray-300"}"}
+            >
+              Pending ({@stats.pending})
+            </button>
+            <button
+              phx-click="filter_status"
+              phx-value-status="IN_PROGRESS"
+              class={"px-4 py-2 rounded-md text-sm font-medium transition-colors #{if @filter_status == "IN_PROGRESS", do: "bg-blue-600 text-white", else: "bg-gray-200 text-gray-700 hover:bg-gray-300"}"}
+            >
+              In Progress ({@stats.in_progress})
+            </button>
+            <button
+              phx-click="filter_status"
+              phx-value-status="RESOLVED"
+              class={"px-4 py-2 rounded-md text-sm font-medium transition-colors #{if @filter_status == "RESOLVED", do: "bg-green-600 text-white", else: "bg-gray-200 text-gray-700 hover:bg-gray-300"}"}
+            >
+              Resolved ({@stats.resolved})
+            </button>
+            <button
+              phx-click="filter_status"
+              phx-value-status="DISMISSED"
+              class={"px-4 py-2 rounded-md text-sm font-medium transition-colors #{if @filter_status == "DISMISSED", do: "bg-gray-600 text-white", else: "bg-gray-200 text-gray-700 hover:bg-gray-300"}"}
+            >
+              Dismissed ({@stats.dismissed})
+            </button>
+          </div>
+        </div>
+        <!-- Severity Filter -->
+        <div>
+          <span class="text-sm font-medium text-gray-700 block mb-2">Filter by severity:</span>
+          <div class="flex flex-wrap items-center gap-2">
+            <button
+              phx-click="filter_severity"
+              phx-value-severity="all"
+              class={"px-4 py-2 rounded-md text-sm font-medium transition-colors #{if @filter_severity == "all", do: "bg-pink-600 text-white", else: "bg-gray-200 text-gray-700 hover:bg-gray-300"}"}
+            >
+              All Severities
+            </button>
+            <button
+              phx-click="filter_severity"
+              phx-value-severity="CRITICAL"
+              class={"px-4 py-2 rounded-md text-sm font-medium transition-colors #{if @filter_severity == "CRITICAL", do: "bg-red-600 text-white", else: "bg-gray-200 text-gray-700 hover:bg-gray-300"}"}
+            >
+              Critical ({@stats.critical})
+            </button>
+            <button
+              phx-click="filter_severity"
+              phx-value-severity="HIGH"
+              class={"px-4 py-2 rounded-md text-sm font-medium transition-colors #{if @filter_severity == "HIGH", do: "bg-orange-600 text-white", else: "bg-gray-200 text-gray-700 hover:bg-gray-300"}"}
+            >
+              High ({@stats.high})
+            </button>
+            <button
+              phx-click="filter_severity"
+              phx-value-severity="MEDIUM"
+              class={"px-4 py-2 rounded-md text-sm font-medium transition-colors #{if @filter_severity == "MEDIUM", do: "bg-yellow-600 text-white", else: "bg-gray-200 text-gray-700 hover:bg-gray-300"}"}
+            >
+              Medium ({@stats.medium})
+            </button>
+            <button
+              phx-click="filter_severity"
+              phx-value-severity="LOW"
+              class={"px-4 py-2 rounded-md text-sm font-medium transition-colors #{if @filter_severity == "LOW", do: "bg-blue-600 text-white", else: "bg-gray-200 text-gray-700 hover:bg-gray-300"}"}
+            >
+              Low ({@stats.low})
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Reports List -->
     <%= if Enum.empty?(@reports) do %>
       <div class="bg-white rounded-lg shadow-md p-12 text-center">
         <svg
@@ -82,7 +262,8 @@
           >
           </path>
         </svg>
-        <p class="text-gray-600 text-lg">No reports found</p>
+        <p class="text-gray-600 text-lg">No reports found matching your filters</p>
+        <p class="text-gray-500 text-sm mt-2">Try adjusting your filter criteria</p>
       </div>
     <% else %>
       <div class="space-y-4">
@@ -91,9 +272,9 @@
             <div class="p-6">
               <div class="flex items-start justify-between mb-4">
                 <div class="flex-1">
-                  <div class="flex items-center gap-3 mb-2">
+                  <div class="flex items-center gap-3 mb-3">
                     <h3 class="text-lg font-bold text-gray-900">
-                      Report #{report.report_id}
+                      Report #{report.id}
                     </h3>
                     <span class={"px-2 py-1 rounded text-xs font-semibold #{status_badge_color(report.status)}"}>
                       {report.status}
@@ -102,41 +283,85 @@
                       {report.severity}
                     </span>
                     <%= if has_immediate_threat?(report) do %>
-                      <span class="px-2 py-1 rounded text-xs font-semibold bg-red-100 text-red-800">
+                      <span class="px-2 py-1 rounded text-xs font-semibold bg-red-100 text-red-800 animate-pulse">
                         ⚠️ IMMEDIATE THREAT
                       </span>
                     <% end %>
                   </div>
 
-                  <p class="text-sm text-gray-600 mb-2">
-                    <strong>Violation:</strong>
-                    {format_violation_type(report.violation_type)}
-                  </p>
-
-                  <p class="text-sm text-gray-600 mb-2">
-                    <strong>Date:</strong>
-                    {format_datetime(report.date_time)} at {format_time(report.time)}
-                  </p>
-
-                  <%= if report.affected do %>
-                    <p class="text-sm text-gray-600 mb-2">
-                      <strong>People Affected:</strong> {report.affected}
+                  <div class="grid md:grid-cols-2 gap-2 text-sm text-gray-600 mb-3">
+                    <p>
+                      <strong>Violation:</strong>
+                      {format_violation_type(report.violation_type)}
                     </p>
-                  <% end %>
-
-                  <p class="text-sm text-gray-600">
-                    <strong>Submitted:</strong>
-                    {Calendar.strftime(report.inserted_at, "%B %d, %Y at %I:%M %p")}
+                    <p>
+                      <strong>Date:</strong>
+                      {format_datetime(report.date_time)} at {format_time(report.time)}
+                    </p>
+                    <%= if report.affected do %>
+                      <p>
+                        <strong>Affected:</strong> {report.affected}
+                      </p>
+                    <% end %>
+                    <p>
+                      <strong>Submitted:</strong>
+                      {Calendar.strftime(report.inserted_at, "%B %d, %Y at %I:%M %p")}
+                    </p>
+                  </div>
+                  <!-- Quick Preview of Description -->
+                  <p class="text-sm text-gray-700 line-clamp-2">
+                    {report.incident_description}
                   </p>
                 </div>
 
-                <button
-                  phx-click="select_report"
-                  phx-value-id={report.id}
-                  class="px-4 py-2 bg-pink-500 text-white rounded-lg hover:bg-pink-600 transition-colors"
-                >
-                  View Details
-                </button>
+                <div class="flex items-start gap-2 ml-4">
+                  <!-- Quick Actions Dropdown -->
+                  <div class="relative group">
+                    <button class="px-3 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors">
+                      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"
+                        >
+                        </path>
+                      </svg>
+                    </button>
+                    <div class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-10">
+                      <div class="py-1">
+                        <%= if report.status != "IN_PROGRESS" do %>
+                          <button
+                            phx-click="quick_status_update"
+                            phx-value-id={report.id}
+                            phx-value-status="IN_PROGRESS"
+                            class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-700"
+                          >
+                            Mark In Progress
+                          </button>
+                        <% end %>
+                        <%= if report.status != "RESOLVED" do %>
+                          <button
+                            phx-click="quick_status_update"
+                            phx-value-id={report.id}
+                            phx-value-status="RESOLVED"
+                            class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-green-50 hover:text-green-700"
+                          >
+                            Mark Resolved
+                          </button>
+                        <% end %>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- View Details Button -->
+                  <button
+                    phx-click="select_report"
+                    phx-value-id={report.id}
+                    class="px-4 py-2 bg-pink-500 text-white rounded-lg hover:bg-pink-600 transition-colors whitespace-nowrap"
+                  >
+                    View Details
+                  </button>
+                </div>
               </div>
             </div>
           </div>
@@ -144,8 +369,7 @@
       </div>
     <% end %>
   </main>
-  
-<!-- Report Detail Modal -->
+  <!-- Report Detail Modal -->
   <%= if @selected_report do %>
     <div
       class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4"
@@ -155,12 +379,12 @@
         class="bg-white rounded-lg shadow-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto"
         phx-click={JS.exec("phx-stop-propagation")}
       >
-        <div class="p-6">
+        <div class="sticky top-0 bg-white border-b border-gray-200 px-6 py-4 z-10">
           <!-- Header -->
-          <div class="flex items-start justify-between mb-6">
+          <div class="flex items-start justify-between">
             <div>
               <h2 class="text-2xl font-bold text-gray-900 mb-2">
-                Report #{@selected_report.report_id}
+                Report #{@selected_report.id}
               </h2>
               <div class="flex items-center gap-2">
                 <span class={"px-3 py-1 rounded text-sm font-semibold #{status_badge_color(@selected_report.status)}"}>
@@ -169,6 +393,11 @@
                 <span class={"px-3 py-1 rounded text-sm font-semibold #{severity_badge_color(@selected_report.severity)}"}>
                   {@selected_report.severity}
                 </span>
+                <%= if has_immediate_threat?(@selected_report) do %>
+                  <span class="px-3 py-1 rounded text-sm font-semibold bg-red-100 text-red-800">
+                    ⚠️ IMMEDIATE THREAT
+                  </span>
+                <% end %>
               </div>
             </div>
 
@@ -187,39 +416,45 @@
               </svg>
             </button>
           </div>
-          
-<!-- Immediate Threat Warning -->
+        </div>
+
+        <div class="p-6">
+          <!-- Immediate Threat Warning -->
           <%= if has_immediate_threat?(@selected_report) do %>
-            <div class="bg-red-50 border-2 border-red-500 rounded-lg p-4 mb-6">
+            <div class="bg-red-50 border-2 border-red-500 rounded-lg p-6 mb-6">
               <div class="flex items-start">
-                <svg
-                  class="w-6 h-6 text-red-600 mr-3 flex-shrink-0 mt-0.5"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+                <div class="flex-shrink-0">
+                  <svg
+                    class="w-8 h-8 text-red-600"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
                   >
-                  </path>
-                </svg>
-                <div class="flex-1">
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+                    >
+                    </path>
+                  </svg>
+                </div>
+                <div class="ml-4">
                   <h3 class="text-lg font-bold text-red-900 mb-2">⚠️ IMMEDIATE THREAT REPORTED</h3>
-                  <p class="text-red-800 font-medium">
-                    Person named: {@selected_report.immediate_threat_name}
+                  <p class="text-red-800 font-semibold">
+                    Reporter identified an immediate threat to:
                   </p>
-                  <p class="text-red-700 text-sm mt-2">
-                    This report indicates an immediate safety concern.
+                  <p class="text-red-900 text-lg font-bold mt-1">
+                    {@selected_report.immediate_threat_name}
+                  </p>
+                  <p class="text-red-700 mt-2 text-sm">
+                    This report requires urgent attention and immediate action.
                   </p>
                 </div>
               </div>
             </div>
           <% end %>
-          
-<!-- Report Details -->
+          <!-- Report Details -->
           <div class="space-y-6">
             <!-- Incident Information -->
             <div class="bg-gray-50 rounded-lg p-4">
@@ -231,6 +466,9 @@
                   <p class="text-gray-900">
                     {format_violation_type(@selected_report.violation_type)}
                   </p>
+                  <%= if @selected_report.violation_type == "CUSTOM" && @selected_report.violation_text do %>
+                    <p class="text-gray-700 mt-1 italic">{@selected_report.violation_text}</p>
+                  <% end %>
                 </div>
 
                 <div>
@@ -246,6 +484,9 @@
                   <div>
                     <p class="font-medium text-gray-700">People Affected:</p>
                     <p class="text-gray-900">{@selected_report.affected}</p>
+                    <%= if @selected_report.affected == "OTHER" && @selected_report.affected_other do %>
+                      <p class="text-gray-700 mt-1 italic">{@selected_report.affected_other}</p>
+                    <% end %>
                   </div>
                 <% end %>
 
@@ -257,8 +498,7 @@
                 </div>
               </div>
             </div>
-            
-<!-- Description -->
+            <!-- Description -->
             <div class="bg-gray-50 rounded-lg p-4">
               <h3 class="text-lg font-bold text-gray-900 mb-2">Incident Description</h3>
               <p class="text-gray-800 whitespace-pre-wrap">
@@ -274,11 +514,19 @@
                 </p>
               </div>
             <% end %>
-            
-<!-- Reporter Contact -->
-            <%= if @selected_report.follow_up do %>
-              <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
-                <h3 class="text-lg font-bold text-gray-900 mb-2">Reporter Requests Follow-Up</h3>
+            <!-- Reporter Contact -->
+            <%= if @selected_report.name != "ANON" || @selected_report.email != "NONE_GIVEN" do %>
+              <div class={"rounded-lg p-4 #{if @selected_report.follow_up, do: "bg-blue-50 border border-blue-200", else: "bg-gray-50 border border-gray-200"}"}>
+                <h3 class="text-lg font-bold text-gray-900 mb-2">
+                  Reporter Information
+                  <%= if @selected_report.follow_up do %>
+                    <span class="text-sm font-normal text-blue-700">(Requests Follow-Up)</span>
+                  <% else %>
+                    <span class="text-sm font-normal text-gray-600">
+                      (Does not request follow-up)
+                    </span>
+                  <% end %>
+                </h3>
                 <div class="text-sm space-y-1">
                   <p><strong>Name:</strong> {@selected_report.name}</p>
                   <p><strong>Email:</strong> {@selected_report.email}</p>
@@ -287,12 +535,11 @@
             <% else %>
               <div class="bg-gray-50 rounded-lg p-4">
                 <p class="text-gray-600 text-sm">
-                  Reporter chose to remain anonymous (no follow-up requested)
+                  Reporter chose to remain anonymous
                 </p>
               </div>
             <% end %>
-            
-<!-- Admin Actions -->
+            <!-- Admin Actions -->
             <div class="border-t-2 border-pink-200 pt-6">
               <h3 class="text-lg font-bold text-gray-900 mb-4">Admin Actions</h3>
 
@@ -305,7 +552,7 @@
                     phx-change="update_status"
                     phx-value-id={@selected_report.id}
                     name="status"
-                    class="w-full px-3 py-2 border border-gray-300 rounded-md"
+                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-pink-500 focus:border-pink-500"
                   >
                     <option value="PENDING" selected={@selected_report.status == "PENDING"}>
                       Pending
@@ -333,7 +580,7 @@
                     phx-change="update_severity"
                     phx-value-id={@selected_report.id}
                     name="severity"
-                    class="w-full px-3 py-2 border border-gray-300 rounded-md"
+                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-pink-500 focus:border-pink-500"
                   >
                     <option value="LOW" selected={@selected_report.severity == "LOW"}>Low</option>
                     <option value="MEDIUM" selected={@selected_report.severity == "MEDIUM"}>
@@ -348,8 +595,7 @@
                   </select>
                 </div>
               </div>
-              
-<!-- Admin Notes -->
+              <!-- Admin Notes -->
               <div class="bg-gray-50 rounded-lg p-4">
                 <h4 class="font-bold text-gray-900 mb-3">Admin Notes</h4>
 
@@ -361,7 +607,7 @@
                           <p class="text-sm font-medium text-gray-900">{note["admin"]}</p>
                           <p class="text-xs text-gray-500">{note["timestamp"]}</p>
                         </div>
-                        <p class="text-sm text-gray-700">{note["note"]}</p>
+                        <p class="text-sm text-gray-700 whitespace-pre-wrap">{note["note"]}</p>
                       </div>
                     <% end %>
                   </div>
@@ -376,7 +622,7 @@
                     value={@new_note}
                     rows="3"
                     placeholder="Add a new admin note..."
-                    class="w-full px-3 py-2 border border-gray-300 rounded-md"
+                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-pink-500 focus:border-pink-500"
                   ></textarea>
                   <button
                     type="submit"
@@ -387,17 +633,19 @@
                 </form>
               </div>
             </div>
-            
-<!-- Danger Zone -->
+            <!-- Danger Zone -->
             <div class="border-t-2 border-red-200 pt-6">
-              <h3 class="text-lg font-bold text-red-900 mb-4">Danger Zone</h3>
+              <h3 class="text-lg font-bold text-red-900 mb-2">Danger Zone</h3>
+              <p class="text-sm text-gray-600 mb-4">
+                Once you delete a report, there is no going back. Please be certain.
+              </p>
               <button
                 phx-click="delete_report"
                 phx-value-id={@selected_report.id}
-                data-confirm="Are you sure you want to delete this report? This action cannot be undone."
+                data-confirm="Are you sure you want to permanently delete this report? This action cannot be undone."
                 class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
               >
-                Delete Report
+                Delete Report Permanently
               </button>
             </div>
           </div>

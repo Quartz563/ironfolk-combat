@@ -158,6 +158,37 @@
           View messages →
         </.link>
       </div>
+      <%!-- Misconduct Reports --%>
+      <div class="bg-white rounded-lg shadow-md p-6 border-l-4 border-red-500">
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="text-sm font-medium text-gray-600">Pending Reports</p>
+            <p class="text-3xl font-bold text-gray-900">{@pending_misconduct_reports_count}</p>
+          </div>
+          <div class="bg-red-100 rounded-full p-3">
+            <svg
+              class="w-8 h-8 text-red-600"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+              >
+              </path>
+            </svg>
+          </div>
+        </div>
+        <.link
+          navigate={~p"/admin/reports"}
+          class="text-sm text-red-600 hover:text-red-800 mt-4 inline-block"
+        >
+          View reports →
+        </.link>
+      </div>
       <!-- Admin Invites -->
       <div class="bg-white rounded-lg shadow-md p-6 border-l-4 border-indigo-500">
         <div class="flex items-center justify-between">
@@ -191,37 +222,6 @@
         >
           Manage invites →
         </button>
-      </div>
-      <%!-- Misconduct Reports --%>
-      <div class="bg-white rounded-lg shadow-md p-6 border-l-4 border-red-500">
-        <div class="flex items-center justify-between">
-          <div>
-            <p class="text-sm font-medium text-gray-600">Pending Reports</p>
-            <p class="text-3xl font-bold text-gray-900">{@pending_misconduct_reports_count}</p>
-          </div>
-          <div class="bg-red-100 rounded-full p-3">
-            <svg
-              class="w-8 h-8 text-red-600"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
-              >
-              </path>
-            </svg>
-          </div>
-        </div>
-        <.link
-          navigate={~p"/admin/reports"}
-          class="text-sm text-red-600 hover:text-red-800 mt-4 inline-block"
-        >
-          View reports →
-        </.link>
       </div>
     </div>
     <!-- Quick Actions -->

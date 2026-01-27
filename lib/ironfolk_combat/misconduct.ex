@@ -154,15 +154,36 @@ defmodule IronfolkCombat.Misconduct do
   end
 
   @doc """
-  Determines severity based on violation type and description.
-  This is a helper function that can be used when creating reports.
+  Determines severity based on violation type and immediate threat status.
+
+  Priority order:
+  1. Immediate threat = CRITICAL (highest priority)
+  2. Violence/sexual harassment = HIGH
+  3. General harassment/abuse/discrimination = MEDIUM
+  4. Safety/injury concerns = MEDIUM
+  5. Everything else = LOW
   """
   def assess_severity(violation_type, immediate_threat) do
     cond do
-      immediate_threat == true -> "HIGH"
-      violation_type in ["PHYSICAL_VIOLENCE", "SEXUAL_HARASSMENT"] -> "HIGH"
-      violation_type in ["VERBAL_ABUSE", "DISCRIMINATION"] -> "MEDIUM"
-      true -> "LOW"
+      # Immediate threats are always CRITICAL regardless of violation type
+      immediate_threat == true ->
+        "CRITICAL"
+
+      # Physical violence and sexual harassment are HIGH severity
+      violation_type in ["PHYSICAL_VIOLENCE", "SEXUAL_HARASSMENT"] ->
+        "HIGH"
+
+      # General harassment, verbal abuse, and discrimination are MEDIUM
+      violation_type in ["HARASSMENT", "VERBAL_ABUSE", "DISCRIMINATION"] ->
+        "MEDIUM"
+
+      # Safety and injury concerns are MEDIUM
+      violation_type in ["SAFETY", "INJURY"] ->
+        "MEDIUM"
+
+      # Everything else (including CUSTOM) defaults to LOW
+      true ->
+        "LOW"
     end
   end
 end

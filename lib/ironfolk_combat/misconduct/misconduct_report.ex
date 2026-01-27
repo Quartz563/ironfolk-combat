@@ -55,7 +55,7 @@ defmodule IronfolkCombat.Misconduct.MisconductReport do
     |> validate_inclusion(:immediate_threat, [true, false])
     |> validate_inclusion(:affected, ["ME", "SOMEONE_ELSE", "MULTIPLE_PEOPLE", "OTHER"])
     |> validate_inclusion(:status, ["PENDING", "UNDER_REVIEW", "RESOLVED", "DISMISSED"])
-    |> validate_inclusion(:severity, ["LOW", "MEDIUM", "HIGH"])
+    |> validate_inclusion(:severity, ["LOW", "MEDIUM", "HIGH", "CRITICAL"])
   end
 
   defp validate_email_format(changeset) do
