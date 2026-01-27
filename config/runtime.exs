@@ -71,5 +71,5 @@ if config_env() == :prod do
 
   config :ironfolk_combat, Ironfolk.Mailer,
     adapter: Swoosh.Adapters.Resend,
-    api_key: System.env("RESEND_API_KEY")
+    api_key: System.get_env("RESEND_API_KEY")
 end
