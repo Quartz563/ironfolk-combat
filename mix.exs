@@ -60,7 +60,8 @@ defmodule IronfolkCombat.MixProject do
       {:ecto_sql, "~> 3.10"},
       {:postgrex, ">= 0.0.0"},
       {:pbkdf2_elixir, "~> 2.0"},
-      {:stripity_stripe, "~> 3.2"}
+      {:stripity_stripe, "~> 3.2"},
+      {:resend, "~> 0.4.0"}
     ]
   end
 

@@ -47,6 +47,8 @@ defmodule IronfolkCombatWeb.Router do
     get "/payment/cancel", PageController, :payment_cancel
 
     post "/signup", PageController, :create_signup
+
+    get "/sitemap.xml", SiteMapController, :index
   end
 
   scope "/admin", IronfolkCombatWeb do

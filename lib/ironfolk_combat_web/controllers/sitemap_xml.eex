@@ -1,0 +1,12 @@
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <%= for url <- @urls do %>
+    <url>
+      <loc><%= url.loc %></loc>
+      <%= if Map.has_key?(url, :lastmod) do %>
+        <lastmod><%= Calendar.strftime(url.lastmod, "%Y-%m-%d") %></lastmod>
+      <% end %>
+      <changefreq><%= url.changefreq %></changefreq>
+      <priority><%= url.priority %></priority>
+    </url>
+  <% end %>
+</urlset>
