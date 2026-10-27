@@ -22,7 +22,7 @@ defmodule IronfolkCombatWeb.SiteMapController do
       {url(~p"/about"), "monthly", "0.8"},
       {url(~p"/faq"), "monthly", "0.7"},
       {url(~p"/code-of-conduct"), "monthly", "0.6"},
-      {url(~p"/sexual-harassment-policy"), "monthly", "0.6"},
+      {url(~p"/harassment-policy"), "monthly", "0.6"},
       {url(~p"/resources"), "monthly", "0.6"},
       {url(~p"/contact"), "monthly", "0.7"},
       {url(~p"/blog"), "daily", "0.9"}

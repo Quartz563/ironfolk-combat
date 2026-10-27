@@ -20,13 +20,13 @@ defmodule IronfolkCombatWeb.EventsLive do
 
   @impl true
   def handle_event("prev_month", _params, socket) do
-    new_date = Date.add(socket.assigns.current_date, -30)
+    new_date = shift_month(socket.assigns.current_date, -1)
     {:noreply, socket |> assign(:current_date, new_date) |> load_month_data(new_date)}
   end
 
   @impl true
   def handle_event("next_month", _params, socket) do
-    new_date = Date.add(socket.assigns.current_date, 30)
+    new_date = shift_month(socket.assigns.current_date, 1)
     {:noreply, socket |> assign(:current_date, new_date) |> load_month_data(new_date)}
   end
 
@@ -88,6 +88,30 @@ defmodule IronfolkCombatWeb.EventsLive do
         }
       end
     end
+  end
+
+  defp shift_month(date, months_to_shift) do
+    # Get first day of current month
+    first_of_month = Date.beginning_of_month(date)
+
+    # Calculate new month/year
+    new_month = first_of_month.month + months_to_shift
+
+    {year_offset, adjusted_month} =
+      cond do
+        new_month > 12 -> {div(new_month - 1, 12), rem(new_month - 1, 12) + 1}
+        new_month < 1 -> {div(new_month - 12, 12), rem(new_month - 12, 12) + 12}
+        true -> {0, new_month}
+      end
+
+    new_year = first_of_month.year + year_offset
+
+    # Build the new date, keeping the same day if possible
+    # For example, Jan 31 -> Feb 28 (or 29 in leap years)
+    days_in_new_month = Date.days_in_month(Date.new!(new_year, adjusted_month, 1))
+    new_day = min(date.day, days_in_new_month)
+
+    Date.new!(new_year, adjusted_month, new_day)
   end
 
   defp get_events_for_date(events, date) do

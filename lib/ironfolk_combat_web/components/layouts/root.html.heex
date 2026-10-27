@@ -13,6 +13,9 @@
     <%= if @conn.request_path =~ ~r{^/admin} do %>
       <meta name="robots" content="noindex, nofollow" />
     <% end %>
+    <%= if canonical = assigns[:canonical_url] do %>
+      <link rel="canonical" href={canonical} />
+    <% end %>
   </head>
   <body class="bg-white">
     {@inner_content}

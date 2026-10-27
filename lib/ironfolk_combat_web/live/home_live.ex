@@ -13,7 +13,8 @@ defmodule IronfolkCombatWeb.HomeLive do
     socket =
       socket
       |> assign(:alert, Admin.get_current_alert())
-      |> assign(:events, Admin.list_upcoming_events(3))
+      |> assign(:events, Admin.list_upcoming_non_training_events(3))
+      |> assign(:canonical_url, "https://ironfolkcombat.co.nz/")
 
     {:ok, socket}
   end
@@ -35,7 +36,7 @@ defmodule IronfolkCombatWeb.HomeLive do
 
   @impl true
   def handle_info({:events_updated}, socket) do
-    {:noreply, assign(socket, :events, Admin.list_upcoming_events(3))}
+    {:noreply, assign(socket, :events, Admin.list_upcoming_non_training_events(3))}
   end
 
   # Private functions
@@ -45,7 +46,7 @@ defmodule IronfolkCombatWeb.HomeLive do
   end
 
   defp get_upcoming_events do
-    IronfolkCombat.Admin.list_active_events()
+    IronfolkCombat.Admin.list_upcoming_non_training_events(3)
   end
 
   defp alert_color("info"), do: "bg-blue-600 text-white"

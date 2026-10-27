@@ -470,6 +470,14 @@ defmodule IronfolkCombat.Admin do
     |> Repo.all()
   end
 
+  def list_active_non_training_events do
+    Event
+    |> where([e], e.active == true)
+    |> where([e], e.event_type != "training")
+    |> order_by([e], asc: e.event_date)
+    |> Repo.all()
+  end
+
   def get_event_by_slug(slug) do
     Repo.get_by(Event, slug: slug, published: true)
   end
@@ -542,6 +550,18 @@ defmodule IronfolkCombat.Admin do
     Event
     |> where([e], e.active == true)
     |> where([e], e.event_date >= ^today)
+    |> order_by([e], asc: e.event_date)
+    |> limit(^limit)
+    |> Repo.all()
+  end
+
+  def list_upcoming_non_training_events(limit \\ 3) do
+    today = Date.utc_today()
+
+    Event
+    |> where([e], e.active == true)
+    |> where([e], e.event_date >= ^today)
+    |> where([e], e.event_type != "training")
     |> order_by([e], asc: e.event_date)
     |> limit(^limit)
     |> Repo.all()

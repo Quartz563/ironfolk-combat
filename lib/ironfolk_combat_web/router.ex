@@ -2,6 +2,7 @@ defmodule IronfolkCombatWeb.Router do
   use IronfolkCombatWeb, :router
 
   pipeline :browser do
+    plug IronfolkCombatWeb.Plugs.CanonicalRedirect
     plug :accepts, ["html"]
     plug :fetch_session
     plug :fetch_live_flash

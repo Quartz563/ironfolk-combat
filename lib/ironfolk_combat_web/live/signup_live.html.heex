@@ -8,7 +8,7 @@
       </h1>
 
       <p class="text-lg md:text-xl text-gray-700 dark:text-gray-300 mb-12 max-w-2xl mx-auto">
-        Ready to begin your Fencing/HEMA journey? Signup for your three free sessions!
+        Ready to begin your journey into historic fencing with Ironfolk Combat?
       </p>
     </div>
   </div>
@@ -18,7 +18,32 @@
 </section>
 
 <div class="min-h-screen bg-white ">
-  <div class="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+  <div class="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-4">
+    <div class="bg-gradiant-to-r from-pink-25 to-purple-25 border-2 border-pink-200 rounded-lg p-6 shadow-sm">
+      <h3 class="text-xl font-bold text-gray-900 mb-3">Important Note</h3>
+      <div class="flex items-center justify-between gap-4">
+        <div class="bg-pink-100 rounded-full p-3">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="w-8 h-8 text-purple-600"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            class="size-6"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z"
+            />
+          </svg>
+        </div>
+        <p class="text-gray-700">
+          You do not need to sign up for a membership with us if you are currently on your free trial period!
+        </p>
+      </div>
+    </div>
     <div class="bg-white  border border-pink-200  rounded-lg shadow-lg p-8">
       <.form for={@form} phx-change="validate" phx-submit="save" class="space-y-6">
         <%!-- Personal Information --%>

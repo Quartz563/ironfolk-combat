@@ -163,7 +163,7 @@ defmodule IronfolkCombat.Emails.MemberEmail do
       <div class="content">
         <p>Hi #{member.first_name},</p>
 
-        <p>Welcome to Ironfolk Combat! We're thrilled to have you join our community. Your signup has been approved and you're now an official member of Wellington's LGBTQ+ friendly HEMA club.</p>
+        <p>Welcome to Ironfolk Combat! We're thrilled to have you join our community. Your signup has been approved and you're now an official member of Wellington's queer friendly historic fencing club.</p>
 
         <div class="ifn-box">
           <p style="margin: 0 0 10px 0; color: #666; font-size: 14px;">Your Ironfolk ID Number</p>
@@ -176,14 +176,14 @@ defmodule IronfolkCombat.Emails.MemberEmail do
         <div class="info-box">
           <p><strong>Thursday Evenings</strong><br>
           6:30 PM - 8:30 PM<br>
-          Newtown School of Dance<br>
+          Te Whaea - National Dance & Drama Centre<br>
           11 Hutchison Road, Newtown, Wellington 6021</p>
         </div>
 
         <div class="info-box">
           <p><strong>Saturday Mornings</strong><br>
-          10:00 AM - 12:00 PM<br>
-          Petone Primary School<br>
+          1:00 PM - 4:00 PM<br>
+          Petone Central School<br>
           16 Britannia Street, Petone, Wellington 5012</p>
         </div>
 
@@ -207,7 +207,7 @@ defmodule IronfolkCombat.Emails.MemberEmail do
         <p>These are available on our website's <a href="https://ironfolkcombat.nz/resources">Resources page</a>.</p>
 
         <h2>💳 Membership Payments</h2>
-        <p>After your three free trial sessions, you can continue training with a paid membership. Payment options and details are available on our website.</p>
+        <p>Now that you've finished your trial weeks and become a full member, you can continue training with a paid membership. Payment will soon be handled though the website, but for now</p>
 
         <div style="text-align: center; margin: 30px 0;">
           <a href="https://ironfolkcombat.nz/resources" class="button">View Member Resources</a>
@@ -256,12 +256,12 @@ defmodule IronfolkCombat.Emails.MemberEmail do
 
     Thursday Evenings
     6:30 PM - 8:30 PM
-    Newtown School of Dance
+    Te Whaea - National Dance & Drama Centre
     11 Hutchison Road, Newtown, Wellington 6021
 
     Saturday Mornings
-    10:00 AM - 12:00 PM
-    Petone Primary School
+    01:00 PM - 04:00 PM
+    Petone Central School
     16 Britannia Street, Petone, Wellington 5012
 
     WHAT TO BRING
@@ -281,7 +281,7 @@ defmodule IronfolkCombat.Emails.MemberEmail do
     Available at: https://ironfolkcombat.nz/resources
 
     MEMBERSHIP PAYMENTS
-    After your three free trial sessions, you can continue training with a paid membership. Details available on our website.
+    You'll need to pay your club fees. Details are on the website.
 
     STAY CONNECTED
     - Facebook: Ironfolk Combat Group
@@ -347,14 +347,9 @@ defmodule IronfolkCombat.Emails.MemberEmail do
           Once approved, you'll receive a welcome email with your Ironfolk ID Number (IFN) and all the details you need for your first session.</p>
         </div>
 
-        <div class="info-box">
-          <p><strong>3. Come Train!</strong><br>
-          Show up to your first training session - we'll have everything you need!</p>
-        </div>
-
         <h2>📍 Training Times</h2>
-        <p><strong>Thursdays:</strong> 6:30 PM - 8:30 PM at Newtown School of Dance<br>
-        <strong>Saturdays:</strong> 10:00 AM - 12:00 PM at Petone Primary School</p>
+        <p><strong>Thursdays:</strong> 6:00 PM - 8:00 PM at Te Whaea - National Dance & Drama Centre<br>
+        <strong>Saturdays:</strong> 1:00 PM - 4:00 PM at Petone Central School</p>
 
         <h2>🎯 While You Wait</h2>
         <p>Feel free to explore our website to learn more about:</p>
@@ -404,8 +399,8 @@ defmodule IronfolkCombat.Emails.MemberEmail do
     Show up to your first training session - we'll have everything you need!
 
     TRAINING TIMES
-    Thursdays: 6:30 PM - 8:30 PM at Newtown School of Dance
-    Saturdays: 10:00 AM - 12:00 PM at Petone Primary School
+    Thursdays: 6:00 PM - 8:00 PM at Te Whaea - National Dance & Drama Centre
+    Saturdays: 01:00 PM - 04:00 PM at Petone Central School
 
     WHILE YOU WAIT
     Feel free to explore our website to learn more about:

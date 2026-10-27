@@ -64,7 +64,7 @@ defmodule IronfolkCombatWeb.Footer do
               </div>
             </div>
 
-            <p class="text-xs text-gray-400">All skill levels welcome. First three sessions free!</p>
+            <p class="text-xs text-gray-400">All skill levels welcome. First three weeks free!</p>
           </div>
           <!-- Contact Info -->
           <div class="space-y-4">
@@ -142,7 +142,7 @@ defmodule IronfolkCombatWeb.Footer do
           <div class="space-y-4">
             <h3 class="text-lg font-semibold text-pink-400">Quick Links</h3>
 
-            <div class="space-y-2">
+            <div class="grid grid-cols-5 gris-rows-5 gap-4">
               <.link
                 navigate={~p"/"}
                 class="block text-sm text-gray-300 hover:text-pink-400 transition-colors"
@@ -157,21 +157,27 @@ defmodule IronfolkCombatWeb.Footer do
               </.link>
               <.link
                 navigate={~p"/signup"}
-                class="block text-sm text-gray-300 hover:text-pink-400 transition-colors"
+                class="block text-sm text-gray-300 hover:text-pink-400 transition-colors row-start-2"
               >
                 Join the Club
               </.link>
               <.link
                 navigate={~p"/contact"}
-                class="block text-sm text-gray-300 hover:text-pink-400 transition-colors"
+                class="block text-sm text-gray-300 hover:text-pink-400 transition-colors row-start-2"
               >
                 Contact
               </.link>
               <.link
                 navigate={~p"/blog"}
-                class="block text-sm text-gray-300 hover:text-pink-400 transition-colors"
+                class="block text-sm text-gray-300 hover:text-pink-400 transition-colors row-start-3"
               >
                 Blog
+              </.link>
+              <.link
+                navigate={~p"/faq"}
+                class="block text-sm text-gray-300 hover:text-pink-400 transition-colors row-start-3"
+              >
+                FAQ
               </.link>
             </div>
             
